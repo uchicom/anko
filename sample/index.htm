@@ -1,9 +1,75 @@
-<html>
-    <!-- (C) 2022 uchicom -->
+<!DOCTYPE html>
+<!-- (C) 2022 uchicom -->
+<html lang="ja">
 <head>
-
+<script src="/js/anko.js"></script>
+<meta name=viewport content="width=device-width, initial-scale=1">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta http-equiv="content-script-type" content="text/javascript">
+<meta http-equiv="content-style-type" content="text/css">
+<meta name="author" content="uchicom">
+<meta name="keywords" content="anko.js">
+<meta name="description" content="anko.jsのサンプルプロジェクト">
+<title>anko.jsのサンプルプロジェクト</title>
+<script>
+window.addEventListener("load", dispLogin);
+function dispLogin() {
+    replaceTemplate("article", "login");
+}
+function login() {
+    replaceTemplate("article", "sampleTemplate");
+    searchSample([{id: 1, name: "テスト一郎"}, {id:2, name: "テスト二郎"}]);
+}
+function searchSample(records) {
+    const tbody = create("tbody");
+    for (let i = 0; i < data.length; i++) {
+        const record = records[i];
+        const row = createRow("sampleTemplate");
+        const cols = row.querySelectorAll("td");
+        cols[0].append(record.id);
+        cols[1].append(record.name);
+        tbody.append(row);
+    }
+    querySelector("#content tbody").replaceWith(tbody);
+}
+function logout() {
+    replaceTemplate("article", "login");
+}
+</script>
 </head>
 <body>
-    
+    <div id="article"></div>
 </body>
+<template id="login">
+    <div id="article">
+        <h2>ログイン画面</h2>
+        <div id="content">
+            <table>
+                <tbody>
+                    <th>ID</th><td><input type="email" id="email" name="email"></td>
+                    <th>PASSWORD</th><td><input type="password" id="pass" name="pass"></td>
+                    <td colspan="2"><button onclick="login()">ログイン</button></td>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</template>
+<template id="sampleTemplate">
+    <div id="article">
+        <nav><button onclick="logout()">ログアウト</button></li></ul></nav>
+        <div id="content">
+            <h2>サンプル機能画面</h2>
+            <table>
+                <thead>
+                    <th>ID</th><th>NAME</th>
+                </thead>
+                <tbody>
+                </tbody>
+                <template id="sampleTemplate.row">
+                    <tr><td></td><td></td></tr>
+                </template>
+            </table>
+        </div>
+    </div>
+</template>
 </html>
