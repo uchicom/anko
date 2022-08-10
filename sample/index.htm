@@ -2,7 +2,7 @@
 <!-- (C) 2022 uchicom -->
 <html lang="ja">
 <head>
-<script src="/js/anko.js"></script>
+<script src="/sample/js/anko.js"></script>
 <meta name=viewport content="width=device-width, initial-scale=1">
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta http-equiv="content-script-type" content="text/javascript">
@@ -26,7 +26,7 @@ function dispSample() {
 }
 function searchSample(records) {
     const tbody = create("tbody");
-    for (let i = 0; i < data.length; i++) {
+    for (let i = 0; i < records.length; i++) {
         const record = records[i];
         const row = createRow("sampleTemplate");
         const cols = row.querySelectorAll("td");

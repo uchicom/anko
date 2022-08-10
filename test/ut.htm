@@ -3,8 +3,8 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta http-equiv="content-script-type" content="text/javascript">
 <meta http-equiv="content-style-type" content="text/css">
-<script src="../sample/js/anko.js"></script>
-<script src="./js/ut.js"></script>
+<script src="/sample/js/anko.js"></script>
+<script src="/test/js/anko-ut.js"></script>
 <title>単体テスト</title>
 <style>
   html, body, iframe {
@@ -17,7 +17,7 @@
 </style>
 <script>
 // 後で適切なスコープに変更する
-window.onload = () => ut("../sample/index.htm", "../test/js/mock.js", tests, () => report());
+window.onload = () => ut("/sample/index.htm", "/test/js/mock.js", tests, () => report());
 
 function report() {
   const report = createClone("reportTemplate");

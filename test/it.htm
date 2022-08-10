@@ -3,8 +3,8 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta http-equiv="content-script-type" content="text/javascript">
 <meta http-equiv="content-style-type" content="text/css">
-<script src="../sample/js/anko.js"></script>
-<script src="./js/it.js"></script>
+<script src="/sample/js/anko.js"></script>
+<script src="/test/js/anko-it.js"></script>
 <title>結合テスト</title>
 <style>
   html, body, iframe {
@@ -16,7 +16,7 @@
   }
 </style>
 <script>
-window.onload = () => it("../sample/index.htm", tests, () => report());
+window.onload = () => it("/sample/index.htm", tests, () => report());
 
 function report() {
   const report = createClone("reportTemplate");

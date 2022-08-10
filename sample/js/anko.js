@@ -2,6 +2,9 @@
 function idElement(id) {
     return document.getElementById(id);
 }
+function create(tag) {
+	return document.createElement(tag);
+}
 function removeAllChild(id) {
 	var select = idElement(id);
 	while (select.firstChild) {
