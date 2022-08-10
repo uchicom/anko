@@ -1,0 +1,105 @@
+<html lang="ja">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta http-equiv="content-script-type" content="text/javascript">
+<meta http-equiv="content-style-type" content="text/css">
+<script src="../sample/js/anko.js"></script>
+<script src="./js/it.js"></script>
+<title>結合テスト</title>
+<style>
+  html, body, iframe {
+    padding: 0;
+    margin: 0;
+    border: none;
+    height: 100%;
+    width: 100%;
+  }
+</style>
+<script>
+window.onload = () => it("../sample/index.htm", tests, () => report());
+
+function report() {
+  const report = createClone("reportTemplate");
+  const tbody = report.querySelector("tbody");
+  let ok = 0;
+  for (let i = 0; i < tests.length; i++) {
+    const test = tests[i];
+    if (test.result) ok++;
+    var row = createRow('reportTemplate', report);
+    var cols = row.querySelectorAll("td");
+    cols[0].append(test.name);
+    cols[1].append(test.result ? "OK" : "NG");
+		tbody.append(row);
+  }
+  const aggregate = `（OK: ${ok} / ${tests.length}）`;
+  report.querySelector("h2").append(aggregate);
+  document.title += aggregate;
+  document.body.append(report);
+};
+
+const tests = [{
+      name: "ログイン",
+      action: ifWindow => {
+        ifWindow.set("#login", {
+          id: "test@test",
+          pass: "test"
+        });
+        ifWindow.querySelector("button").click();
+      },
+      wait: 5000,
+      assert : ifWindow => ifWindow.idElement("login") == null
+    },
+    {
+      name: "サンプル画面表示",
+      action: ifWindow => ifWindow.dispChangeProfile(),
+      wait: 3000,
+      assert : ifWindow => ifWindow.querySelectorAll("#content tbody tr ").length == 2
+    },
+    {
+      name: "ログアウト",
+      action: ifWindow => ifWindow.logoutProcess(),
+      wait: 2000,
+      assert: ifWindow => ifWindow.idElement("login") != null
+    }
+  ];
+
+</script>
+</head>
+<body>
+</body>
+<template id="aggregateTemplate">
+  <h2>集計結果</h2>
+  <table class="uk-table uk-table-divider">
+    <thead>
+      <tr>
+        <th>合計</th>
+        <th>OK</th>
+        <th>NG</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</template>
+<template id="reportTemplate">
+  <h2>テスト結果</h2>
+  <table class="uk-table uk-table-divider">
+  <tr>
+    <th>テスト</th>
+    <th>結果</th>
+  </tr>
+  <tbody></tbody>
+  <template id="reportTemplate.row">
+    <tr>
+      <td></td>
+      <td></td>
+    </tr>
+  </template>
+</table>
+</template>
+</html>

@@ -1,0 +1,126 @@
+<html lang="ja">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta http-equiv="content-script-type" content="text/javascript">
+<meta http-equiv="content-style-type" content="text/css">
+<script src="../sample/js/anko.js"></script>
+<script src="./js/ut.js"></script>
+<title>単体テスト</title>
+<style>
+  html, body, iframe {
+    padding: 0;
+    margin: 0;
+    border: none;
+    height: 100%;
+    width: 100%;
+  }
+</style>
+<script>
+// 後で適切なスコープに変更する
+window.onload = () => ut("../sample/index.htm", "../test/js/mock.js", tests, () => report());
+
+function report() {
+  const report = createClone("reportTemplate");
+  const tbody = report.querySelector("tbody");
+  let totalOk = 0;
+  let total = 0;
+  for (let i = 0; i < tests.length; i++) {
+    const test = tests[i].path;
+    if (!test) continue;
+    let ok = 0;
+    let ng = 0;
+    let keys = Object.keys(test);
+    for (let i = 0; i < keys.length; i++) {
+      const pathData = test[keys[i]];
+      if (!pathData.assert) continue;
+      total += pathData.assert.length;
+      const results = pathData.result;
+      if (!results) continue;
+      for (let j = 0; j < results.length; j++) {
+        if (results[j]) {
+          ok++;
+        } else {
+          ng++;
+        }
+      }
+    }
+    totalOk += ok;
+    var row = createRow('reportTemplate', report);
+    var cols = row.querySelectorAll("td");
+    cols[0].append(tests[i].name);
+    cols[1].append(ng == 0 ? "OK" : "NG");
+	tbody.append(row);
+  }
+  const aggregate = `（OK: ${totalOk} / ${total}）`;
+  report.querySelector("h2").append(aggregate);
+  document.title += aggregate;
+  document.body.append(report);
+};
+const tests = [{
+    name: "ログイン",
+    action: ifWindow => {
+      ifWindow.set("#login", {
+        id: "test@test",
+        pass: "test"
+      });
+      ifWindow.login();
+    },
+    path: {
+      '/sample/api/login': {
+        mock: {token: "abc"},
+        assert: [
+          payload=>payload.id == "test@test",
+          payload=>payload.pass == "test",
+          (payload,ifWindow) => ifWindow.querySelector("#content tbody td:nth-child(1)").value == "1",
+          (payload,ifWindow) => ifWindow.querySelector("#content tbody td:nth-child(2)").value == "テスト一郎",
+          (payload,ifWindow) => ifWindow.querySelector("#content tbody td:nth-child(3)").value == "2",
+          (payload,ifWindow) => ifWindow.querySelector("#content tbody td:nth-child(4)").value == "テスト二郎"
+        ]
+      }
+    },
+  },
+  {
+    name: "ログアウト",
+    action: ifWindow=>ifWindow.logoutProcess(),
+  }
+]
+</script>
+</head>
+<body>
+</body>
+<template id="aggregateTemplate">
+  <h2>集計結果</h2>
+  <table class="uk-table uk-table-divider">
+    <thead>
+      <tr>
+        <th>合計</th>
+        <th>OK</th>
+        <th>NG</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</template>
+<template id="reportTemplate">
+  <h2>テスト結果</h2>
+  <table class="uk-table uk-table-divider">
+  <tr>
+    <th>テスト</th>
+    <th>結果</th>
+  </tr>
+  <tbody></tbody>
+  <template id="reportTemplate.row">
+    <tr>
+      <td></td>
+      <td></td>
+    </tr>
+  </template>
+</table>
+</template>
+</html>

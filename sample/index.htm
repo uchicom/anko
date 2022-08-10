@@ -17,6 +17,10 @@ function dispLogin() {
     replaceTemplate("article", "login");
 }
 function login() {
+    // postJson();
+    dispSample();
+}
+function dispSample() {
     replaceTemplate("article", "sampleTemplate");
     searchSample([{id: 1, name: "テスト一郎"}, {id:2, name: "テスト二郎"}]);
 }
@@ -46,7 +50,7 @@ function logout() {
         <div id="content">
             <table>
                 <tbody>
-                    <th>ID</th><td><input type="email" id="email" name="email"></td>
+                    <th>ID</th><td><input type="email" id="id" name="id"></td>
                     <th>PASSWORD</th><td><input type="password" id="pass" name="pass"></td>
                     <td colspan="2"><button onclick="login()">ログイン</button></td>
                 </tbody>
