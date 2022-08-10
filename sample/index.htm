@@ -48,13 +48,15 @@ function logout() {
     <div id="article">
         <h2>ログイン画面</h2>
         <div id="content">
-            <table>
-                <tbody>
-                    <th>ID</th><td><input type="email" id="id" name="id"></td>
-                    <th>PASSWORD</th><td><input type="password" id="pass" name="pass"></td>
-                    <td colspan="2"><button onclick="login()">ログイン</button></td>
-                </tbody>
-            </table>
+            <form id="login" onsubmit="event.preventDefault()">
+                <table>
+                    <tbody>
+                        <th>ID</th><td><input type="email" id="id" name="id"></td>
+                        <th>PASSWORD</th><td><input type="password" id="pass" name="pass"></td>
+                        <td colspan="2"><button onclick="login()">ログイン</button></td>
+                    </tbody>
+                </table>
+            </form>
         </div>
     </div>
 </template>

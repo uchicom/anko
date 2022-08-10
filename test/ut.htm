@@ -16,8 +16,7 @@
   }
 </style>
 <script>
-// 後で適切なスコープに変更する
-window.onload = () => ut("/sample/index.htm", "/test/js/mock.js", tests, () => report());
+window.onload = () => ut("/sample/index.htm", "/test/js/anko-mock.js", tests, () => report());
 
 function report() {
   const report = createClone("reportTemplate");

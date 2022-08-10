@@ -37,6 +37,17 @@ function replaceTemplate(orgId, templateId, formFunction) {
 	if (form && formFunction) formFunction(form);
 	document.getElementById(orgId).replaceWith(clone);
 }
+function set(selector, response) {
+	var selects = querySelectorAll(selector + " input," + selector + " textarea," + selector + " select");
+	for (var i = 0; i < selects.length; i++) {
+		var select = selects[i];
+		if (select.type == "radio" || select.type == "checkbox") {
+			select.checked = response[select.id] == null ? false : response[select.id];
+		} else {
+			select.value = response[select.id] == null ? "" : response[select.id];
+		}
+	}
+}
 function postJson(url, assignHeader, payload, preProcess, process, errorProcess, postProcess) {
     if (preProcess) preProcess();
     fetch(url, {
