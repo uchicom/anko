@@ -47,8 +47,8 @@ function report() {
     var row = createRow('reportTemplate', report);
     var cols = row.querySelectorAll("td");
     cols[0].append(tests[i].name);
-    cols[1].append(ng == 0 ? "OK" : "NG");
-	tbody.append(row);
+    cols[1].append(ok == total ? "OK" : "NG:" + ok + "/" + total);
+	  tbody.append(row);
   }
   const aggregate = `（OK: ${totalOk} / ${total}）`;
   report.querySelector("h2").append(aggregate);
@@ -65,22 +65,27 @@ const tests = [{
       ifWindow.login();
     },
     path: {
-      '/sample/api/login': {
+      '/sample/json/login.json': {
         mock: {token: "abc"},
         assert: [
           payload=>payload.id == "test@test",
-          payload=>payload.pass == "test",
-          (payload,ifWindow) => ifWindow.querySelector("#content tbody td:nth-child(1)").value == "1",
-          (payload,ifWindow) => ifWindow.querySelector("#content tbody td:nth-child(2)").value == "テスト一郎",
-          (payload,ifWindow) => ifWindow.querySelector("#content tbody td:nth-child(3)").value == "2",
-          (payload,ifWindow) => ifWindow.querySelector("#content tbody td:nth-child(4)").value == "テスト二郎"
+          payload=>payload.pass == "test"
+        ]
+      },
+      '/sample/json/search.json': {
+        mock: [{"id": 1, "name": "テスト一郎"}, {"id": 2, "name": "テスト二郎"}],
+        assert: [
+          (payload,ifWindow) => ifWindow.querySelectorAll("#content tbody td")[0].textContent == "1",
+          (payload,ifWindow) => ifWindow.querySelectorAll("#content tbody td")[1].textContent == "テスト一郎",
+          (payload,ifWindow) => ifWindow.querySelectorAll("#content tbody td")[2].textContent == "2",
+          (payload,ifWindow) => ifWindow.querySelectorAll("#content tbody td")[3].textContent == "テスト二郎"
         ]
       }
     },
   },
   {
     name: "ログアウト",
-    action: ifWindow=>ifWindow.logoutProcess(),
+    action: ifWindow=>ifWindow.logout(),
   }
 ]
 </script>

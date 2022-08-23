@@ -1,6 +1,11 @@
 // (C) 2022 uchicom
 function postJson(url, assignHeader, payload, preProcess, process, errorProcess, postProcess) {
-    console.log(url);
+  mockJson(url, assignHeader, payload, preProcess, process, errorProcess, postProcess);
+}
+function getJson(url, assignHeader, payload, preProcess, process, errorProcess, postProcess) {
+  mockJson(url, assignHeader, payload, preProcess, process, errorProcess, postProcess);
+}
+function mockJson(url, assignHeader, payload, preProcess, process, errorProcess, postProcess) {
     if (path == null) {
       if (preProcess) preProcess();
       try {
@@ -38,6 +43,6 @@ let tests = {};
 let assertResultKey;
 let path;
 function preset(pathdata, assertResultKeydata) {
-path = pathdata;
-assertResultKey = assertResultKeydata == null ? "result" : assertResultKeydata;
+  path = pathdata;
+  assertResultKey = assertResultKeydata == null ? "result" : assertResultKeydata;
 }

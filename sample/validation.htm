@@ -3,26 +3,54 @@
 <html lang="ja">
 <head>
 <script src="/sample/js/anko.js"></script>
+<script src="/sample/js/anko-validator.js"></script>
 <meta name=viewport content="width=device-width, initial-scale=1">
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta http-equiv="content-script-type" content="text/javascript">
 <meta http-equiv="content-style-type" content="text/css">
 <meta name="author" content="uchicom">
 <meta name="keywords" content="anko.js">
-<meta name="description" content="anko.jsのサンプルプロジェクト">
-<title>anko.jsのサンプルプロジェクト</title>
+<meta name="description" content="anko-validator.jsのサンプルプロジェクト">
+<title>anko-validator.jsのサンプルプロジェクト</title>
 <script>
+initValidation();
 window.addEventListener("load", dispLogin);
+
+// サーバが作成するjsファイル
+function initValidation() {
+    const validationHash='$hash';
+    const validationJson = {login : {
+        id : {required:{message:"必須です"}},
+        pass : {required:{message:"必須です"}}
+    }};
+    if (validationHash != localStorage.getItem('validationHash')) {
+        localStorage.setItem('validationHash', validationHash);
+        localStorage.setItem('validation', JSON.stringify(validationJson));
+    }
+}
+// labelに必須とかつける場合common.jsとかに定義
+const labelConsumer = label => {
+  if (label && !label.querySelector("span[class=\"required\"]")) {
+    label.appendChild(createRequirTag());
+  }
+};
+function createRequirTag() {
+	const span = create("span");
+	span.setAttribute("class", "required");
+	span.appendChild(text("必須"));
+	return span;
+}
+
 function dispLogin() {
-    replaceTemplate("article", "loginTemplate");
+    replaceValidateTemplate("article", "login");
 }
 function login() {
-    getJson("/sample/json/login.json", null, {id:idElement("id").value, pass:idElement("pass").value}, null, () => dispSample());
+    getJson("/sample/json/login.json", null, null, null, dispSample);
 }
-var dispSample = () => {
+const dispSample = () => {
     replaceTemplate("article", "sampleTemplate");
     searchSample();
-};
+}
 function searchSample() {
     getJson("/sample/json/search.json", null, null, null, records => {
         const tbody = create("tbody");
@@ -41,11 +69,24 @@ function logout() {
     dispLogin();
 }
 </script>
+<style>
+.required {
+	font-size:0.5em;
+	font-weight: bold;
+	margin-left: 1em;
+	float: right;
+	color: red;
+}
+
+input:invalid,select:invalid,textarea:invalid {
+	border-color: pink;
+}
+</style>
 </head>
 <body>
     <div id="article"></div>
 </body>
-<template id="loginTemplate">
+<template id="login">
     <div id="article">
         <h2>ログイン画面</h2>
         <div id="content">
@@ -68,7 +109,7 @@ function logout() {
             <h2>サンプル機能画面</h2>
             <table>
                 <thead>
-                    <tr><th>ID</th><th>NAME</th></tr>
+                    <th>ID</th><th>NAME</th>
                 </thead>
                 <tbody>
                 </tbody>
