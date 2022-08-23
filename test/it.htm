@@ -51,13 +51,13 @@ const tests = [{
     },
     {
       name: "サンプル画面表示",
-      action: ifWindow => ifWindow.dispChangeProfile(),
+      action: ifWindow => ifWindow.dispSample(),
       wait: 3000,
       assert : ifWindow => ifWindow.querySelectorAll("#content tbody tr ").length == 2
     },
     {
       name: "ログアウト",
-      action: ifWindow => ifWindow.logoutProcess(),
+      action: ifWindow => ifWindow.logout(),
       wait: 2000,
       assert: ifWindow => ifWindow.idElement("login") != null
     }
