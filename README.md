@@ -4,6 +4,10 @@ Light and small framework for javascript
 ## 共通機能を使う場合
 - anko.js
 
+## 入力チェック機能を使う場合
+- anko.js
+- anko-validator.js
+
 ## it.htmを利用する場合
 - anko.js
 - anko-it.js
