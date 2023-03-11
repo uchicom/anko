@@ -59,7 +59,7 @@ function getJson(url, assignHeader, payload, preProcess, process, errorProcess, 
 	requestJson("GET", queryUrl, assignHeader, null, preProcess, process, errorProcess, postProcess);
 }
 function requestJson(method, url, assignHeader, payload, preProcess, process, errorProcess, postProcess) {
-    if (preProcess) preProcess();
+	if (preProcess && !preProcess()) return;
     fetch(url, {
         method: method,
         headers:  Object.assign({'Content-Type': 'application/json; charset=utf-8'},
