@@ -47,7 +47,7 @@ function report() {
     var row = createRow('reportTemplate', report);
     var cols = row.querySelectorAll("td");
     cols[0].append(tests[i].name);
-    cols[1].append(ok == total ? "OK" : "NG:" + ok + "/" + total);
+    cols[1].append(ok > 0 && ng == 0 ? "OK" : `OK: ${ok}, NG: ${ng}`);
 	  tbody.append(row);
   }
   const aggregate = `（OK: ${totalOk} / ${total}）`;
