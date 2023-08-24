@@ -16,3 +16,8 @@ Light and small framework for javascript
 - anko.js
 - anko-ut.js
 - anko-mock.js mock化する場合はanko.jsでpostする必要がある
+
+## mvn
+### サーバ起動
+```
+mvn exec:java "-Dexec.mainClass=com.uchicom.memo.Main"

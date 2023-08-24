@@ -191,7 +191,7 @@
                 <rule>
                   <element>CLASS</element>
                   <includes>
-                    <include>com.uchicom.anko.api.*</include>
+                    <include>com.uchicom.memo.api.*</include>
                   </includes>
                   <excludes>
                     <exclude>**_Factory**</exclude>
@@ -217,7 +217,7 @@
                 <rule>
                   <element>CLASS</element>
                   <includes>
-                    <include>com.uchicom.anko.dao.*</include>
+                    <include>com.uchicom.memo.dao.*</include>
                   </includes>
                   <excludes>
                     <exclude>**_Factory**</exclude>
@@ -242,7 +242,7 @@
                 <rule>
                   <element>CLASS</element>
                   <includes>
-                    <include>com.uchicom.anko.service.*</include>
+                    <include>com.uchicom.memo.service.*</include>
                   </includes>
                   <excludes>
                     <exclude>**_Factory**</exclude>
@@ -267,7 +267,7 @@
                 <rule>
                   <element>CLASS</element>
                   <includes>
-                    <include>com.uchicom.anko.batch.*</include>
+                    <include>com.uchicom.memo.batch.*</include>
                   </includes>
                   <excludes>
                     <exclude>**_Factory**</exclude>

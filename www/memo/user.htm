@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<link rel="stylesheet" href="/css/uikit-rtl.min.css" type="text/css">
+<link rel="stylesheet" href="/css/uikit.min.css" type="text/css">
+<link rel="stylesheet" href="/css/base.css" type="text/css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta http-equiv="content-script-type" content="text/javascript">
+<meta http-equiv="content-style-type" content="text/css">
+<meta name="author" content="uchicom">
+<meta name="keywords" content="メモ">
+<meta name="description" content="メモサービスです">
+<script src="/js/uikit.min.js"></script>
+<script src="/js/uikit-icons.min.js"></script>
+<script src="/js/anko.js"></script>
+<script src="/memo/js/common.js"></script>
+<script src="/memo/js/main.js"></script>
+<script src="/memo/js/validation.js"></script>
+<script>
+  window.addEventListener("load", dispLogin);
+</script>
+<style>img {width:40px;height:25px;margin-right:10px}</style>
+<title>会員システム - メモサービス</title>
+</head>
+<body>
+<header>
+  <div id="companyNameHeader">
+  <span class="logoChar">メモアプリ</span>
+  </div>
+<ul class="uk-breadcrumb">
+  <li><a href="/">ホーム</a></li>
+  <li><a href="/service.htm"> メモサービス</a></li>
+</ul>
+</header>
+<article style="clear:left;" id="article"></article>
+<div id="footer">
+  <footer>
+    <div>
+      <a href="https://github.com/uchicom" style="text-decoration: none;">uchicom &copy; 2023</a>
+    </div>
+  </footer>
+</div>
+</body>
+</html>
+
+<template id="loginTemplate">
+  <div id="article" style="clear:left;"><article id="content">
+    <h2>ログイン</h2>
+      <div class="uk-container">
+        <div class="uk-grid">
+        <form class="uk-form-horizontal uk-align-center" onsubmit="event.preventDefault()" id="login">
+        <div class="uk-margin">
+        <label class="uk-form-label" for="id">ログインID</label>
+        <div class="uk-form-controls">
+          <div class="uk-inline">
+          <span class="uk-form-icon" uk-icon="icon: user"></span>
+          <input class="uk-input" type="text" id="id" name="id">
+          </div>
+        </div>
+        </div>
+        <div class="uk-margin">
+        <label class="uk-form-label" for="pass">パスワード</label>
+        <div class="uk-form-controls">
+          <div class="uk-inline">
+          <span class="uk-form-icon" uk-icon="icon: lock"></span>
+          <input class="uk-input" type="password" id="pass" name="pass">
+          </div>
+        </div>
+        </div>
+        <div class="uk-margin">
+        <div class="uk-form-controls">
+          <button class="uk-button uk-button-primary" onclick="login()">ログイン</button>
+        </div>
+        </div>
+        </form>
+        </div>
+        </div>
+
+    </article></div>
+</template>
+<template id="topTemplate">
+  <article style="clear:left;" id="article"><div style="float:right">
+    <a href="#offcanvas-slide" class="uk-button uk-button-secondary" uk-toggle><span uk-icon="menu"></span>メニュー</a>
+    <div id="offcanvas-slide" uk-offcanvas="flip: true">
+    <div class="uk-offcanvas-bar">
+        <ul id="menu" class="uk-nav uk-nav-default uk-nav-parent-icon" uk-nav="multiple: true">
+        <li class="uk-nav-header">メニュー</li>
+        <li onclick="display('/memo/user/mypage')"><a>マイページ</a></li>
+        <li class="uk-parent"><a href="#">メモ</a><ul class="uk-nav-sub">
+          <li onclick="display('/memo/user/profile/change')"><a>メモ一覧</a>
+          <li onclick="display('/memo/user/password/change')"><a>メモ登録</a>
+          <li onclick="display('/memo/user/email_address/change')"><a>メモ編集</a>
+          </ul></li>
+        <li onclick="logout()"><a>ログアウト</a>
+        </ul></li>
+        </ul>
+    </div>
+    </div>
+    </div>
+    <div style="float:left" id="content">
+    </div>
+    </article>
+</template>
+<template id="memoTemplate">
+  <div style="float:left" id="content"><h3>メモ一覧</h3>
+    <table class="uk-table uk-table-divider">
+      <tbody>
+      </tbody>
+      <template id="memoTemplate.row">
+        <tr>
+          <th></th>
+          <td></td>
+        </tr>
+      </template>
+    </table>
+  </div>
+</template>
