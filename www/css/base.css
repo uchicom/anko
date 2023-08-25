@@ -1,0 +1,137 @@
+body {
+	font-family: 'Hiragino Kaku  Pro', Meiryo, 'MS PGothic', sans-serif;
+  min-height: 100vh;
+  position: relative;/*←相対位置*/
+  padding-bottom: 80px;/*←footerの高さ*/
+  box-sizing: border-box;/*←全て含めてmin-height:100vhに*/
+}
+
+footer{
+  width: 100%;
+  color: lightgray;
+  text-align: center;
+  padding: 20px 0;
+
+  position: absolute;/*←絶対位置*/
+  bottom: 0; /*下に固定*/
+}
+
+#footer{
+	clear:both;
+}
+
+@media screen and (min-width: 481px) {
+  header {
+		margin: 0 0 0 0;
+		padding: 0 10% 0 10%;
+		position: relative;
+	}
+	p {
+		padding: 5px 10px 5px 10px;
+		margin: 10px 10px 10px 20px;
+	}
+	h1 {
+		font-size: 24px;
+		width: 90%;
+		display: block;
+		margin: 0 auto;
+		padding: 0;
+		position: relative;
+		font-style: bold;
+		color: #333333;
+		line-height: 1.5em;
+		border-bottom: 3px solid #333333;
+	}
+  h2 {
+		font-size: 18px;
+		border-left: 10px solid #333333;
+		text-indent: 10px;
+		margin: 10px 0 10px 0;
+	}
+	h3 {
+		font-size: 14px;
+		border-left:10px solid #333333;
+		text-indent: 10px;
+		margin: 10px 0 10px 10px;
+	}
+	h4 {
+		font-size: 12px;
+		border-left:5px solid #333333;
+		text-indent: 10px;
+		margin: 10px 0 10px 10px;
+	}
+  article {
+		padding: 0 5% 0 5%;
+		margin: 0px auto;
+		position: relative;
+		line-height: 1.5em;
+	}
+}
+
+@media screen and (max-width: 480px) {
+  header {
+		margin: 0 0 0 0;
+		padding: 0 5px 0 5px;
+		position: relative;
+	}
+	h1 {
+		font-size: 24px;
+		padding: 0;
+		position: relative;
+		font-style: bold;
+		color: #333333;
+		line-height: 1.5em;
+		border-bottom: 3px solid #333333;
+	}
+  h2 {
+		font-size: 18px;
+		border-left: 10px solid #333333;
+		text-indent: 10px;
+		margin: 10px 0 10px 0;
+	}
+	h3 {
+		font-size: 14px;
+		border-left: 10px solid #333333;
+		text-indent: 10px;
+		margin: 10px 0 10px 0;
+	}
+	h4 {
+		font-size: 12px;
+		border-left: 5px solid #333333;
+		text-indent: 10px;
+		margin: 10px 0 10px 0;
+	}
+  article {
+		padding: 0px;
+		margin: 0px;
+		position: relative;
+		line-height: 1.5em;
+	}
+}
+
+.required {
+	font-size:0.5em;
+	font-weight: bold;
+	margin-left: 1em;
+	float: right;
+	color: red;
+}
+
+div.waitScreen {
+	display: table;
+	 width: 100%;
+	 height: 100%;
+	 position: fixed;
+	 top: 0;
+	 left: 0;
+	 background-color: #fff;
+	 opacity: 0.8;
+ }
+ 
+ div.waitIcon {
+	 display: block;
+	 margin: 30% auto;
+	 padding: 0;
+	 position: relative;
+	 text-align:center;
+ }
