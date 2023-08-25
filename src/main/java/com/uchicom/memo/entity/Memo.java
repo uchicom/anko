@@ -19,7 +19,7 @@ public class Memo extends AbstractTable {
 
   /** 本文. */
   @IQColumn(nullable = false)
-  public String content;
+  public String body;
 
   @Inject
   public Memo() {}

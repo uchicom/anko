@@ -23,6 +23,7 @@ public class ValidateUtil {
   public static String createJsonForAllRequest() {
     var classSet = ClassUtil.listClasses("com.uchicom.memo.dto.request");
     classSet.addAll(ClassUtil.listClasses("com.uchicom.memo.dto.request.account"));
+    classSet.addAll(ClassUtil.listClasses("com.uchicom.memo.dto.request.memo"));
     return classSet.stream()
         .map(ValidateUtil::createJson)
         .filter(Objects::nonNull)

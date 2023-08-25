@@ -21,3 +21,29 @@ Light and small framework for javascript
 ### サーバ起動
 ```
 mvn exec:java "-Dexec.mainClass=com.uchicom.memo.Main"
+```
+
+### フォーマッタ
+```
+mvn spotless:apply
+```
+
+### 全体テスト実行
+```
+mvn verify
+```
+
+#### ファイル単体でテスト実行
+```
+mvn test "-Dtest=com.uchicom.memo.dao.AccountDaoTest"
+```
+
+### フォーマッタ & 全テスト実行
+```
+mvn spotless:apply verify
+```
+
+### フォーマッタ & クリア & 全テスト実行
+```
+mvn spotless:apply clean compile verify
+```

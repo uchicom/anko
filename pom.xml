@@ -225,6 +225,7 @@
                     <exclude>**Dagger*</exclude>
                     <exclude>**Abstract*</exclude>
                     <exclude>**Test</exclude>
+                    <exclude>**Helper</exclude>
                   </excludes>
                   <limits>
                     <limit>

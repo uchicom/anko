@@ -1,5 +1,5 @@
 // (C) 2023 uchicom
-package com.uchicom.memo.dao;
+package com.uchicom.memo.dao.helper;
 
 import com.iciql.Db;
 import com.iciql.Iciql.IQSchema;

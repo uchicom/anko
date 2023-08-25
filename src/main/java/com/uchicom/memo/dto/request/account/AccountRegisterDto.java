@@ -5,7 +5,7 @@ import com.uchicom.memo.annotation.Form;
 import jakarta.validation.constraints.NotBlank;
 
 @Form("accountRegister")
-public class RegisterDto {
+public class AccountRegisterDto {
   @NotBlank(message = "必須です。")
   public String id;
 

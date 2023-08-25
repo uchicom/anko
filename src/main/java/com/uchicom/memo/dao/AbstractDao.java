@@ -1,6 +1,7 @@
 // (C) 2023 uchicom
 package com.uchicom.memo.dao;
 
+import com.uchicom.memo.dao.helper.DbHelper;
 import com.uchicom.memo.entity.AbstractTable;
 import java.util.List;
 

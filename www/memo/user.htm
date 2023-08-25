@@ -14,6 +14,7 @@
 <script src="/js/uikit.min.js"></script>
 <script src="/js/uikit-icons.min.js"></script>
 <script src="/js/anko.js"></script>
+<script src="/js/anko-validator.js"></script>
 <script src="/memo/js/common.js"></script>
 <script src="/memo/js/main.js"></script>
 <script src="/memo/js/validation.js"></script>
@@ -26,7 +27,7 @@
 <body>
 <header>
   <div id="companyNameHeader">
-  <span class="logoChar">メモアプリ</span>
+  <span class="logoChar">ankoサンプル</span>
   </div>
 <ul class="uk-breadcrumb">
   <li><a href="/">ホーム</a></li>
@@ -88,9 +89,9 @@
         <li class="uk-nav-header">メニュー</li>
         <li onclick="display('/memo/user/mypage')"><a>マイページ</a></li>
         <li class="uk-parent"><a href="#">メモ</a><ul class="uk-nav-sub">
-          <li onclick="display('/memo/user/profile/change')"><a>メモ一覧</a>
-          <li onclick="display('/memo/user/password/change')"><a>メモ登録</a>
-          <li onclick="display('/memo/user/email_address/change')"><a>メモ編集</a>
+          <li onclick="display('/memo/user/list')"><a>メモ一覧</a>
+          <li onclick="display('/memo/user/register')"><a>メモ登録</a>
+          <li onclick="display('/memo/user/update')"><a>メモ編集</a>
           </ul></li>
         <li onclick="logout()"><a>ログアウト</a>
         </ul></li>
@@ -102,17 +103,84 @@
     </div>
     </article>
 </template>
+<template id="accountRegisterTemplate">
+  <div id="article" style="clear:left;" >
+    <article id="content">
+    <h2>アカウント登録</h2>
+    <form onsubmit="event.preventDefault()" id="accountRegister">
+    <table class="uk-table uk-table-divider" style="margin-right:auto;margin-left:auto">
+    <tr><th><label for="id">ログインID</label></th><td><input class="uk-input" type="text" id="id" name="id" ></td></tr>
+    <tr><th><label for="pass">パスワード</label></th><td><input class="uk-input" type="text" id="pass" name="pass" ></td></tr>
+    <tr><th><label for="name">お名前</label></th><td><input class="uk-input" type="text" id="name" name="name" ></td></tr>
+    </table>
+    <button class="uk-button uk-button-primary uk-align-right" id="signupbutton" onclick="this.disabled=true;post('/account/register', 'form#accountRegister', null, (() => this.disabled = false).bind(this))">登録</button>
+    </form>
+    </article></div>
+</template>
+<template id="mypageTemplate">
+  <div style="float:left" id="content"><h3>マイページ</h3>
+    <p>ログインに成功しました。</p>
+  </div>
+</template>
 <template id="memoTemplate">
-  <div style="float:left" id="content"><h3>メモ一覧</h3>
+  <div style="float:left" id="content">
+    <h3>メモ一覧</h3>
+    <span class="uk-label" id="number"></span>
     <table class="uk-table uk-table-divider">
+      <thead>
+        <tr>
+          <th>メモID</th>
+          <th>タイトル</th>
+          <th>内容</th>
+        </tr>
+      </thead>
       <tbody>
       </tbody>
       <template id="memoTemplate.row">
         <tr>
-          <th></th>
           <td></td>
+          <td></td>
+          <td><pre></pre></td>
         </tr>
       </template>
     </table>
+  </div>
+</template>
+<template id="memoRegisterTemplate">
+  <div style="float:left" id="content"><h3>メモ登録</h3>
+    <form onsubmit="event.preventDefault()" id="memoRegister">
+    <table class="uk-table uk-table-divider">
+      <tr><th><label for="title">タイトル</label></th><td><input class="uk-input" type="text" id="title" name="title"></td></tr>
+      <tr><th><label for="body">内容</label></th><td><textarea class="uk-textarea" id="body" name="body"></textarea></td></tr>
+    </table>
+    <button class="uk-button uk-button-primary uk-align-right" id="signupbutton" onclick="post('/memo/register', 'form#memoRegister', () => display('/memo/user/list'))">登録</button>
+    </form>
+  </div>
+</template>
+<template id="memoUpdateTemplate">
+  <div style="float:left" id="content">
+    <h3>メモ更新</h3>
+    <span class="uk-label" id="number"></span>
+    <form onsubmit="event.preventDefault()" id="memoUpdate">
+    <table class="uk-table uk-table-divider">
+      <thead>
+        <tr>
+          <th><label for="id">メモID</label></th>
+          <th><label for="title">タイトル</label></th>
+          <th><label for="body">内容</label></th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+      <template id="memoUpdateTemplate.row">
+        <tr>
+          <td><input type="hidden" name="memoId"></td>
+          <td><input class="uk-input" type="text" name="title"></td>
+          <td><textarea class="uk-textarea" name="body"></textarea></td>
+        </tr>
+      </template>
+    </table>
+    <button class="uk-button uk-button-primary uk-align-right" id="signupbutton" onclick="this.disabled=true;post('/memo/update', 'form#memoUpdate', () => dispMemoUpdate(), (() => this.disabled = false).bind(this), '保存しますか？', true)">保存</button>
+    </form>
   </div>
 </template>

@@ -7,7 +7,7 @@ function replaceValidateTemplate(orgId, templateId) {
   replaceTemplate(orgId, templateId, attachValidattion);
 }
 
-const attachValidattion = form => {
+const attachValidattion = (form, labelConsumer) => {
 	var map = getValidationMap(form.getAttribute("id"));
 	if (!map) {
 		return;

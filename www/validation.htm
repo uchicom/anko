@@ -31,10 +31,10 @@ function initValidation() {
 // labelに必須とかつける場合common.jsとかに定義
 const labelConsumer = label => {
   if (label && !label.querySelector("span[class=\"required\"]")) {
-    label.appendChild(createRequirTag());
+    label.appendChild(createRequireTag());
   }
 };
-function createRequirTag() {
+function createRequireTag() {
 	const span = create("span");
 	span.setAttribute("class", "required");
 	span.appendChild(text("必須"));

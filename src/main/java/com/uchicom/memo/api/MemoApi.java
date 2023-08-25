@@ -1,12 +1,16 @@
 // (C) 2022 uchicom
 package com.uchicom.memo.api;
 
+import com.uchicom.memo.annotation.Auth;
 import com.uchicom.memo.annotation.Path;
-import com.uchicom.memo.dto.request.account.LoginDto;
-import com.uchicom.memo.dto.response.ErrorDto;
-import com.uchicom.memo.dto.response.account.TokenDto;
+import com.uchicom.memo.dto.request.memo.MemoRegisterDto;
+import com.uchicom.memo.dto.request.memo.MemoUpdateDto;
+import com.uchicom.memo.dto.response.ListDto;
+import com.uchicom.memo.dto.response.MessageDto;
+import com.uchicom.memo.entity.Memo;
 import com.uchicom.memo.service.AccountService;
 import com.uchicom.memo.service.MemoService;
+import java.util.List;
 import javax.inject.Inject;
 import spark.Request;
 import spark.Response;
@@ -22,39 +26,35 @@ public class MemoApi extends AbstractApi {
     this.accountService = accountService;
     this.memoService = memoService;
   }
-  // register 登録　id pass を登録して保存 insertのみ存在してたらエラー
 
+  @Auth
   @Path("/list")
   public Object list(Request req, Response res) {
     return refer(
         () -> {
-          return memoService.getList(accountService.getAccountId(req));
+          return new ListDto<Memo>(memoService.getList(accountService.getAccountId(req)));
         });
   }
 
+  @Auth
   @Path("/register")
-  public Object register(LoginDto dto, Request req, Response res) {
+  public Object register(MemoRegisterDto dto, Request req, Response res) {
     return trans(
         req,
         () -> {
-          var token = accountService.login(dto.id, dto.pass);
-          if (token == null) {
-            return new ErrorDto("認証エラー");
-          }
-          return new TokenDto(token);
+          memoService.register(accountService.getAccountId(req), dto);
+          return new MessageDto("メモを登録しました。");
         });
   }
 
+  @Auth
   @Path("/update")
-  public Object update(LoginDto dto, Request req, Response res) {
+  public Object update(List<MemoUpdateDto> dtoList, Request req, Response res) {
     return trans(
         req,
         () -> {
-          var token = accountService.login(dto.id, dto.pass);
-          if (token == null) {
-            return new ErrorDto("認証エラー");
-          }
-          return new TokenDto(token);
+          memoService.update(accountService.getAccountId(req), dtoList);
+          return new MessageDto("メモを更新しました。");
         });
   }
 }

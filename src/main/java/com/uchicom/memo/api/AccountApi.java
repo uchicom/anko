@@ -2,8 +2,8 @@
 package com.uchicom.memo.api;
 
 import com.uchicom.memo.annotation.Path;
+import com.uchicom.memo.dto.request.account.AccountRegisterDto;
 import com.uchicom.memo.dto.request.account.LoginDto;
-import com.uchicom.memo.dto.request.account.RegisterDto;
 import com.uchicom.memo.dto.response.ErrorDto;
 import com.uchicom.memo.dto.response.MessageDto;
 import com.uchicom.memo.dto.response.account.TokenDto;
@@ -23,11 +23,11 @@ public class AccountApi extends AbstractApi {
   }
 
   @Path("/register")
-  public Object register(RegisterDto dto, Request req, Response res) {
+  public Object register(AccountRegisterDto dto, Request req, Response res) {
     return trans(
         req,
         () -> {
-          var account = accountService.register(dto.id, dto.pass, dto.name);
+          var account = accountService.register(dto);
           if (account == null) {
             return new ErrorDto("既に登録済みのログインIDです。");
           }
@@ -40,7 +40,7 @@ public class AccountApi extends AbstractApi {
     return trans(
         req,
         () -> {
-          var token = accountService.login(dto.id, dto.pass);
+          var token = accountService.login(dto);
           if (token == null) {
             return new ErrorDto("認証エラー");
           }

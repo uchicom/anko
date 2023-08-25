@@ -207,8 +207,8 @@ function postJsonUrl(url, selector, func, errorFunc, confirmMessage, isArray, ar
 		data[arrayKey] = [];
 	}
 	if (selector) {
-		var validate = querySelectorAll(selector + " form");
-		if (validate.length > 0 && !validate[0].checkValidity()) {
+		var validate = querySelector(selector);
+		if (validate && validate.tagName == 'FORM' && !validate.checkValidity()) {
 			if (errorFunc) {
 				errorFunc();
 			}
@@ -382,37 +382,11 @@ function confirmPost(message, action, key, func, funcPrevious, isArray) {
 	}
 	post(action, key, func, null, message, isArray);
 }
-
-const attachValidattion = form => {
-	var map = getValidationMap(form.getAttribute("id"));
-	if (!map) {
-		return;
-	}
-	var elements = form.querySelectorAll("input,select,textarea");
-	for (var ei = 0; ei < elements.length; ei++) {
-		var element = elements[ei];
-		var validation = map[element.name];
-		if (!validation) {
-			continue;
-		}
-		if (validation['required']) {
-			element.required = true;
-			element.title = validation['required'].message;
-			var label = form.querySelector("label[for=\"" + element.getAttribute("id") + "\"],label[for=\"" + element.getAttribute("name") + "\"]");
-			if (label && !label.querySelector("span[class=\"required\"]")) {
-				label.appendChild(createRequirTag());
-			}
-		}
-		if (validation['pattern']) {
-			element.pattern = validation['pattern'].regexp;
-			element.title = validation['pattern'].message;
-		}
-		if (validation['length'] && validation['length'].max) {
-			element.maxLength = validation['length'].max;
-		}
-	}
+const labelConsumer = label => {
+  if (label && !label.querySelector("span[class=\"required\"]")) {
+    label.appendChild(createRequirTag());
+  }
 };
-
 function createRequirTag() {
 	var span = document.createElement("span");
 	span.setAttribute("class", "required");
@@ -420,10 +394,10 @@ function createRequirTag() {
 	return span;
 }
 function articleTemplate(templateId) {
-	replaceTemplate('article', templateId, attachValidattion);
+	replaceTemplate('article', templateId, attachValidattion, labelConsumer);
 }
 function contentTemplate(templateId, formFunction) {
-	replaceTemplate('content', templateId, formFunction ? formFunction : attachValidattion);
+	replaceTemplate('content', templateId, formFunction ? formFunction : attachValidattion, labelConsumer);
 }
 function getToken() {
 	return sessionStorage.getItem('token');

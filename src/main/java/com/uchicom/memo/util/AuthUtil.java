@@ -26,7 +26,8 @@ public class AuthUtil {
   }
 
   public static String publish(LocalDateTime now, long accountId) {
-    var algorithm = Algorithm.HMAC256(Constants.SECRET);
+    var algorithm =
+        Algorithm.HMAC256(Constants.SECRET); // ここではあえて単純化しています。SECRETは複雑な文字列や、可変にしたりすると良いです。
     var builder = JWT.create().withExpiresAt(now.plusHours(1).toInstant(Constants.ZONE_OFFSET));
     builder.withSubject(String.valueOf(accountId));
     return builder.sign(algorithm);
