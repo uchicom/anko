@@ -6,10 +6,10 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.uchicom.memo.Constants;
 import com.uchicom.memo.module.MainModule;
 import dagger.Component;
+import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import spark.Request;
 
 /**
  * 認証ユーティリティ.
@@ -44,8 +44,8 @@ public class AuthUtil {
    * @param req リクエスト
    * @return 認証OKの場合はtrue,それ以外はfalseを返します
    */
-  public static boolean auth(Request req) {
-    String token = req.headers("token");
+  public static boolean auth(HttpServletRequest req) {
+    String token = req.getHeader("token");
     if (token == null) {
       return false;
     }
@@ -55,7 +55,7 @@ public class AuthUtil {
         logger.warning("id is blank");
         return false;
       }
-      req.attribute("accountId", Long.parseLong(subject));
+      req.setAttribute("accountId", Long.parseLong(subject));
       return true;
     } catch (Exception e) {
       logger.log(Level.INFO, "認証エラー", e);

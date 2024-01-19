@@ -8,9 +8,9 @@ import com.uchicom.memo.dto.response.ErrorDto;
 import com.uchicom.memo.dto.response.MessageDto;
 import com.uchicom.memo.dto.response.account.TokenDto;
 import com.uchicom.memo.service.AccountService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import javax.inject.Inject;
-import spark.Request;
-import spark.Response;
 
 @Path("/account")
 public class AccountApi extends AbstractApi {
@@ -23,7 +23,7 @@ public class AccountApi extends AbstractApi {
   }
 
   @Path("/register")
-  public Object register(AccountRegisterDto dto, Request req, Response res) {
+  public Object register(AccountRegisterDto dto, HttpServletRequest req, HttpServletResponse res) {
     return trans(
         req,
         () -> {
@@ -36,7 +36,7 @@ public class AccountApi extends AbstractApi {
   }
 
   @Path("/login")
-  public Object login(LoginDto dto, Request req, Response res) {
+  public Object login(LoginDto dto, HttpServletRequest req, HttpServletResponse res) {
     return trans(
         req,
         () -> {

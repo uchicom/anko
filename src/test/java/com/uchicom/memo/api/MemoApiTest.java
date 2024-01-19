@@ -14,6 +14,8 @@ import com.uchicom.memo.dto.response.MessageDto;
 import com.uchicom.memo.entity.Memo;
 import com.uchicom.memo.service.AccountService;
 import com.uchicom.memo.service.MemoService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -23,13 +25,11 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import spark.Request;
-import spark.Response;
 
 @Tag("api")
 public class MemoApiTest extends AbstractTest {
-  @Mock Request req;
-  @Mock Response res;
+  @Mock HttpServletRequest req;
+  @Mock HttpServletResponse res;
 
   @Mock AccountService accountService;
   @Mock MemoService memoService;

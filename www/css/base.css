@@ -135,3 +135,7 @@ div.waitScreen {
 	 position: relative;
 	 text-align:center;
  }
+ 
+input:invalid,select:invalid,textarea:invalid {
+	border-color: pink;
+}

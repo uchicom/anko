@@ -9,10 +9,10 @@ import com.uchicom.memo.dto.response.ListDto;
 import com.uchicom.memo.dto.response.MessageDto;
 import com.uchicom.memo.entity.Memo;
 import com.uchicom.memo.service.MemoService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import javax.inject.Inject;
-import spark.Request;
-import spark.Response;
 
 @Path("/memo")
 public class MemoApi extends AbstractApi {
@@ -26,7 +26,7 @@ public class MemoApi extends AbstractApi {
 
   @Auth
   @Path("/list")
-  public Object list(Request req, Response res) {
+  public Object list(HttpServletRequest req, HttpServletResponse res) {
     return refer(
         () -> {
           return new ListDto<Memo>(memoService.getList(getAccountId(req)));
@@ -35,7 +35,7 @@ public class MemoApi extends AbstractApi {
 
   @Auth
   @Path("/register")
-  public Object register(MemoRegisterDto dto, Request req, Response res) {
+  public Object register(MemoRegisterDto dto, HttpServletRequest req, HttpServletResponse res) {
     return trans(
         req,
         () -> {
@@ -46,7 +46,8 @@ public class MemoApi extends AbstractApi {
 
   @Auth
   @Path("/update")
-  public Object update(List<MemoUpdateDto> dtoList, Request req, Response res) {
+  public Object update(
+      List<MemoUpdateDto> dtoList, HttpServletRequest req, HttpServletResponse res) {
     return trans(
         req,
         () -> {
