@@ -84,10 +84,12 @@ public class Context {
   public static String get(Config config) {
     return context.configProperties.getProperty(config.name());
   }
+
   /** 設定 */
   public static Integer getInteger(Config config) {
     return Integer.parseInt(context.configProperties.getProperty(config.name()));
   }
+
   /** 設定 */
   public static Boolean getBoolean(Config config) {
     return Boolean.parseBoolean(context.configProperties.getProperty(config.name()));

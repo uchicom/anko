@@ -9,6 +9,7 @@ import javax.inject.Inject;
 public class DateTimeService {
   @Inject
   public DateTimeService() {}
+
   /**
    * 現在日を取得します.
    *

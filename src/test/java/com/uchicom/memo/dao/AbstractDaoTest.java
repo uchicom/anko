@@ -57,6 +57,7 @@ public abstract class AbstractDaoTest<U extends AbstractTable, V> extends Abstra
     helper = Mockito.spy(new DbHelper<U>(u.get()));
     dao = function.apply(helper);
   }
+
   /** テスト事前準備. */
   @BeforeEach
   public void setUp() throws Exception {
