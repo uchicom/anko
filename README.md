@@ -1,5 +1,7 @@
 # anko.js
-Light and small framework for javascript
+Light and small framework for javascript and Java.
+
+Sample memo application.
 
 ## 共通機能を使う場合
 - anko.js
