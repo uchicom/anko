@@ -39,4 +39,8 @@ public abstract class AbstractApi extends AbstractDb {
     logger.log(Level.SEVERE, "APIエラー", e);
     return new ErrorDto("エラーが発生しました。管理者に連絡してください。");
   }
+
+  public long getAccountId(Request req) {
+    return (long) req.attribute("accountId");
+  }
 }

@@ -11,7 +11,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import javax.inject.Inject;
-import spark.Request;
 
 public class AccountService {
 
@@ -22,10 +21,6 @@ public class AccountService {
   public AccountService(DateTimeService dateTimeService, AccountDao accountDao) {
     this.dateTimeService = dateTimeService;
     this.accountDao = accountDao;
-  }
-
-  public long getAccountId(Request req) {
-    return (long) req.attribute("accountId");
   }
 
   public Account register(AccountRegisterDto dto) throws NoSuchAlgorithmException {

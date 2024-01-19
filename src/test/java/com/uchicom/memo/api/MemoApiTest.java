@@ -48,7 +48,7 @@ public class MemoApiTest extends AbstractTest {
   @Test
   public void list() throws Exception {
     // mock
-    doReturn(1L).when(accountService).getAccountId(req);
+    doReturn(1L).when(api).getAccountId(req);
     var list = List.of(new Memo());
     doReturn(list).when(memoService).getList(accountIdCaptor.capture());
 
@@ -67,7 +67,7 @@ public class MemoApiTest extends AbstractTest {
   @Test
   public void register() throws Exception {
     // mock
-    doReturn(1L).when(accountService).getAccountId(req);
+    doReturn(1L).when(api).getAccountId(req);
     var dto = new MemoRegisterDto();
     doNothing()
         .when(memoService)
@@ -89,7 +89,7 @@ public class MemoApiTest extends AbstractTest {
   @Test
   public void update() throws Exception {
     // mock
-    doReturn(1L).when(accountService).getAccountId(req);
+    doReturn(1L).when(api).getAccountId(req);
     doNothing()
         .when(memoService)
         .update(accountIdCaptor.capture(), memoUpdateDtoListCaptor.capture());

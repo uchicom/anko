@@ -3,7 +3,6 @@ package com.uchicom.memo.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
 
 import com.uchicom.memo.AbstractTest;
 import com.uchicom.memo.dao.AccountDao;
@@ -19,7 +18,6 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import spark.Request;
 
 /**
  * {@link AccountService}のテストケース.
@@ -38,19 +36,6 @@ public class AccountServiceTest extends AbstractTest {
   @Captor ArgumentCaptor<Long> accountIdCaptor;
 
   @Spy @InjectMocks AccountService service;
-
-  @Test
-  public void getAccountId() {
-    // mock
-    var req = mock(Request.class);
-    doReturn(1L).when(req).attribute("accountId");
-
-    // test
-    var result = service.getAccountId(req);
-
-    // assert
-    assertThat(result).isEqualTo(1L);
-  }
 
   @Test
   public void register() throws Exception {
