@@ -6,9 +6,9 @@ import com.uchicom.memo.module.MainModule;
 import com.uchicom.memo.util.AbstractDb;
 import com.uchicom.util.ThrowingSupplier;
 import dagger.Component;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import spark.Request;
 
 public abstract class AbstractApi extends AbstractDb {
 
@@ -31,12 +31,17 @@ public abstract class AbstractApi extends AbstractDb {
     return handling(() -> reference(function));
   }
 
-  public Object trans(Request req, ThrowingSupplier<Object, Throwable> function) {
-    return handling(() -> transaction(String.valueOf((Long) req.attribute("accountId")), function));
+  public Object trans(HttpServletRequest req, ThrowingSupplier<Object, Throwable> function) {
+    return handling(
+        () -> transaction(String.valueOf((Long) req.getAttribute("accountId")), function));
   }
 
   public ErrorDto errorApi(Throwable e) {
     logger.log(Level.SEVERE, "APIエラー", e);
     return new ErrorDto("エラーが発生しました。管理者に連絡してください。");
+  }
+
+  public long getAccountId(HttpServletRequest req) {
+    return (long) req.getAttribute("accountId");
   }
 }

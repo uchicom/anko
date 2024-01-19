@@ -13,6 +13,8 @@ import com.uchicom.memo.dto.response.MessageDto;
 import com.uchicom.memo.dto.response.account.TokenDto;
 import com.uchicom.memo.entity.Account;
 import com.uchicom.memo.service.AccountService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -21,13 +23,11 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import spark.Request;
-import spark.Response;
 
 @Tag("api")
 public class AccountApiTest extends AbstractTest {
-  @Mock Request req;
-  @Mock Response res;
+  @Mock HttpServletRequest req;
+  @Mock HttpServletResponse res;
 
   @Mock AccountService accountService;
 
