@@ -22,6 +22,7 @@ import jakarta.validation.Validator;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,7 +70,7 @@ public class ApiServlet extends HttpServlet {
       var function = map.get(req.getPathInfo());
       var result = function.apply(req, res);
       if (result != null) {
-        res.getOutputStream().write(result.toString().getBytes());
+        res.getOutputStream().write(result.getBytes(StandardCharsets.UTF_8));
       }
     } catch (Exception exception) {
       logger.log(Level.SEVERE, exception.getMessage(), exception);

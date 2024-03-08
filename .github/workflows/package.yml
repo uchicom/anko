@@ -1,8 +1,9 @@
 name: Create a package
 
 on:
-  push:
-    branches: [ main ]
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
@@ -16,7 +17,18 @@ jobs:
       with:
         java-version: '21'
         distribution: 'temurin'
-    - name: Package with Maven
+    - name: Setup reviewdog
+      uses: reviewdog/action-setup@v1
+      with:
+        reviewdog_version: latest
+    - name: Package with Maven And ReviewDog
       env:
         TZ: 'Asia/Tokyo'
-      run: mvn -B package --file pom.xml
+        CI_PULL_REQUEST: ${{ github.event.pull_request.number }}
+        CI_COMMIT: ${{ github.sha }}
+        CI_REPO_OWNER: ${{ github.repository_owner }}
+        CI_REPO_NAME: ${{ github.event.repository.name }}
+        CI_BRANCH: ${{ github.head_ref }}
+        REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        mvn -B package --file pom.xml |& reviewdog -efm='%W[WARNING] %f:[%l,%c] %m' -efm='%C   %m' -efm='%Z  %m' -name=ErrorProne -reporter=github-pr-review -filter-mode=nofilter -fail-on-error=true

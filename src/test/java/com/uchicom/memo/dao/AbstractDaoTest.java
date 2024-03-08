@@ -38,8 +38,8 @@ public abstract class AbstractDaoTest<U extends AbstractTable, V> extends Abstra
   @Mock DatabaseMetaData databaseMetaData;
 
   V dao;
-
-  @Mock Query<U> query;
+  Query<U> query;
+  DbHelper<U> helper;
 
   @Mock QueryWhere<U> queryWhere;
 
@@ -50,8 +50,6 @@ public abstract class AbstractDaoTest<U extends AbstractTable, V> extends Abstra
   @Captor ArgumentCaptor<String> sqlCaptor;
 
   @Captor ArgumentCaptor<U> entityCaptor;
-
-  DbHelper<U> helper;
 
   AbstractDaoTest(Supplier<U> u, Function<DbHelper<U>, V> function) {
     helper = Mockito.spy(new DbHelper<U>(u.get()));
