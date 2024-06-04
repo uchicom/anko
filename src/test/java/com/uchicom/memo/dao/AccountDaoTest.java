@@ -25,7 +25,7 @@ public class AccountDaoTest extends AbstractDaoTest<Account, AccountDao> {
     test(
         () -> {
           dao.findAll();
-          assertThat(getSQL()).isEqualTo("SELECT * FROM account ORDER BY id");
+          assertThat(getSQL()).isEqualTo("SELECT * FROM memo.account ORDER BY id");
         });
   }
 
@@ -35,7 +35,7 @@ public class AccountDaoTest extends AbstractDaoTest<Account, AccountDao> {
     test(
         () -> {
           dao.findByLoginId("loginId");
-          assertThat(getSQL()).isEqualTo("SELECT * FROM account WHERE login_id = 'loginId'");
+          assertThat(getSQL()).isEqualTo("SELECT * FROM memo.account WHERE login_id = 'loginId'");
         });
   }
 }

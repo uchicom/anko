@@ -25,7 +25,7 @@ public class MemoDaoTest extends AbstractDaoTest<Memo, MemoDao> {
     test(
         () -> {
           dao.findAll();
-          assertThat(getSQL()).isEqualTo("SELECT * FROM memo ORDER BY id");
+          assertThat(getSQL()).isEqualTo("SELECT * FROM memo.memo ORDER BY id");
         });
   }
 
@@ -35,7 +35,7 @@ public class MemoDaoTest extends AbstractDaoTest<Memo, MemoDao> {
     test(
         () -> {
           dao.findByAccountId(1L);
-          assertThat(getSQL()).isEqualTo("SELECT * FROM memo WHERE account_id = 1");
+          assertThat(getSQL()).isEqualTo("SELECT * FROM memo.memo WHERE account_id = 1");
         });
   }
 
@@ -45,7 +45,7 @@ public class MemoDaoTest extends AbstractDaoTest<Memo, MemoDao> {
     test(
         () -> {
           dao.findByIdAndAccountId(1L, 2L);
-          assertThat(getSQL()).isEqualTo("SELECT * FROM memo WHERE id = 1 AND account_id = 2");
+          assertThat(getSQL()).isEqualTo("SELECT * FROM memo.memo WHERE id = 1 AND account_id = 2");
         });
   }
 }
