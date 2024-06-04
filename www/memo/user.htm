@@ -110,7 +110,7 @@
     <form onsubmit="event.preventDefault()" id="accountRegister">
     <table class="uk-table uk-table-divider" style="margin-right:auto;margin-left:auto">
     <tr><th><label for="id">ログインID</label></th><td><input class="uk-input" type="text" id="id" name="id" ></td></tr>
-    <tr><th><label for="pass">パスワード</label></th><td><input class="uk-input" type="text" id="pass" name="pass" ></td></tr>
+    <tr><th><label for="pass">パスワード</label></th><td><input class="uk-input" type="password" id="pass" name="pass" ></td></tr>
     <tr><th><label for="name">お名前</label></th><td><input class="uk-input" type="text" id="name" name="name" ></td></tr>
     </table>
     <button class="uk-button uk-button-primary uk-align-right" id="signupbutton" onclick="this.disabled=true;post('/account/register', 'form#accountRegister', null, (() => this.disabled = false).bind(this))">登録</button>
