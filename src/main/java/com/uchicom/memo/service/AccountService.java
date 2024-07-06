@@ -5,7 +5,7 @@ import com.uchicom.memo.dao.AccountDao;
 import com.uchicom.memo.dto.request.account.AccountRegisterDto;
 import com.uchicom.memo.dto.request.account.LoginDto;
 import com.uchicom.memo.entity.Account;
-import com.uchicom.memo.util.AuthUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -14,12 +14,12 @@ import javax.inject.Inject;
 
 public class AccountService {
 
-  private final DateTimeService dateTimeService;
+  private final AuthService authService;
   private final AccountDao accountDao;
 
   @Inject
-  public AccountService(DateTimeService dateTimeService, AccountDao accountDao) {
-    this.dateTimeService = dateTimeService;
+  public AccountService(AuthService authService, AccountDao accountDao) {
+    this.authService = authService;
     this.accountDao = accountDao;
   }
 
@@ -52,7 +52,7 @@ public class AccountService {
       // ログイン失敗
       return null;
     }
-    return AuthUtil.publish(dateTimeService.getLocalDateTime(), account.id);
+    return authService.publish(account.id);
   }
 
   String createSalt(String loginId) {
@@ -72,5 +72,9 @@ public class AccountService {
 
   boolean verifyPassword(Account account, String password) throws NoSuchAlgorithmException {
     return Arrays.equals(account.password, createPasswordHash(account.login_id, password));
+  }
+
+  public boolean isLogin(HttpServletRequest req) {
+    return authService.auth(req);
   }
 }

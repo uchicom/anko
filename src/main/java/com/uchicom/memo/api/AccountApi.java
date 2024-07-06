@@ -6,8 +6,10 @@ import com.uchicom.memo.dto.request.account.AccountRegisterDto;
 import com.uchicom.memo.dto.request.account.LoginDto;
 import com.uchicom.memo.dto.response.ErrorDto;
 import com.uchicom.memo.dto.response.MessageDto;
-import com.uchicom.memo.dto.response.account.TokenDto;
+import com.uchicom.memo.dto.response.account.ResultDto;
+import com.uchicom.memo.enumeration.ApiResult;
 import com.uchicom.memo.service.AccountService;
+import com.uchicom.memo.service.CookieService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import javax.inject.Inject;
@@ -16,10 +18,12 @@ import javax.inject.Inject;
 public class AccountApi extends AbstractApi {
 
   private final AccountService accountService;
+  private final CookieService cookieService;
 
   @Inject
-  public AccountApi(AccountService accountService) {
+  public AccountApi(AccountService accountService, CookieService cookieService) {
     this.accountService = accountService;
+    this.cookieService = cookieService;
   }
 
   @Path("/register")
@@ -44,7 +48,28 @@ public class AccountApi extends AbstractApi {
           if (token == null) {
             return new ErrorDto("認証エラー");
           }
-          return new TokenDto(token);
+          cookieService.addJwt(res, token);
+          return new ResultDto(ApiResult.OK);
+        });
+  }
+
+  @Path("/check/login")
+  public Object checkLogin(HttpServletRequest req, HttpServletResponse res) {
+    return refer(
+        () -> {
+          if (accountService.isLogin(req)) {
+            return new ResultDto(ApiResult.OK);
+          }
+          return new ResultDto(ApiResult.NG);
+        });
+  }
+
+  @Path("/logout")
+  public Object logout(HttpServletRequest req, HttpServletResponse res) {
+    return refer(
+        () -> {
+          cookieService.removeJwt(req, res);
+          return new ResultDto(ApiResult.OK);
         });
   }
 }

@@ -3,12 +3,14 @@ package com.uchicom.memo.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
 import com.uchicom.memo.AbstractTest;
 import com.uchicom.memo.dao.AccountDao;
 import com.uchicom.memo.dto.request.account.AccountRegisterDto;
 import com.uchicom.memo.dto.request.account.LoginDto;
 import com.uchicom.memo.entity.Account;
+import jakarta.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.Tag;
@@ -28,12 +30,14 @@ import org.mockito.Spy;
 public class AccountServiceTest extends AbstractTest {
 
   @Mock DateTimeService dateTimeService;
+  @Mock AuthService authService;
   @Mock AccountDao accountDao;
 
   @Captor ArgumentCaptor<String> loginIdCaptor;
   @Captor ArgumentCaptor<String> passwordCaptor;
   @Captor ArgumentCaptor<Account> accountCaptor;
   @Captor ArgumentCaptor<Long> accountIdCaptor;
+  @Captor ArgumentCaptor<HttpServletRequest> reqCaptor;
 
   @Spy @InjectMocks AccountService service;
 
@@ -113,6 +117,8 @@ public class AccountServiceTest extends AbstractTest {
     doReturn(account).when(accountDao).findByLoginId(loginIdCaptor.capture());
     doReturn(true).when(service).verifyPassword(accountCaptor.capture(), passwordCaptor.capture());
     doReturn(LocalDateTime.of(2023, 8, 25, 12, 34, 56)).when(dateTimeService).getLocalDateTime();
+    var token = "token";
+    doReturn(token).when(authService).publish(accountIdCaptor.capture());
     var dto = new LoginDto();
     dto.id = "loginId";
     dto.pass = "password";
@@ -121,10 +127,26 @@ public class AccountServiceTest extends AbstractTest {
     var result = service.login(dto);
 
     // assert
-    assertThat(result).isNotNull();
+    assertThat(result).isEqualTo(token);
 
     assertThat(loginIdCaptor.getValue()).isEqualTo("loginId");
     assertThat(accountCaptor.getValue()).isEqualTo(account);
     assertThat(passwordCaptor.getValue()).isEqualTo("password");
+    assertThat(accountIdCaptor.getValue()).isEqualTo(account.id);
+  }
+
+  @Test
+  public void isLogin() throws Exception {
+    // mock
+    var bool = true;
+    doReturn(bool).when(authService).auth(reqCaptor.capture());
+
+    var req = mock(HttpServletRequest.class);
+    // test
+    var result = service.isLogin(req);
+
+    // assert
+    assertThat(result).isEqualTo(bool);
+    assertThat(reqCaptor.getValue()).isEqualTo(req);
   }
 }

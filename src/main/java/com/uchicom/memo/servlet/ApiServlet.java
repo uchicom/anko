@@ -10,7 +10,7 @@ import com.uchicom.memo.api.AccountApi;
 import com.uchicom.memo.api.MemoApi;
 import com.uchicom.memo.dto.response.account.AuthDto;
 import com.uchicom.memo.exception.ViolationException;
-import com.uchicom.memo.util.AuthUtil;
+import com.uchicom.memo.service.AuthService;
 import com.uchicom.memo.util.ClassUtil;
 import com.uchicom.memo.util.ThrowingBiFunction;
 import jakarta.servlet.ServletException;
@@ -38,6 +38,8 @@ public class ApiServlet extends HttpServlet {
 
   private final Map<Class<? extends AbstractApi>, AbstractApi> apiClassMap = new HashMap<>();
 
+  private final AuthService authService;
+
   private final ObjectMapper objectMapper;
 
   private final Validator validator;
@@ -48,11 +50,13 @@ public class ApiServlet extends HttpServlet {
   public ApiServlet(
       AccountApi accountApi,
       MemoApi memoApi,
+      AuthService authService,
       ObjectMapper objectMapper,
       Validator validator,
       Logger logger) {
     register(accountApi);
     register(memoApi);
+    this.authService = authService;
     this.objectMapper = objectMapper;
     this.validator = validator;
     this.logger = logger;
@@ -107,7 +111,7 @@ public class ApiServlet extends HttpServlet {
       String url = null;
       Auth auth = method.getAnnotation(Auth.class);
       res.setHeader("Cache-Control", "no-store");
-      if (auth != null && !AuthUtil.auth(req)) {
+      if (auth != null && !authService.auth(req)) {
         res.setContentType("application/json; charset=UTF-8");
         return objectMapper.writeValueAsString(new AuthDto("認証情報の有効期限が切れました。ログインしなおしてください。"));
       }
