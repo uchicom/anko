@@ -3,6 +3,7 @@ package com.uchicom.memo.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 
 import com.uchicom.memo.AbstractTest;
@@ -10,9 +11,11 @@ import com.uchicom.memo.dto.request.account.AccountRegisterDto;
 import com.uchicom.memo.dto.request.account.LoginDto;
 import com.uchicom.memo.dto.response.ErrorDto;
 import com.uchicom.memo.dto.response.MessageDto;
-import com.uchicom.memo.dto.response.account.TokenDto;
+import com.uchicom.memo.dto.response.account.ResultDto;
 import com.uchicom.memo.entity.Account;
+import com.uchicom.memo.enumeration.ApiResult;
 import com.uchicom.memo.service.AccountService;
+import com.uchicom.memo.service.CookieService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,9 +33,12 @@ public class AccountApiTest extends AbstractTest {
   @Mock HttpServletResponse res;
 
   @Mock AccountService accountService;
+  @Mock CookieService cookieService;
 
   @Captor ArgumentCaptor<AccountRegisterDto> accountRegisterDtoCaptor;
   @Captor ArgumentCaptor<LoginDto> loginDtoCaptor;
+  @Captor ArgumentCaptor<HttpServletRequest> reqCaptor;
+  @Captor ArgumentCaptor<HttpServletResponse> resCaptor;
 
   @Spy @InjectMocks AccountApi api;
 
@@ -107,11 +113,63 @@ public class AccountApiTest extends AbstractTest {
     var result = api.login(dto, req, res);
 
     // assert
-    if (result instanceof TokenDto tokenDto) {
-      assertThat(tokenDto.token).isEqualTo("test");
+    if (result instanceof ResultDto resultDto) {
+      assertThat(resultDto.result).isEqualTo(ApiResult.OK);
     } else {
       fail();
     }
     assertThat(loginDtoCaptor.getValue()).isEqualTo(dto);
+  }
+
+  @Test
+  public void checkLogin_NG() throws Exception {
+
+    doReturn(false).when(accountService).isLogin(reqCaptor.capture());
+
+    // test method
+    var result = api.checkLogin(req, res);
+
+    // assert
+    if (result instanceof ResultDto resultDto) {
+      assertThat(resultDto.result).isEqualTo(ApiResult.NG);
+    } else {
+      fail();
+    }
+    assertThat(reqCaptor.getValue()).isEqualTo(req);
+  }
+
+  @Test
+  public void checkLogin() throws Exception {
+
+    doReturn(true).when(accountService).isLogin(reqCaptor.capture());
+
+    // test method
+    var result = api.checkLogin(req, res);
+
+    // assert
+    if (result instanceof ResultDto resultDto) {
+      assertThat(resultDto.result).isEqualTo(ApiResult.OK);
+    } else {
+      fail();
+    }
+    assertThat(reqCaptor.getValue()).isEqualTo(req);
+  }
+
+  @Test
+  public void logout() throws Exception {
+
+    doNothing().when(cookieService).removeJwt(reqCaptor.capture(), resCaptor.capture());
+
+    // test method
+    var result = api.logout(req, res);
+
+    // assert
+    if (result instanceof ResultDto resultDto) {
+      assertThat(resultDto.result).isEqualTo(ApiResult.OK);
+    } else {
+      fail();
+    }
+    assertThat(reqCaptor.getValue()).isEqualTo(req);
+    assertThat(resCaptor.getValue()).isEqualTo(res);
   }
 }

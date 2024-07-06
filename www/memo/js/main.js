@@ -47,16 +47,18 @@ function post(path, selector, func, errorFunc, confirmMessage, isArray) {
 // ログイン
 dispLogin = () => {
 	// 認証済み
-	if (getToken()) {
-		dispTop();
-		return;
-	}
-	// 未認証
-	if (location.pathname == "/memo/user/signup") { //サインアップ
-		dispAccountRegister();
-	} else {
-		articleTemplate('loginTemplate');
-	}
+	post( '/account/check/login',  null, data => {
+		if (data.result == "OK") {
+			dispTop();
+			return;
+		}
+		// 未認証
+		if (location.pathname == "/memo/user/signup") { //サインアップ
+			dispAccountRegister();
+		} else {
+			articleTemplate('loginTemplate');
+		}
+	});
 }
 
 // トップ画面
@@ -79,8 +81,7 @@ function dispLoginView() {
 // ログイン
 function login() {
 	post( '/account/login',  'form#login', data => {
-		if (data.token) {
-			saveToken(data.token);
+		if (data.result == 'OK') {
 			dispTop();
 		}
 	});
@@ -100,9 +101,12 @@ function logout() {
 	}
 }
 function logoutProcess() {
-	removeToken();
-	UIkit.nav('#offcanvas-slide').$destroy();
-	dispLoginView();
+	post( '/account/logout',  null, data => {
+		if (data.result == "OK") {
+			UIkit.nav('#offcanvas-slide').$destroy();
+			dispLoginView();
+		}
+	});
 }
 
 // アカウント登録

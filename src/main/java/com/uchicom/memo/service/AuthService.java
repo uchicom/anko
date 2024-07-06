@@ -1,39 +1,43 @@
 // (C) 2023 uchicom
-package com.uchicom.memo.util;
+package com.uchicom.memo.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.uchicom.memo.Constants;
-import com.uchicom.memo.module.MainModule;
-import dagger.Component;
 import jakarta.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.inject.Inject;
 
 /**
- * 認証ユーティリティ.
+ * 認可サービス.
  *
  * @author uchicom: Shigeki Uchiyama
  */
-public class AuthUtil {
-  /** ロガー */
-  private static final Logger logger = DaggerAuthUtil_MainComponent.create().logger();
+public class AuthService {
 
-  @Component(modules = MainModule.class)
-  interface MainComponent {
-    Logger logger();
+  private final DateTimeService dateTimeService;
+  private final CookieService cookieService;
+  private final Logger logger;
+
+  @Inject
+  public AuthService(DateTimeService dateTimeService, CookieService cookieService, Logger logger) {
+    this.dateTimeService = dateTimeService;
+    this.cookieService = cookieService;
+    this.logger = logger;
   }
 
-  public static String publish(LocalDateTime now, long accountId) {
-    var algorithm =
-        Algorithm.HMAC256(Constants.SECRET); // ここではあえて単純化しています。SECRETは複雑な文字列や、可変にしたりすると良いです。
-    var builder = JWT.create().withExpiresAt(now.plusHours(1).toInstant(Constants.ZONE_OFFSET));
+  public String publish(long accountId) {
+    var algorithm = Algorithm.HMAC256(Constants.SECRET);
+    var builder =
+        JWT.create()
+            .withExpiresAt(
+                dateTimeService.getLocalDateTime().plusHours(1).toInstant(Constants.ZONE_OFFSET));
     builder.withSubject(String.valueOf(accountId));
     return builder.sign(algorithm);
   }
 
-  public static String subject(String token) {
+  public String subject(String token) {
     var algorithm = Algorithm.HMAC256(Constants.SECRET);
     return JWT.require(algorithm).build().verify(token).getSubject();
   }
@@ -44,8 +48,8 @@ public class AuthUtil {
    * @param req リクエスト
    * @return 認証OKの場合はtrue,それ以外はfalseを返します
    */
-  public static boolean auth(HttpServletRequest req) {
-    String token = req.getHeader("token");
+  public boolean auth(HttpServletRequest req) {
+    var token = cookieService.getValue(req.getCookies(), "jwt");
     if (token == null) {
       return false;
     }
