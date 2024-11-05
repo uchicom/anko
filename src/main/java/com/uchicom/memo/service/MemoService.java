@@ -16,6 +16,10 @@ public class MemoService {
     this.memoDao = memoDao;
   }
 
+  public Memo get(long memoId) {
+    return memoDao.findById(memoId);
+  }
+
   public List<Memo> getList(long accountId) {
     return memoDao.findByAccountId(accountId);
   }

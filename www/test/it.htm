@@ -3,7 +3,7 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta http-equiv="content-script-type" content="text/javascript">
 <meta http-equiv="content-style-type" content="text/css">
-<script src="/sample/js/anko.js"></script>
+<script src="/js/anko.js"></script>
 <script src="/test/js/anko-it.js"></script>
 <title>結合テスト</title>
 <style>
@@ -16,7 +16,7 @@
   }
 </style>
 <script>
-window.onload = () => it("/sample/index.htm", tests, () => report());
+window.onload = () => it("/memo/user/", tests, () => report());
 
 function report() {
   const report = createClone("reportTemplate");
@@ -38,11 +38,17 @@ function report() {
 };
 
 const tests = [{
+      name: "ログイン画面表示",
+      action: ifWindow => {
+      },
+      wait: 1000,
+      assert : ifWindow => ifWindow.idElement("login") != null
+    },{
       name: "ログイン",
       action: ifWindow => {
         ifWindow.set("#login", {
-          id: "test@test",
-          pass: "test"
+          id: "12312312312@12312312312",
+          pass: "123123123123"
         });
         ifWindow.querySelector("button").click();
       },
@@ -50,8 +56,8 @@ const tests = [{
       assert : ifWindow => ifWindow.idElement("login") == null
     },
     {
-      name: "サンプル画面表示",
-      action: ifWindow => ifWindow.dispSample(),
+      name: "メモ一覧表示",
+      action: ifWindow => ifWindow.dispMemo(),
       wait: 3000,
       assert : ifWindow => ifWindow.querySelectorAll("#content tbody tr ").length == 2
     },

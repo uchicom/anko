@@ -3,7 +3,7 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta http-equiv="content-script-type" content="text/javascript">
 <meta http-equiv="content-style-type" content="text/css">
-<script src="/sample/js/anko.js"></script>
+<script src="/js/anko.js"></script>
 <script src="/test/js/anko-ut.js"></script>
 <title>単体テスト</title>
 <style>
@@ -16,7 +16,7 @@
   }
 </style>
 <script>
-window.onload = () => ut("/sample/index.htm", "/test/js/anko-mock.js", tests, () => report());
+window.onload = () => ut("/memo/user/", "/test/js/anko-mock.js", tests, () => report());
 
 function report() {
   const report = createClone("reportTemplate");
@@ -65,20 +65,16 @@ const tests = [{
       ifWindow.login();
     },
     path: {
-      '/sample/json/login.json': {
+      '/memo/api/account/login': {
         mock: {token: "abc"},
         assert: [
           payload=>payload.id == "test@test",
           payload=>payload.pass == "test"
         ]
       },
-      '/sample/json/search.json': {
-        mock: [{"id": 1, "name": "テスト一郎"}, {"id": 2, "name": "テスト二郎"}],
+      '/memo/api/account/check/login': {
+        mock: {"result": "OK"},
         assert: [
-          (payload,ifWindow) => ifWindow.querySelectorAll("#content tbody td")[0].textContent == "1",
-          (payload,ifWindow) => ifWindow.querySelectorAll("#content tbody td")[1].textContent == "テスト一郎",
-          (payload,ifWindow) => ifWindow.querySelectorAll("#content tbody td")[2].textContent == "2",
-          (payload,ifWindow) => ifWindow.querySelectorAll("#content tbody td")[3].textContent == "テスト二郎"
         ]
       }
     },

@@ -37,6 +37,20 @@ public class MemoServiceTest extends AbstractTest {
   @Spy @InjectMocks MemoService service;
 
   @Test
+  public void get() {
+    var memo = new Memo();
+    doReturn(memo).when(memoDao).findById(memoIdCaptor.capture());
+    var memoId = 1L;
+
+    // test
+    var result = service.get(memoId);
+
+    // assert
+    assertThat(result).isEqualTo(memo);
+    assertThat(memoIdCaptor.getValue()).isEqualTo(memoId);
+  }
+
+  @Test
   public void getList() {
     var list = List.of(new Memo());
     doReturn(list).when(memoDao).findByAccountId(accountIdCaptor.capture());
