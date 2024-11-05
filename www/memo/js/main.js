@@ -2,9 +2,10 @@ var router;
 
 // 戻る動作
 window.addEventListener('popstate', function(e) {
-	var route = router[location.pathname];
+	const keyId = getKeyId(location.pathname);
+	const route = router[keyId.key];
 	if (route) {
-		route();
+		route(keyId.id);
 	}
 });
 
@@ -25,22 +26,26 @@ const display = pathname => {
   if (canvas) {
     canvas.hide();
   }
-	const matches = pathname.match(/^(.+)\/([0-9]+)$/);
-	let key = pathname;
-	let id = null;
-	console.log(matches);
-	if (matches) {
-		key = matches[1] + "/{id}";
-		id = matches[2];
-	}
-	const route = router[key];
+	const keyId = getKeyId(pathname);
+	const route = router[keyId.key];
 	if (route) {
 		clearErrorMessage();
-		route(id);
+		route(keyId.id);
 		history.pushState(null, null, pathname);
 		return true;
 	}
 	return false;
+}
+
+function getKeyId(pathname) {
+	const matches = pathname.match(/^(.+)\/([0-9]+)$/);
+	let key = pathname;
+	let id = null;
+	if (matches) {
+		key = matches[1] + "/{id}";
+		id = matches[2];
+	}
+	return {key:key, id:id};
 }
 
 
