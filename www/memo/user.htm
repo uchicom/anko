@@ -138,8 +138,8 @@
       </tbody>
       <template id="memoTemplate.row">
         <tr>
-          <td></td>
-          <td></td>
+          <td><a></a></td>
+          <td><a></a></td>
           <td><pre></pre></td>
         </tr>
       </template>
@@ -182,5 +182,14 @@
     </table>
     <button class="uk-button uk-button-primary uk-align-right" id="signupbutton" onclick="this.disabled=true;post('/memo/update', 'form#memoUpdate', () => dispMemoUpdate(), (() => this.disabled = false).bind(this), '保存しますか？', true)">保存</button>
     </form>
+  </div>
+</template>
+<template id="memoViewTemplate">
+  <div style="float:left" id="content"><h3>メモ表示</h3>
+    <table class="uk-table uk-table-divider">
+      <tr><th>メモID</th><td></td></tr>
+      <tr><th>タイトル</th><td></td></tr>
+      <tr><th>内容</th><td></td></tr>
+    </table>
   </div>
 </template>

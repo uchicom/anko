@@ -3,6 +3,7 @@ package com.uchicom.memo.api;
 
 import com.uchicom.memo.annotation.Auth;
 import com.uchicom.memo.annotation.Path;
+import com.uchicom.memo.dto.request.memo.MemoIdentificationDto;
 import com.uchicom.memo.dto.request.memo.MemoRegisterDto;
 import com.uchicom.memo.dto.request.memo.MemoUpdateDto;
 import com.uchicom.memo.dto.response.ListDto;
@@ -22,6 +23,15 @@ public class MemoApi extends AbstractApi {
   @Inject
   public MemoApi(MemoService memoService) {
     this.memoService = memoService;
+  }
+
+  @Auth
+  @Path("/get")
+  public Object get(MemoIdentificationDto dto, HttpServletRequest req, HttpServletResponse res) {
+    return refer(
+        () -> {
+          return memoService.get(dto.memoId);
+        });
   }
 
   @Auth

@@ -15,6 +15,7 @@ function init() {
 		"/memo/user/list": dispMemo,
 		"/memo/user/register": dispMemoRegister,
 		"/memo/user/update": dispMemoUpdate,
+		"/memo/user/list/{id}": dispMemoView,
 	};
 }
 
@@ -24,10 +25,18 @@ const display = pathname => {
   if (canvas) {
     canvas.hide();
   }
-	const route = router[pathname];
+	const matches = pathname.match(/^(.+)\/([0-9]+)$/);
+	let key = pathname;
+	let id = null;
+	console.log(matches);
+	if (matches) {
+		key = matches[1] + "/{id}";
+		id = matches[2];
+	}
+	const route = router[key];
 	if (route) {
 		clearErrorMessage();
-		route();
+		route(id);
 		history.pushState(null, null, pathname);
 		return true;
 	}
@@ -128,8 +137,11 @@ function dispMemo() {
 			const record = data.list[key];
 			const row = createRow('memoTemplate');
 			const tds = row.querySelectorAll("td");
-			tds[0].append(record.id);
-			tds[1].append(record.title);
+			const as = row.querySelectorAll("a");
+			as[0].setAttribute("href", `/memo/user/list/${record.id}`); // リンクなのでページ遷移
+			as[0].append(record.id);
+			as[1].setAttribute("onclick", `display('/memo/user/list/${record.id}')`); // クリックイベントによる画面切り替えなのでページ遷移しない
+			as[1].append(record.title);
 			row.querySelector("pre").append(record.body);
 			tbody.append(row);
 		}
@@ -161,5 +173,15 @@ function dispMemoUpdate() {
 		const form = querySelector("#content form");
 		form.querySelector(".uk-table tbody").replaceWith(tbody);
 		attachValidattion(form, labelConsumer);
+	});
+}
+function dispMemoView(memoId) {
+	contentTemplate('memoViewTemplate');
+	
+	post('/memo/get', {memoId:memoId}, data => {
+		const tds = document.querySelectorAll("#content table td");
+		tds[0].append(data.id);
+		tds[1].append(data.title);
+		tds[2].append(data.body);
 	});
 }

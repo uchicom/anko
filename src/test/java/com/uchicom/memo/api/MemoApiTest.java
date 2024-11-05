@@ -7,6 +7,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 
 import com.uchicom.memo.AbstractTest;
+import com.uchicom.memo.dto.request.memo.MemoIdentificationDto;
 import com.uchicom.memo.dto.request.memo.MemoRegisterDto;
 import com.uchicom.memo.dto.request.memo.MemoUpdateDto;
 import com.uchicom.memo.dto.response.ListDto;
@@ -37,12 +38,29 @@ public class MemoApiTest extends AbstractTest {
   @Captor ArgumentCaptor<Long> accountIdCaptor;
   @Captor ArgumentCaptor<MemoRegisterDto> memoRegisterDtoCaptor;
   @Captor ArgumentCaptor<List<MemoUpdateDto>> memoUpdateDtoListCaptor;
+  @Captor ArgumentCaptor<Long> memoIdCaptor;
 
   @Spy @InjectMocks MemoApi api;
 
   @BeforeEach
   public void setUp() {
     createApiMock(api);
+  }
+
+  @Test
+  public void get() throws Exception {
+    // mock
+    var memo = new Memo();
+    doReturn(memo).when(memoService).get(memoIdCaptor.capture());
+    var dto = new MemoIdentificationDto();
+    dto.memoId = 1L;
+
+    // test
+    var result = api.get(dto, req, res);
+
+    // assert
+    assertThat(result).isEqualTo(memo);
+    assertThat(memoIdCaptor.getValue()).isEqualTo(dto.memoId);
   }
 
   @Test
