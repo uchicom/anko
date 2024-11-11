@@ -11,7 +11,6 @@ import com.uchicom.memo.api.MemoApi;
 import com.uchicom.memo.dto.response.account.AuthDto;
 import com.uchicom.memo.exception.ViolationException;
 import com.uchicom.memo.service.AuthService;
-import com.uchicom.memo.util.ClassUtil;
 import com.uchicom.memo.util.ThrowingBiFunction;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -20,6 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
@@ -35,8 +35,6 @@ public class ApiServlet extends HttpServlet {
 
   Map<String, ThrowingBiFunction<HttpServletRequest, HttpServletResponse, String, Exception>> map =
       new HashMap<>();
-
-  private final Map<Class<? extends AbstractApi>, AbstractApi> apiClassMap = new HashMap<>();
 
   private final AuthService authService;
 
@@ -60,11 +58,23 @@ public class ApiServlet extends HttpServlet {
     this.objectMapper = objectMapper;
     this.validator = validator;
     this.logger = logger;
-    apiPackage("com.uchicom.memo.api");
   }
 
   void register(AbstractApi api) {
-    apiClassMap.put(api.getClass(), api);
+    var clazz = api.getClass();
+    var path = clazz.getAnnotation(Path.class);
+    if (path == null) return;
+    var p = path.value();
+    var methods = clazz.getMethods();
+    for (Method method : methods) {
+      var methodPath = method.getAnnotation(Path.class);
+      if (methodPath == null) continue;
+      map.put(
+          p + methodPath.value(),
+          (req, res) -> {
+            return execute(api, method, req, res);
+          });
+    }
   }
 
   @Override
@@ -72,6 +82,10 @@ public class ApiServlet extends HttpServlet {
       throws ServletException, IOException {
     try {
       var function = map.get(req.getPathInfo());
+      if (function == null) {
+        res.setStatus(404);
+        return;
+      }
       var result = function.apply(req, res);
       if (result != null) {
         res.getOutputStream().write(result.getBytes(StandardCharsets.UTF_8));
@@ -81,31 +95,10 @@ public class ApiServlet extends HttpServlet {
     }
   }
 
-  void apiPackage(String packageName) {
-    var classSet = ClassUtil.<AbstractApi>listClasses(packageName);
-    for (var clazz : classSet) {
-      var path = clazz.getAnnotation(Path.class);
-      if (path == null) continue;
-      var p = path.value();
-      var methods = clazz.getMethods();
-      for (Method method : methods) {
-        var methodPath = method.getAnnotation(Path.class);
-        if (methodPath == null) continue;
-        map.put(
-            p + methodPath.value(),
-            (req, res) -> {
-              return execute(clazz, method, req, res);
-            });
-      }
-    }
-  }
-
-  String execute(
-      Class<AbstractApi> apiClass, Method method, HttpServletRequest req, HttpServletResponse res)
+  String execute(AbstractApi api, Method method, HttpServletRequest req, HttpServletResponse res)
       throws Exception {
 
     logger.info(req.getHeader("User-Agent") + "@" + req.getRemoteAddr() + ":" + req.getPathInfo());
-    var api = apiClassMap.get(apiClass);
 
     try {
       String url = null;
@@ -161,15 +154,20 @@ public class ApiServlet extends HttpServlet {
     } catch (ViolationException e) {
       return objectMapper.writeValueAsString(e.getErrorDto());
     } catch (Exception e) {
-      logger.log(Level.SEVERE, "シェアオフィスエラー通知:" + e.getMessage(), e);
+      logger.log(Level.SEVERE, "メモエラー通知:" + e.getMessage(), e);
       throw new ServletException(e);
     }
   }
 
-  <T, U> T readValue(HttpServletRequest req, Class<T> clazz, Type type) throws Exception {
+  <T> T readValue(HttpServletRequest req, Class<T> clazz, Type type) throws Exception {
+    var length = req.getContentLength();
+    var bytes =
+        length == -1
+            ? req.getInputStream().readAllBytes()
+            : readBytes(req.getInputStream(), length);
     T requestDto =
         objectMapper.readValue(
-            req.getInputStream(),
+            bytes,
             new TypeReference<T>() {
               @Override
               public Type getType() {
@@ -183,6 +181,19 @@ public class ApiServlet extends HttpServlet {
       validate(requestDto);
     }
     return requestDto;
+  }
+
+  byte[] readBytes(InputStream is, int length) throws IOException {
+    var bytes = new byte[length];
+    var offset = 0;
+    var result = 0;
+    while ((result = is.read(bytes, offset, length - offset)) > 0) {
+      offset += result;
+      if (offset == length) {
+        break;
+      }
+    }
+    return bytes;
   }
 
   <T> void validate(T requestDto) throws ViolationException {
