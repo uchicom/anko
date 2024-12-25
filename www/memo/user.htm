@@ -123,27 +123,29 @@
   </div>
 </template>
 <template id="memoTemplate">
-  <div style="float:left" id="content">
+  <div id="content">
     <h3>メモ一覧</h3>
     <span class="uk-label" id="number"></span>
-    <table class="uk-table uk-table-divider">
-      <thead>
-        <tr>
-          <th>メモID</th>
-          <th>タイトル</th>
-          <th>内容</th>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-      <template id="memoTemplate.row">
-        <tr>
-          <td><a></a></td>
-          <td><a></a></td>
-          <td><pre></pre></td>
-        </tr>
-      </template>
-    </table>
+    <div style="height: calc(100vh - 230px); width:100%; overflow-x: auto;">
+      <table class="guide-table">
+        <thead>
+          <tr>
+            <th>メモID</th>
+            <th>タイトル</th>
+            <th>内容</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        <template id="memoTemplate.row">
+          <tr>
+            <td><a></a></td>
+            <td><a></a></td>
+            <td><pre></pre></td>
+          </tr>
+        </template>
+      </table>
+    </div>
   </div>
 </template>
 <template id="memoRegisterTemplate">
@@ -158,29 +160,31 @@
   </div>
 </template>
 <template id="memoUpdateTemplate">
-  <div style="float:left" id="content">
+  <div id="content">
     <h3>メモ更新</h3>
     <span class="uk-label" id="number"></span>
     <form onsubmit="event.preventDefault()" id="memoUpdate">
-    <table class="uk-table uk-table-divider">
-      <thead>
-        <tr>
-          <th><label for="id">メモID</label></th>
-          <th><label for="title">タイトル</label></th>
-          <th><label for="body">内容</label></th>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-      <template id="memoUpdateTemplate.row">
-        <tr>
-          <td><input type="hidden" name="memoId"></td>
-          <td><input class="uk-input" type="text" name="title"></td>
-          <td><textarea class="uk-textarea" name="body"></textarea></td>
-        </tr>
-      </template>
-    </table>
-    <button class="uk-button uk-button-primary uk-align-right" id="signupbutton" onclick="this.disabled=true;post('/memo/update', 'form#memoUpdate', () => dispMemoUpdate(), (() => this.disabled = false).bind(this), '保存しますか？', true)">保存</button>
+      <div style="height: calc(100vh - 300px); width:100%; overflow-x: auto;">
+        <table class="guide-table">
+          <thead>
+            <tr>
+              <th><label for="id">メモID</label></th>
+              <th><label for="title">タイトル</label></th>
+              <th><label for="body">内容</label></th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+          <template id="memoUpdateTemplate.row">
+            <tr>
+              <td><input type="hidden" name="memoId"></td>
+              <td><input class="uk-input" type="text" name="title"></td>
+              <td><textarea class="uk-textarea" name="body"></textarea></td>
+            </tr>
+          </template>
+        </table>
+      </div>
+      <button class="uk-button uk-button-primary uk-align-right" id="signupbutton" onclick="this.disabled=true;post('/memo/update', 'form#memoUpdate', () => dispMemoUpdate(), (() => this.disabled = false).bind(this), '保存しますか？', true)">保存</button>
     </form>
   </div>
 </template>

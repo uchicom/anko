@@ -150,7 +150,7 @@ function dispMemo() {
 			row.querySelector("pre").append(record.body);
 			tbody.append(row);
 		}
-		querySelector("#content .uk-table tbody").replaceWith(tbody);
+		querySelector("#content tbody").replaceWith(tbody);
 	});
 }
 
@@ -176,7 +176,7 @@ function dispMemoUpdate() {
 			tbody.append(row);
 		}
 		const form = querySelector("#content form");
-		form.querySelector(".uk-table tbody").replaceWith(tbody);
+		form.querySelector("tbody").replaceWith(tbody);
 		attachValidattion(form, labelConsumer);
 	});
 }
