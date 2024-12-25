@@ -139,3 +139,37 @@ div.waitScreen {
 input:invalid,select:invalid,textarea:invalid {
 	border-color: pink;
 }
+
+.guide-table {
+	width:100%;
+	border-spacing: 0px;
+	thead {
+	 tr:first-child th {
+		border-top:1px solid black;
+	 }
+	 tr:first-child th:first-child {
+		border-left:1px solid black;
+	 }
+	 th {
+		top:0;
+		position: sticky;
+		background-color: #C9DAF8;
+		color: #333333;
+		font-weight: normal;
+		text-align:left;
+		border-bottom:1px solid black;
+		border-right:1px solid black;
+		padding: 16px 12px;
+	 }
+	}
+	tbody {
+	 td:first-child {
+		border-left:1px solid black;
+	 }
+	 td {
+		background-color: #fbfbfb;
+		border-bottom:1px solid black;
+		border-right:1px solid black;
+	 }
+	}
+}
