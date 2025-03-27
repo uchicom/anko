@@ -7,11 +7,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import javax.inject.Inject;
 
 public class CookieService {
 
-  @Inject
   public CookieService() {}
 
   public void addJwt(HttpServletResponse res, String jwt) {

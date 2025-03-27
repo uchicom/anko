@@ -11,7 +11,6 @@ import com.uchicom.memo.Context;
 import com.uchicom.memo.entity.AbstractTable;
 import java.time.LocalDateTime;
 import java.util.List;
-import javax.inject.Inject;
 
 public class DbHelper<T extends AbstractTable> {
 
@@ -21,7 +20,6 @@ public class DbHelper<T extends AbstractTable> {
   Class<T> clazz;
 
   /** コンストラクタ. */
-  @Inject
   @SuppressWarnings("unchecked")
   public DbHelper(T t) {
     this.clazz = (Class<T>) t.getClass();

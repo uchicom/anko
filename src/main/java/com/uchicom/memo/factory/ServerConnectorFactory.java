@@ -2,7 +2,6 @@
 package com.uchicom.memo.factory;
 
 import com.uchicom.util.Parameter;
-import javax.inject.Inject;
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.SecureRequestCustomizer;
@@ -13,7 +12,6 @@ import org.eclipse.jetty.util.ssl.SslContextFactory;
 
 public class ServerConnectorFactory {
 
-  @Inject
   public ServerConnectorFactory() {}
 
   public ServerConnector createServerConnector(Server server, Parameter parameter) {

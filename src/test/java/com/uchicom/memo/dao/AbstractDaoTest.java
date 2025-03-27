@@ -4,7 +4,6 @@ package com.uchicom.memo.dao;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 
-import com.google.common.base.Supplier;
 import com.iciql.Db;
 import com.iciql.Query;
 import com.iciql.QueryWhere;
@@ -21,6 +20,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;

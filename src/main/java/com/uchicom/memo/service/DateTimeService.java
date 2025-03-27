@@ -4,10 +4,9 @@ package com.uchicom.memo.service;
 import com.uchicom.memo.Constants;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import javax.inject.Inject;
 
 public class DateTimeService {
-  @Inject
+
   public DateTimeService() {}
 
   /**

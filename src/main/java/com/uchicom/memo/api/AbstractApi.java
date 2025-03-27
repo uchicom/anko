@@ -2,22 +2,16 @@
 package com.uchicom.memo.api;
 
 import com.uchicom.memo.dto.response.ErrorDto;
-import com.uchicom.memo.module.MainModule;
+import com.uchicom.memo.factory.di.DIFactory;
 import com.uchicom.memo.util.AbstractDb;
 import com.uchicom.util.ThrowingSupplier;
-import dagger.Component;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public abstract class AbstractApi extends AbstractDb {
 
-  protected static final Logger logger = DaggerAbstractApi_MainComponent.create().logger();
-
-  @Component(modules = MainModule.class)
-  interface MainComponent {
-    Logger logger();
-  }
+  protected static final Logger logger = DIFactory.logger();
 
   public <T> Object handling(ThrowingSupplier<T, Throwable> function) {
     try {

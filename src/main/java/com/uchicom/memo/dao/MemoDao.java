@@ -4,12 +4,10 @@ package com.uchicom.memo.dao;
 import com.uchicom.memo.dao.helper.DbHelper;
 import com.uchicom.memo.entity.Memo;
 import java.util.List;
-import javax.inject.Inject;
 
 public class MemoDao extends AbstractDao<Memo> {
 
   /** コンストラクタ. */
-  @Inject
   public MemoDao(DbHelper<Memo> helper) {
     super(helper);
   }

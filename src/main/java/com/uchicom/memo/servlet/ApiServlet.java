@@ -29,7 +29,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.inject.Inject;
 
 public class ApiServlet extends HttpServlet {
 
@@ -44,7 +43,6 @@ public class ApiServlet extends HttpServlet {
 
   private final Logger logger;
 
-  @Inject
   public ApiServlet(
       AccountApi accountApi,
       MemoApi memoApi,

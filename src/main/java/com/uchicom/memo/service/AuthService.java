@@ -7,7 +7,6 @@ import com.uchicom.memo.Constants;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.inject.Inject;
 
 /**
  * 認可サービス.
@@ -20,7 +19,6 @@ public class AuthService {
   private final CookieService cookieService;
   private final Logger logger;
 
-  @Inject
   public AuthService(DateTimeService dateTimeService, CookieService cookieService, Logger logger) {
     this.dateTimeService = dateTimeService;
     this.cookieService = cookieService;
