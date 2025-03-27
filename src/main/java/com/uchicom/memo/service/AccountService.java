@@ -10,14 +10,12 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-import javax.inject.Inject;
 
 public class AccountService {
 
   private final AuthService authService;
   private final AccountDao accountDao;
 
-  @Inject
   public AccountService(AuthService authService, AccountDao accountDao) {
     this.authService = authService;
     this.accountDao = accountDao;

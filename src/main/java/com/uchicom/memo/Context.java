@@ -3,11 +3,10 @@ package com.uchicom.memo;
 
 import com.iciql.Db;
 import com.uchicom.memo.enumeration.Config;
-import com.uchicom.memo.module.MainModule;
+import com.uchicom.memo.factory.di.DIFactory;
 import com.uchicom.util.ResourceUtil;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import dagger.Component;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.Properties;
@@ -23,12 +22,7 @@ public class Context {
   public static final ThreadLocal<Db> db = new ThreadLocal<Db>();
   public static final ThreadLocal<String> executor = new ThreadLocal<String>();
 
-  private static final Logger logger = DaggerContext_MainComponent.create().logger();
-
-  @Component(modules = MainModule.class)
-  interface MainComponent {
-    Logger logger();
-  }
+  private static final Logger logger = DIFactory.logger();
 
   private static final Context context = new Context();
 

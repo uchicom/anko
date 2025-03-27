@@ -13,14 +13,12 @@ import com.uchicom.memo.service.MemoService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
-import javax.inject.Inject;
 
 @Path("/memo")
 public class MemoApi extends AbstractApi {
 
   private final MemoService memoService;
 
-  @Inject
   public MemoApi(MemoService memoService) {
     this.memoService = memoService;
   }

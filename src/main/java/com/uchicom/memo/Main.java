@@ -3,16 +3,14 @@ package com.uchicom.memo;
 
 import com.uchicom.memo.factory.JsFactory;
 import com.uchicom.memo.factory.ServerConnectorFactory;
-import com.uchicom.memo.module.MainModule;
+import com.uchicom.memo.factory.di.DIFactory;
 import com.uchicom.memo.servlet.ApiServlet;
 import com.uchicom.memo.servlet.JsServlet;
 import com.uchicom.memo.servlet.RootServlet;
 import com.uchicom.util.Parameter;
-import dagger.Component;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.inject.Inject;
 import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ResourceHandler;
@@ -20,14 +18,9 @@ import org.eclipse.jetty.util.resource.ResourceFactory;
 
 public class Main {
 
-  private static Main main = DaggerMain_MainComponent.create().main();
+  private static Main main = DIFactory.main();
 
   static Server server;
-
-  @Component(modules = MainModule.class)
-  interface MainComponent {
-    Main main();
-  }
 
   public static void main(String[] args) {
 
@@ -54,7 +47,6 @@ public class Main {
 
   private final Logger logger;
 
-  @Inject
   public Main(
       ApiServlet apiServlet,
       ServerConnectorFactory serverConnectorFactory,

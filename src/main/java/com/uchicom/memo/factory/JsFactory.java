@@ -2,11 +2,9 @@
 package com.uchicom.memo.factory;
 
 import com.uchicom.memo.util.ValidateUtil;
-import javax.inject.Inject;
 
 public class JsFactory {
 
-  @Inject
   public JsFactory() {}
 
   public String createValidationPage() {

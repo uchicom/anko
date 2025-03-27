@@ -6,12 +6,10 @@ import com.uchicom.memo.dto.request.memo.MemoRegisterDto;
 import com.uchicom.memo.dto.request.memo.MemoUpdateDto;
 import com.uchicom.memo.entity.Memo;
 import java.util.List;
-import javax.inject.Inject;
 
 public class MemoService {
   private final MemoDao memoDao;
 
-  @Inject
   public MemoService(MemoDao memoDao) {
     this.memoDao = memoDao;
   }

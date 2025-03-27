@@ -4,7 +4,6 @@ package com.uchicom.memo.entity;
 import com.iciql.Iciql.IQColumn;
 import com.iciql.Iciql.IQSchema;
 import com.iciql.Iciql.IQTable;
-import javax.inject.Inject;
 
 /** メモ. */
 @IQSchema("memo")
@@ -23,6 +22,5 @@ public class Memo extends AbstractTable {
   @IQColumn(nullable = false)
   public String body;
 
-  @Inject
   public Memo() {}
 }

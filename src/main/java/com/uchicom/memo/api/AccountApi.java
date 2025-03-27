@@ -12,7 +12,6 @@ import com.uchicom.memo.service.AccountService;
 import com.uchicom.memo.service.CookieService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import javax.inject.Inject;
 
 @Path("/account")
 public class AccountApi extends AbstractApi {
@@ -20,7 +19,6 @@ public class AccountApi extends AbstractApi {
   private final AccountService accountService;
   private final CookieService cookieService;
 
-  @Inject
   public AccountApi(AccountService accountService, CookieService cookieService) {
     this.accountService = accountService;
     this.cookieService = cookieService;
