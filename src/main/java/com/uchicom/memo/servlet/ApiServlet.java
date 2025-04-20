@@ -111,41 +111,28 @@ public class ApiServlet extends HttpServlet {
       var parameterTypes = method.getParameterTypes();
 
       if (String.class == method.getReturnType()) { // Stringの場合はurl
-        switch (parameterTypes.length) {
-          case 1:
-            url = (String) method.invoke(api, readValue(req, parameterTypes[0], types[0]));
-            break;
-          case 2:
-            url = (String) method.invoke(api, req, res);
-            break;
-          case 3:
-            url =
-                (String) method.invoke(api, readValue(req, parameterTypes[0], types[0]), req, res);
-            break;
-        }
+        return switch (parameterTypes.length) {
+          case 1 -> (String) method.invoke(api, readValue(req, parameterTypes[0], types[0]));
+          case 2 -> (String) method.invoke(api, req, res);
+          case 3 -> (String)
+              method.invoke(api, readValue(req, parameterTypes[0], types[0]), req, res);
+          default -> null;
+        };
       } else if (Object.class == method.getReturnType()) { // Objectの場合はJSON
         res.setContentType("application/json; charset=UTF-8");
-        switch (parameterTypes.length) {
-          case 1:
-            return objectMapper.writeValueAsString(
-                method.invoke(api, readValue(req, parameterTypes[0], types[0])));
-          case 2:
-            return objectMapper.writeValueAsString(method.invoke(api, req, res));
-          case 3:
-            return objectMapper.writeValueAsString(
-                method.invoke(api, readValue(req, parameterTypes[0], types[0]), req, res));
-        }
+        return switch (parameterTypes.length) {
+          case 1 -> objectMapper.writeValueAsString(
+              method.invoke(api, readValue(req, parameterTypes[0], types[0])));
+          case 2 -> objectMapper.writeValueAsString(method.invoke(api, req, res));
+          case 3 -> objectMapper.writeValueAsString(
+              method.invoke(api, readValue(req, parameterTypes[0], types[0]), req, res));
+          default -> null;
+        };
       } else { // 戻りがない場合は内部処理で書き込み
         switch (parameterTypes.length) {
-          case 1:
-            method.invoke(api, readValue(req, parameterTypes[0], types[0]));
-            break;
-          case 2:
-            method.invoke(api, req, res);
-            break;
-          case 3:
-            method.invoke(api, readValue(req, parameterTypes[0], types[0]), req, res);
-            break;
+          case 1 -> method.invoke(api, readValue(req, parameterTypes[0], types[0]));
+          case 2 -> method.invoke(api, req, res);
+          case 3 -> method.invoke(api, readValue(req, parameterTypes[0], types[0]), req, res);
         }
       }
       return url;
