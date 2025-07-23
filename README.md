@@ -1,7 +1,7 @@
 # anko.js
 Light and small framework for javascript and Java.
 
-Sample memo application.
+A tracking application based on Anko.
 
 ## 共通機能を使う場合
 - anko.js
@@ -22,7 +22,7 @@ Sample memo application.
 ## mvn
 ### サーバ起動
 ```
-mvn exec:java "-Dexec.mainClass=com.uchicom.memo.Main"
+mvn exec:java "-Dexec.mainClass=com.uchicom.tracker.Main"
 ```
 
 ### フォーマッタ
@@ -37,7 +37,7 @@ mvn verify
 
 #### ファイル単体でテスト実行
 ```
-mvn test "-Dtest=com.uchicom.memo.dao.AccountDaoTest"
+mvn test "-Dtest=com.uchicom.tracker.dao.AccountDaoTest"
 ```
 
 ### フォーマッタ & 全テスト実行
@@ -52,5 +52,5 @@ mvn spotless:apply clean compile verify
 
 ## SQLスクリプト
 ```
-java -cp ~/.m2/repository/com/h2database/h2/2.2.224/h2-2.2.224.jar org.h2.tools.RunScript -url "jdbc:h2:./database/memo" -user memo -password memo -script ./database/sql/create.sql  -showResults
+java -cp ~/.m2/repository/com/h2database/h2/2.2.224/h2-2.2.224.jar org.h2.tools.RunScript -url "jdbc:h2:./database/tracker" -user tracker -password tracker -script ./database/sql/create.sql  -showResults
 ```

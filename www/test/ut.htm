@@ -16,7 +16,7 @@
   }
 </style>
 <script>
-window.onload = () => ut("/memo/user/", "/test/js/anko-mock.js", tests, () => report());
+window.onload = () => ut("/tracker/user/", "/test/js/anko-mock.js", tests, () => report());
 
 function report() {
   const report = createClone("reportTemplate");
@@ -65,14 +65,14 @@ const tests = [{
       ifWindow.login();
     },
     path: {
-      '/memo/api/account/login': {
+      '/tracker/api/account/login': {
         mock: {token: "abc"},
         assert: [
           payload=>payload.id == "test@test",
           payload=>payload.pass == "test"
         ]
       },
-      '/memo/api/account/check/login': {
+      '/tracker/api/account/check/login': {
         mock: {"result": "OK"},
         assert: [
         ]

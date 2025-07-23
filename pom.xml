@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.uchicom</groupId>
-  <artifactId>anko</artifactId>
+  <artifactId>tracker</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <scm>
     <connection>scm:git:${project.scm.url}</connection>
@@ -170,7 +170,7 @@
                 <rule>
                   <element>CLASS</element>
                   <includes>
-                    <include>com.uchicom.memo.api.*</include>
+                    <include>com.uchicom.tracker.api.*</include>
                   </includes>
                   <excludes>
                     <exclude>**Abstract*</exclude>
@@ -192,7 +192,7 @@
                 <rule>
                   <element>CLASS</element>
                   <includes>
-                    <include>com.uchicom.memo.dao.*</include>
+                    <include>com.uchicom.tracker.dao.*</include>
                   </includes>
                   <excludes>
                     <exclude>**Abstract*</exclude>
@@ -215,7 +215,7 @@
                 <rule>
                   <element>CLASS</element>
                   <includes>
-                    <include>com.uchicom.memo.service.*</include>
+                    <include>com.uchicom.tracker.service.*</include>
                   </includes>
                   <excludes>
                     <exclude>**Abstract*</exclude>
@@ -237,7 +237,7 @@
                 <rule>
                   <element>CLASS</element>
                   <includes>
-                    <include>com.uchicom.memo.batch.*</include>
+                    <include>com.uchicom.tracker.batch.*</include>
                   </includes>
                   <excludes>
                     <exclude>**Abstract*</exclude>
