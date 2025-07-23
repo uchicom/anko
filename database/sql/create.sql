@@ -1,8 +1,8 @@
-drop schema if exists memo cascade;
-create schema if not exists memo;
+drop schema if exists tracker cascade;
+create schema if not exists tracker;
 
 --account
-create table memo.account(
+create table tracker.account(
 id bigint auto_increment,
 updated varchar(256),
 update_datetime timestamp,
@@ -15,8 +15,8 @@ name varchar(128) not null,
 primary key(id)
 );
 
---memo
-create table memo.memo(
+--issue
+create table tracker.issue(
 id bigint auto_increment,
 updated varchar(256),
 update_datetime timestamp,
@@ -24,7 +24,7 @@ update_seq integer,
 inserted varchar(256) not null,
 insert_datetime timestamp not null,
 account_id bigint not null,
-title varchar(128) not null,
-body text not null,
+subject varchar(128) not null,
+detail text not null,
 primary key(id)
 );
