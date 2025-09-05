@@ -209,6 +209,15 @@ public class DbHelper<T extends AbstractTable> {
   }
 
   /**
+   * IDを条件にエンティティを削除します.
+   *
+   * @param id ID
+   */
+  public void deleteById(long id) {
+    from().where(meta().id).is(id).delete();
+  }
+
+  /**
    * エンティティを削除します.
    *
    * @param entity エンティティ
