@@ -2,6 +2,8 @@
 package com.uchicom.tracker.service;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTCreator;
+import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.uchicom.tracker.Constants;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,18 +28,27 @@ public class AuthService {
   }
 
   public String publish(long accountId) {
-    var algorithm = Algorithm.HMAC256(Constants.SECRET);
-    var builder =
-        JWT.create()
-            .withExpiresAt(
-                dateTimeService.getLocalDateTime().plusHours(1).toInstant(Constants.ZONE_OFFSET));
-    builder.withSubject(String.valueOf(accountId));
-    return builder.sign(algorithm);
+    return getJwtCreatorBuilder()
+        .withExpiresAt(
+            dateTimeService.getLocalDateTime().plusHours(1).toInstant(Constants.ZONE_OFFSET))
+        .withSubject(String.valueOf(accountId))
+        .sign(getAlgorithm());
+  }
+
+  Algorithm getAlgorithm() {
+    return Algorithm.HMAC256(Constants.SECRET);
+  }
+
+  JWTCreator.Builder getJwtCreatorBuilder() {
+    return JWT.create();
   }
 
   public String subject(String token) {
-    var algorithm = Algorithm.HMAC256(Constants.SECRET);
-    return JWT.require(algorithm).build().verify(token).getSubject();
+    return getJwtVerifier().verify(token).getSubject();
+  }
+
+  JWTVerifier getJwtVerifier() {
+    return JWT.require(getAlgorithm()).build();
   }
 
   /**

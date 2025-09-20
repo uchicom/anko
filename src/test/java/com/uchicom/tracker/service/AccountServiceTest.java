@@ -38,6 +38,7 @@ public class AccountServiceTest extends AbstractTest {
   @Captor ArgumentCaptor<Account> accountCaptor;
   @Captor ArgumentCaptor<Long> accountIdCaptor;
   @Captor ArgumentCaptor<HttpServletRequest> reqCaptor;
+  @Captor ArgumentCaptor<String> saltCaptor;
 
   @Spy @InjectMocks AccountService service;
 
@@ -133,6 +134,59 @@ public class AccountServiceTest extends AbstractTest {
     assertThat(accountCaptor.getValue()).isEqualTo(account);
     assertThat(passwordCaptor.getValue()).isEqualTo("password");
     assertThat(accountIdCaptor.getValue()).isEqualTo(account.id);
+  }
+
+  @Test
+  public void createSalt() throws Exception {
+    // mock
+    var loginId = "loginId";
+
+    // method
+    var result = service.createSalt(loginId);
+
+    // assert
+    assertThat(result).isEqualTo("loginId/abcdefghijklmnop");
+  }
+
+  @Test
+  public void createPasswordHash() throws Exception {
+    // mock
+    var salt = "salt";
+    doReturn(salt).when(service).createSalt(loginIdCaptor.capture());
+    var hash = "hash".getBytes(StandardCharsets.US_ASCII);
+    doReturn(hash).when(service).getHash(passwordCaptor.capture(), saltCaptor.capture());
+    var loginId = "loginId";
+    var password = "password";
+
+    // method
+    var result = service.createPasswordHash(loginId, password);
+
+    // assert
+    assertThat(result).isEqualTo(hash);
+    assertThat(loginIdCaptor.getValue()).isEqualTo(loginId);
+    assertThat(passwordCaptor.getValue()).isEqualTo(password);
+    assertThat(saltCaptor.getValue()).isEqualTo(salt);
+  }
+
+  @Test
+  public void verifyPassword() throws Exception {
+    // mock
+    var hash = "password".getBytes(StandardCharsets.US_ASCII);
+    doReturn(hash)
+        .when(service)
+        .createPasswordHash(loginIdCaptor.capture(), passwordCaptor.capture());
+    var account = new Account();
+    account.login_id = "loginId";
+    account.password = "password".getBytes(StandardCharsets.US_ASCII);
+    var password = "password";
+
+    // method
+    var result = service.verifyPassword(account, password);
+
+    // assert
+    assertThat(result).isTrue();
+    assertThat(loginIdCaptor.getValue()).isEqualTo(account.login_id);
+    assertThat(passwordCaptor.getValue()).isEqualTo(password);
   }
 
   @Test
