@@ -21,14 +21,9 @@
       <version>1.1.1</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
-      <artifactId>jetty-server</artifactId>
-      <version>12.1.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.jetty.ee10</groupId>
-      <artifactId>jetty-ee10-servlet</artifactId>
-      <version>12.1.1</version>
+      <groupId>com.uchicom</groupId>
+      <artifactId>zouni</artifactId>
+      <version>0.5.3</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
@@ -180,12 +175,12 @@
                     <limit>
                       <counter>LINE</counter>
                       <value>COVEREDRATIO</value>
-                      <minimum>0.3</minimum>
+                      <minimum>1.0</minimum>
                     </limit>
                     <limit>
                       <counter>BRANCH</counter>
                       <value>COVEREDRATIO</value>
-                      <minimum>0.3</minimum>
+                      <minimum>1.0</minimum>
                     </limit>
                   </limits>
                 </rule>
@@ -225,12 +220,12 @@
                     <limit>
                       <counter>LINE</counter>
                       <value>COVEREDRATIO</value>
-                      <minimum>0.2</minimum>
+                      <minimum>0.8</minimum>
                     </limit>
                     <limit>
                       <counter>BRANCH</counter>
                       <value>COVEREDRATIO</value>
-                      <minimum>0.2</minimum>
+                      <minimum>0.8</minimum>
                     </limit>
                   </limits>
                 </rule>
