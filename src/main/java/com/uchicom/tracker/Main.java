@@ -46,7 +46,7 @@ public class Main {
   void execute(ZouniParameter zouniParameter) throws Exception {
     var servlet = new RootServlet(DIFactory.logger(), "./www/", "tracker/user.htm");
     var map = new HashMap<String, Servlet>();
-    map.put("pub./user/", servlet);
+    map.put("pub./tracker/user/", servlet);
     map.put("pub./tracker/js/validation.js", new JsServlet(jsFactory::createValidationPage));
     var startWithMap = new HashMap<String, Servlet>();
     startWithMap.put("pub./tracker/user/", servlet);
