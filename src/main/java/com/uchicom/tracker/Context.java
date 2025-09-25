@@ -32,22 +32,26 @@ public class Context {
   private HikariDataSource ds;
 
   private Context() {
-    // Hikari設定
-    logger.info(System.getProperty("com.uchicom.tracker.db", "src/main/resources/db.properties"));
-    dbProperties =
-        ResourceUtil.createProperties(
-            new File(
-                System.getProperty("com.uchicom.tracker.db", "src/main/resources/db.properties")),
-            "UTF-8");
-    // 設定
-    logger.info(
-        System.getProperty("com.uchicom.tracker.config", "src/main/resources/config.properties"));
-    configProperties =
-        ResourceUtil.createProperties(
-            new File(
-                System.getProperty(
-                    "com.uchicom.tracker.config", "src/main/resources/config.properties")),
-            "UTF-8");
+    try {
+      // Hikari設定
+      logger.info(System.getProperty("com.uchicom.tracker.db", "src/main/resources/db.properties"));
+      dbProperties =
+          ResourceUtil.createProperties(
+              new File(
+                  System.getProperty("com.uchicom.tracker.db", "src/main/resources/db.properties")),
+              "UTF-8");
+      // 設定
+      logger.info(
+          System.getProperty("com.uchicom.tracker.config", "src/main/resources/config.properties"));
+      configProperties =
+          ResourceUtil.createProperties(
+              new File(
+                  System.getProperty(
+                      "com.uchicom.tracker.config", "src/main/resources/config.properties")),
+              "UTF-8");
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
   }
 
   private synchronized HikariDataSource getDs(boolean create) {
