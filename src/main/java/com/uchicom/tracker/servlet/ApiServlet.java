@@ -115,18 +115,20 @@ public class ApiServlet extends HttpServlet {
         return switch (parameterTypes.length) {
           case 1 -> (String) method.invoke(api, readValue(req, parameterTypes[0], types[0]));
           case 2 -> (String) method.invoke(api, req, res);
-          case 3 -> (String)
-              method.invoke(api, readValue(req, parameterTypes[0], types[0]), req, res);
+          case 3 ->
+              (String) method.invoke(api, readValue(req, parameterTypes[0], types[0]), req, res);
           default -> null;
         };
       } else if (Object.class == method.getReturnType()) { // Objectの場合はJSON
         res.setContentType("application/json; charset=UTF-8");
         return switch (parameterTypes.length) {
-          case 1 -> objectMapper.writeValueAsString(
-              method.invoke(api, readValue(req, parameterTypes[0], types[0])));
+          case 1 ->
+              objectMapper.writeValueAsString(
+                  method.invoke(api, readValue(req, parameterTypes[0], types[0])));
           case 2 -> objectMapper.writeValueAsString(method.invoke(api, req, res));
-          case 3 -> objectMapper.writeValueAsString(
-              method.invoke(api, readValue(req, parameterTypes[0], types[0]), req, res));
+          case 3 ->
+              objectMapper.writeValueAsString(
+                  method.invoke(api, readValue(req, parameterTypes[0], types[0]), req, res));
           default -> null;
         };
       } else { // 戻りがない場合は内部処理で書き込み
