@@ -4,10 +4,19 @@ package com.uchicom.tracker.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
+import com.auth0.jwt.JWTCreator;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.uchicom.tracker.AbstractTest;
+import com.uchicom.tracker.Constants;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.logging.Logger;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -30,6 +39,51 @@ public class AuthServiceTest extends AbstractTest {
   @Captor ArgumentCaptor<Cookie[]> cookiesCaptor;
   @Captor ArgumentCaptor<String> nameCaptor;
   @Captor ArgumentCaptor<Object> objectCaptor;
+  @Captor ArgumentCaptor<Instant> instantCaptor;
+  @Captor ArgumentCaptor<String> subjectCaptor;
+  @Captor ArgumentCaptor<Algorithm> algorithmCaptor;
+
+  @Test
+  public void publish() {
+    // mock
+    var builder = mock(JWTCreator.Builder.class);
+    doReturn(builder).when(service).getJwtCreatorBuilder();
+    when(builder.withExpiresAt(instantCaptor.capture())).thenReturn(builder);
+    when(builder.withSubject(subjectCaptor.capture())).thenReturn(builder);
+    var signed = "signed";
+    when(builder.sign(algorithmCaptor.capture())).thenReturn(signed);
+    var datetime = LocalDateTime.of(2025, 9, 20, 12, 34, 56);
+    when(dateTimeService.getLocalDateTime()).thenReturn(datetime);
+    var accountId = 1L;
+
+    // test
+    var result = service.publish(accountId);
+
+    // assert
+    assertThat(result).isEqualTo(signed);
+    assertThat(instantCaptor.getValue())
+        .isEqualTo(datetime.plusHours(1).toInstant(Constants.ZONE_OFFSET));
+    assertThat(subjectCaptor.getValue()).isEqualTo("1");
+  }
+
+  @Test
+  public void subject() {
+    // mock
+    var jwtVerifier = mock(JWTVerifier.class);
+    doReturn(jwtVerifier).when(service).getJwtVerifier();
+    var decodedJwt = mock(DecodedJWT.class);
+    when(jwtVerifier.verify(tokenCaptor.capture())).thenReturn(decodedJwt);
+    var subject = "subject";
+    when(decodedJwt.getSubject()).thenReturn(subject);
+    var token = "token";
+
+    // test
+    var result = service.subject(token);
+
+    // assert
+    assertThat(result).isEqualTo(subject);
+    assertThat(tokenCaptor.getValue()).isEqualTo(token);
+  }
 
   @Test
   public void auth_cookie_null() {

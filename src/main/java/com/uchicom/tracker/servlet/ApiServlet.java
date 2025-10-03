@@ -68,7 +68,7 @@ public class ApiServlet extends HttpServlet {
       var methodPath = method.getAnnotation(Path.class);
       if (methodPath == null) continue;
       map.put(
-          p + methodPath.value(),
+          "/tracker/api" + p + methodPath.value(),
           (req, res) -> {
             return execute(api, method, req, res);
           });
@@ -79,7 +79,7 @@ public class ApiServlet extends HttpServlet {
   protected void service(HttpServletRequest req, HttpServletResponse res)
       throws ServletException, IOException {
     try {
-      var function = map.get(req.getPathInfo());
+      var function = map.get(req.getRequestURI());
       if (function == null) {
         res.setStatus(404);
         return;
@@ -96,7 +96,8 @@ public class ApiServlet extends HttpServlet {
   String execute(AbstractApi api, Method method, HttpServletRequest req, HttpServletResponse res)
       throws Exception {
 
-    logger.info(req.getHeader("User-Agent") + "@" + req.getRemoteAddr() + ":" + req.getPathInfo());
+    logger.info(
+        req.getHeader("User-Agent") + "@" + req.getRemoteAddr() + ":" + req.getRequestURI());
 
     try {
       String url = null;

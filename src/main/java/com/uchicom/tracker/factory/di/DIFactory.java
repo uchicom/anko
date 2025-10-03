@@ -3,7 +3,6 @@ package com.uchicom.tracker.factory.di;
 
 import com.uchicom.tracker.Main;
 import com.uchicom.tracker.factory.JsFactory;
-import com.uchicom.tracker.factory.ServerConnectorFactory;
 import com.uchicom.tracker.logging.DailyRollingFileHandler;
 import com.uchicom.tracker.servlet.ApiServlet;
 import jakarta.validation.Validation;
@@ -17,7 +16,7 @@ import java.util.stream.Stream;
 public class DIFactory {
 
   public static Main main() {
-    return new Main(apiServlet(), serverConnectorFactory(), jsFactory(), logger());
+    return new Main(apiServlet(), jsFactory(), logger());
   }
 
   static ApiServlet apiServlet() {
@@ -28,10 +27,6 @@ public class DIFactory {
         ServiceFactory.objectMapper(),
         validator(),
         logger());
-  }
-
-  static ServerConnectorFactory serverConnectorFactory() {
-    return new ServerConnectorFactory();
   }
 
   static JsFactory jsFactory() {

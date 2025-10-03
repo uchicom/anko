@@ -29,7 +29,7 @@ public class ClassUtil {
     final URL root = classLoader.getResource(resourceName);
 
     if ("file".equals(root.getProtocol())) {
-      File[] files = new File(root.getFile()).listFiles((dir, name) -> name.endsWith(".class"));
+      File[] files = new File(root.getFile()).listFiles(file -> file.getName().endsWith(".class"));
       return Arrays.asList(files).stream()
           .map(file -> file.getName())
           .map(name -> name.replaceAll(".class$", ""))

@@ -52,5 +52,5 @@ mvn spotless:apply clean compile verify
 
 ## SQLスクリプト
 ```
-java -cp ~/.m2/repository/com/h2database/h2/2.2.224/h2-2.2.224.jar org.h2.tools.RunScript -url "jdbc:h2:./database/tracker" -user tracker -password tracker -script ./database/sql/create.sql  -showResults
+java -cp ~/.m2/repository/com/h2database/h2/2.2.224/h2-2.2.224.jar org.h2.tools.RunScript -url "jdbc:h2:./database/tracker;AUTO_COMPACT_FILL_RATE=0;CIPHER=AES" -user tracker -password "tracker tracker" -script ./database/sql/create.sql  -showResults
 ```
