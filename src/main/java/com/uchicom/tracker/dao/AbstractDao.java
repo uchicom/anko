@@ -26,7 +26,7 @@ public abstract class AbstractDao<T extends AbstractTable> {
    * @param id ID
    * @return エンティティ
    */
-  public T findById(long id) {
+  public T findById(Long id) {
     return helper.findById(id);
   }
 
@@ -103,7 +103,7 @@ public abstract class AbstractDao<T extends AbstractTable> {
    *
    * @param id ID
    */
-  public void deleteById(long id) {
+  public void deleteById(Long id) {
     helper.deleteById(id);
   }
 

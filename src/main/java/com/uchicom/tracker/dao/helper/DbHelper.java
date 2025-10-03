@@ -75,7 +75,7 @@ public class DbHelper<T extends AbstractTable> {
    * @param id ID
    * @return エンティティ
    */
-  public T findById(long id) {
+  public T findById(Long id) {
     return from().where(meta().id).is(id).selectFirst();
   }
 
@@ -213,7 +213,7 @@ public class DbHelper<T extends AbstractTable> {
    *
    * @param id ID
    */
-  public void deleteById(long id) {
+  public void deleteById(Long id) {
     from().where(meta().id).is(id).delete();
   }
 
