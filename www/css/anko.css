@@ -1,0 +1,71 @@
+input, select, textarea {
+  font-size:1.2em;
+  display:block;
+}
+button.anko-button {
+  padding:1em 2em 1em 2em;
+  border:unset;
+}
+input.anko-input {
+  padding: 0.3em 0.75em 0.2em 0.75em;
+  border:gray solid 2px;
+}
+input.anko-input:focus {
+  outline:darkgray solid 1px;
+}
+textarea.anko-textarea:focus {
+  outline:darkgray solid 1px;
+}
+select.anko-select:focus {
+  outline:darkgray solid 1px;
+}
+select.anko-select {
+  padding: 0.3em 0.75em 0.2em 0.75em;
+  border:gray solid 2px;
+}
+textarea.anko-textarea {
+  padding: 0.3em 0.75em 0.2em 0.75em;
+  border:gray solid 2px;
+  display:block;
+}
+input[type="checkbox"].anko-checkbox {
+  transform: scale(1.5);
+  border:gray solid 2px;
+}
+input[type="radio"].anko-radio {
+  transform: scale(1.5);
+  border:gray solid 2px;
+}
+
+ul.anko-horizon{
+ display: flex;
+ li {
+  list-style: none;
+  margin-left: 20px;
+ }
+}
+
+div.anko-danger {
+  background-color: rgb(246, 216, 220);
+  border: solid 1px pink;
+  color:crimson;
+  .anko-close {
+    cursor:pointer;
+    float:right;
+    color:brown;
+    font-size: 1.2em;
+  }
+  .anko-close:hover {
+    color:maroon;
+  }
+}
+
+dialog.primary {
+  background-color: rgb(223, 232, 245);
+}
+dialog.success {
+  background-color: rgb(217, 241, 217);
+}
+dialog.warning {
+  background-color: rgb(242, 222, 206);
+}

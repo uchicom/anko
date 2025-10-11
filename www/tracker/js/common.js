@@ -36,23 +36,43 @@ function popTransition(key) {
 	return value;
 }
 function infoNotification(message) {
-	UIkit.notification(message, {status:'primary'})
+	notification(message, 'primary');
 }
 function successNotification(message) {
-    UIkit.notification(message, {status:'success'})
+	notification(message, 'success');
 }
 function warningNotification(message) {
-    UIkit.notification(message, {status:'warning'})
+	notification(message, 'warning');
 }
 function clearErrorMessage() {
-	var elements = classNameElements("uk-alert");
+	var elements = querySelectorAll("dialog");
 	for (var index = 0; index < elements.length; index++) {
-		UIkit.alert(elements[index]).close();
+		elements[index].close();
 	}
 }
 function errorMessage(message) {
 	clearErrorMessage();
   idElement("content").prepend(createAlertDiv(true, message));
+}
+function notification(message, className) {
+	const dialog = create("dialog");
+	dialog.classList.add(className);
+	dialog.open = true;
+	dialog.style = "border:unset";
+	const p = create("p");
+	p.style = "margin:10px";
+	p.append(message);
+	dialog.append(p);
+	const div = create("div");
+	div.align = "center";
+	const button = create("button");
+	button.classList.add('anko-button');
+	button.classList.add('primary');
+	button.onclick = () => dialog.close();
+	button.append("OK");
+	div.append(button);
+	dialog.append(div);
+	querySelector("body").append(dialog);
 }
 function replaceClone(id) {
 	var element = idElement(id);
@@ -75,17 +95,17 @@ function classNameElements(className) {
 }
 function createAlertDiv(closeDiv, message) {
 	var messageDiv = create("div");
-	messageDiv.classList.add("uk-alert-danger");
-	messageDiv.setAttribute("uk-alert", "");
+	messageDiv.classList.add("anko-danger");
 	var messageP = create("p");
 	messageP.style = "margin-left:20px";
 	messageP.append(text(message));
 	messageDiv.append(messageP);
 	if (closeDiv) {
 		var messageA = create("a");
-		messageA.classList.add("uk-alert-close");
-		messageA.setAttribute("uk-close", "");
-		messageDiv.append(messageA);
+		messageA.append("×");
+		messageA.classList.add("anko-close");
+		messageA.onclick = () => messageDiv.remove();
+		messageP.append(messageA);
 	}
 	return messageDiv;
 
@@ -100,7 +120,6 @@ function errorMessages(formId, violations) {
 			if (select.disabled) {
 				continue;
 			}
-			select.classList.add("uk-form-success");
 		}
 		
 		for (const key in violations) {
@@ -111,8 +130,7 @@ function errorMessages(formId, violations) {
 				if (elem.parentNode) {
 					elem.parentNode.append(createAlertDiv(false, violation.message));
 				}
-				elem.classList.remove("uk-form-success");
-				elem.classList.add("uk-form-danger");
+				elem.classList.add("anko-danger");
 			}
 		}
 	} else {
@@ -121,8 +139,7 @@ function errorMessages(formId, violations) {
 			var elems =  document.querySelectorAll(`${selector} input[name="${violation.propertyPath}"], ${selector} textarea[name="${violation.propertyPath}"], ${selector} select[name="${violation.propertyPath}"]`);
 			var elem = elems[violation.index];
 			elem.parentNode.append(createAlertDiv(false, violation.message));
-			elem.classList.remove("uk-form-success");
-			elem.classList.add("uk-form-danger");
+			elem.classList.add("anko-danger");
 		}
 	}
 }
@@ -265,7 +282,6 @@ function loading(on, key) {
 			div.classList.add("waitScreen");
 			var div2 = create("div");
 			div2.classList.add("waitIcon");
-			div2.setAttribute("uk-spinner", "ratio: 4.5");
 			div.append(div2);
 			document.body.append(div);
 		}
@@ -293,8 +309,7 @@ function postJsonDataUrl(url, data, func, errorFunc, confirmMessage) {
 					return false;
 				}
       }
-      removeAll("uk-form-danger");
-      removeAll("uk-form-success");
+      removeAll("anko-danger");
 			loading(true, key);
 			return true;
      },

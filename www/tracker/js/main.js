@@ -22,10 +22,6 @@ function init() {
 
 // 画面表示
 const display = pathname => {
-	const canvas = UIkit.offcanvas('#offcanvas-slide');
-  if (canvas) {
-    canvas.hide();
-  }
 	const keyId = getKeyId(pathname);
 	const route = router[keyId.key];
 	if (route) {
@@ -117,7 +113,6 @@ function logout() {
 function logoutProcess() {
 	post( '/account/logout',  null, data => {
 		if (data.result == "OK") {
-			UIkit.nav('#offcanvas-slide').$destroy();
 			dispLoginView();
 		}
 	});
