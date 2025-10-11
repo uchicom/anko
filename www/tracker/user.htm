@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<link rel="stylesheet" href="/css/uikit.min.css" type="text/css">
+<link rel="stylesheet" href="/css/anko.css" type="text/css">
 <link rel="stylesheet" href="/css/base.css" type="text/css">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
@@ -10,8 +10,6 @@
 <meta name="author" content="uchicom">
 <meta name="keywords" content="問題">
 <meta name="description" content="問題サービスです">
-<script src="/js/uikit.min.js"></script>
-<script src="/js/uikit-icons.min.js"></script>
 <script src="/js/anko.js"></script>
 <script src="/js/anko-validator.js"></script>
 <script src="/tracker/js/common.js"></script>
@@ -28,7 +26,7 @@
   <div id="companyNameHeader">
   <span class="logoChar">ankoサンプル</span>
   </div>
-<ul class="uk-breadcrumb">
+<ul class="anko-horizon">
   <li><a href="/">ホーム</a></li>
   <li><a href="/service.htm"> トラッカーサービス</a></li>
 </ul>
@@ -45,74 +43,43 @@
 </html>
 
 <template id="loginTemplate">
-  <div id="article" style="clear:left;"><article id="content">
-    <h2>ログイン</h2>
-      <div class="uk-container">
-        <div class="uk-grid">
-        <form class="uk-form-horizontal uk-align-center" onsubmit="event.preventDefault()" id="login">
-        <div class="uk-margin">
-        <label class="uk-form-label" for="id">ログインID</label>
-        <div class="uk-form-controls">
-          <div class="uk-inline">
-          <span class="uk-form-icon" uk-icon="icon: user"></span>
-          <input class="uk-input" type="text" id="id" name="id">
-          </div>
-        </div>
-        </div>
-        <div class="uk-margin">
-        <label class="uk-form-label" for="pass">パスワード</label>
-        <div class="uk-form-controls">
-          <div class="uk-inline">
-          <span class="uk-form-icon" uk-icon="icon: lock"></span>
-          <input class="uk-input" type="password" id="pass" name="pass">
-          </div>
-        </div>
-        </div>
-        <div class="uk-margin">
-        <div class="uk-form-controls">
-          <button class="uk-button uk-button-primary" onclick="login()">ログイン</button>
-        </div>
-        </div>
-        </form>
-        </div>
-        </div>
-
-    </article></div>
+  <div id="article" style="clear:both;">
+    <article id="content">
+      <h2>ログイン</h2>
+      <form onsubmit="event.preventDefault()" id="login">
+        <table style="margin: auto">
+          <tr><th><label for="id">ログインID</label></th><td><input class="anko-input" type="text" id="id" name="id"></td></tr>
+          <tr><th><label for="pass">パスワード</label></th><td><input class="anko-input" type="password" id="pass" name="pass"></td></tr>
+          <tr><td colspan="2" style="text-align: right"><button class="anko-button primary" onclick="login()">ログイン</button></td></tr>
+        </table>
+      </form>
+      <button onclick="warningNotification('success')">success</button>
+    </article>
+  </div>
 </template>
 <template id="topTemplate">
-  <article style="clear:left;" id="article"><div style="float:right">
-    <a href="#offcanvas-slide" class="uk-button uk-button-secondary" uk-toggle><span uk-icon="menu"></span>メニュー</a>
-    <div id="offcanvas-slide" uk-offcanvas="flip: true">
-    <div class="uk-offcanvas-bar">
-        <ul id="menu" class="uk-nav uk-nav-default uk-nav-parent-icon" uk-nav="multiple: true">
-        <li class="uk-nav-header">メニュー</li>
-        <li onclick="display('/tracker/user/mypage')"><a>マイページ</a></li>
-        <li class="uk-parent"><a href="#">問題</a><ul class="uk-nav-sub">
-          <li onclick="display('/tracker/user/issue/list')"><a>問題一覧</a>
-          <li onclick="display('/tracker/user/issue/register')"><a>問題登録</a>
-          <li onclick="display('/tracker/user/issue/update')"><a>問題編集</a>
-          </ul></li>
-        <li onclick="logout()"><a>ログアウト</a>
-        </ul></li>
-        </ul>
-    </div>
-    </div>
-    </div>
+  <article style="clear:left;" id="article">
+    <ul id="menu" class="anko-horizon">
+      <li><a onclick="display('/tracker/user/issue/list')">問題一覧</a>
+      <li><a onclick="display('/tracker/user/issue/register')">問題登録</a>
+      <li><a onclick="display('/tracker/user/issue/update')">問題編集</a>
+      <li><a onclick="logout()">ログアウト</a>
+    </ul>
     <div style="float:left" id="content">
     </div>
-    </article>
+  </article>
 </template>
 <template id="accountRegisterTemplate">
   <div id="article" style="clear:left;" >
     <article id="content">
     <h2>アカウント登録</h2>
     <form onsubmit="event.preventDefault()" id="accountRegister">
-    <table class="uk-table uk-table-divider" style="margin-right:auto;margin-left:auto">
-    <tr><th><label for="id">ログインID</label></th><td><input class="uk-input" type="text" id="id" name="id" ></td></tr>
-    <tr><th><label for="pass">パスワード</label></th><td><input class="uk-input" type="password" id="pass" name="pass" ></td></tr>
-    <tr><th><label for="name">お名前</label></th><td><input class="uk-input" type="text" id="name" name="name" ></td></tr>
+    <table class="guide-list" style="margin-right:auto;margin-left:auto">
+    <tr><th><label for="id">ログインID</label></th><td><input class="anko-input" type="text" id="id" name="id" ></td></tr>
+    <tr><th><label for="pass">パスワード</label></th><td><input class="anko-input" type="password" id="pass" name="pass" ></td></tr>
+    <tr><th><label for="name">お名前</label></th><td><input class="anko-input" type="text" id="name" name="name" ></td></tr>
     </table>
-    <button class="uk-button uk-button-primary uk-align-right" id="signupbutton" onclick="this.disabled=true;post('/account/register', 'form#accountRegister', null, (() => this.disabled = false).bind(this))">登録</button>
+    <button class="anko-button primary" style="float:right" id="signupbutton" onclick="this.disabled=true;post('/account/register', 'form#accountRegister', null, (() => this.disabled = false).bind(this))">登録</button>
     </form>
     </article></div>
 </template>
@@ -124,7 +91,7 @@
 <template id="issueTemplate">
   <div id="content">
     <h3>問題一覧</h3>
-    <span class="uk-label" id="number"></span>
+    <span id="number"></span>
     <div style="height: calc(100vh - 230px); width:100%; overflow-x: auto;">
       <table class="guide-table">
         <thead>
@@ -150,18 +117,18 @@
 <template id="issueRegisterTemplate">
   <div style="float:left" id="content"><h3>問題登録</h3>
     <form onsubmit="event.preventDefault()" id="issueRegister">
-    <table class="uk-table uk-table-divider">
-      <tr><th><label for="subject">件名</label></th><td><input class="uk-input" type="text" id="subject" name="subject"></td></tr>
-      <tr><th><label for="detail">詳細</label></th><td><textarea class="uk-textarea" id="detail" name="detail"></textarea></td></tr>
+    <table class="guide-list">
+      <tr><th><label for="subject">件名</label></th><td><input class="anko-input" type="text" id="subject" name="subject"></td></tr>
+      <tr><th><label for="detail">詳細</label></th><td><textarea class="anko-textarea" id="detail" name="detail"></textarea></td></tr>
     </table>
-    <button class="uk-button uk-button-primary uk-align-right" id="signupbutton" onclick="post('/issue/register', 'form#issueRegister', () => display('/issue/user/list'))">登録</button>
+    <button class="anko-button primary" style="float: right" id="signupbutton" onclick="post('/issue/register', 'form#issueRegister', () => display('/tracker/user/issue/list'))">登録</button>
     </form>
   </div>
 </template>
 <template id="issueUpdateTemplate">
   <div id="content">
     <h3>問題更新</h3>
-    <span class="uk-label" id="number"></span>
+    <span id="number"></span>
     <form onsubmit="event.preventDefault()" id="issueUpdate">
       <div style="height: calc(100vh - 300px); width:100%; overflow-x: auto;">
         <table class="guide-table">
@@ -177,19 +144,19 @@
           <template id="issueUpdateTemplate.row">
             <tr>
               <td><input type="hidden" name="issueId"></td>
-              <td><input class="uk-input" type="text" name="subject"></td>
-              <td><textarea class="uk-textarea" name="detail"></textarea></td>
+              <td><input class="anko-input" type="text" name="subject"></td>
+              <td><textarea class="anko-textarea" name="detail"></textarea></td>
             </tr>
           </template>
         </table>
       </div>
-      <button class="uk-button uk-button-primary uk-align-right" id="signupbutton" onclick="this.disabled=true;post('/issue/update', 'form#issueUpdate', () => dispIssueUpdate(), (() => this.disabled = false).bind(this), '保存しますか？', true)">保存</button>
+      <button class="anko-button primary" style="float:right" id="signupbutton" onclick="this.disabled=true;post('/issue/update', 'form#issueUpdate', () => dispIssueUpdate(), (() => this.disabled = false).bind(this), '保存しますか？', true)">保存</button>
     </form>
   </div>
 </template>
 <template id="issueViewTemplate">
   <div style="float:left" id="content"><h3>問題表示</h3>
-    <table class="uk-table uk-table-divider">
+    <table class="guide-list">
       <tr><th>問題ID</th><td></td></tr>
       <tr><th>件名</th><td></td></tr>
       <tr><th>詳細</th><td></td></tr>
