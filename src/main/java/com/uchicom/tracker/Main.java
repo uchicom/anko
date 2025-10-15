@@ -6,16 +6,21 @@ import com.uchicom.tracker.factory.di.DIFactory;
 import com.uchicom.tracker.servlet.ApiServlet;
 import com.uchicom.zouni.ZouniParameter;
 import com.uchicom.zouni.ZouniProcess;
+import com.uchicom.zouni.dto.IpErrorMessageKey;
 import com.uchicom.zouni.servlet.JsServlet;
 import com.uchicom.zouni.servlet.RootServlet;
 import jakarta.servlet.Servlet;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Main {
 
   private static Main main = DIFactory.main();
+  private static ConcurrentHashMap<IpErrorMessageKey, AtomicInteger> ipErrorMessageCountMap =
+      new ConcurrentHashMap<>();
 
   public static void main(String[] args) {
 
@@ -44,7 +49,7 @@ public class Main {
   }
 
   void execute(ZouniParameter zouniParameter) throws Exception {
-    var servlet = new RootServlet(DIFactory.logger(), "./www/", "tracker/user.htm");
+    var servlet = new RootServlet(logger, "./www/", "tracker/user.htm");
     var map = new HashMap<String, Servlet>();
     map.put("pub./tracker/user/", servlet);
     map.put("pub./tracker/js/validation.js", new JsServlet(jsFactory::createValidationPage));
@@ -56,7 +61,8 @@ public class Main {
     zouniParameter
         .createServer(
             (parameter, socket) -> {
-              return new ZouniProcess(parameter, socket, map, startWithMap);
+              return new ZouniProcess(
+                  parameter, socket, map, startWithMap, logger, ipErrorMessageCountMap);
             })
         .execute();
   }
