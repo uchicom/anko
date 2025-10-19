@@ -154,6 +154,7 @@ div.waitScreen {
  
 input:invalid,select:invalid,textarea:invalid {
 	border: pink solid;
+	background-color: mistyrose;
 }
 button.primary {
   background-color: #76a4f4;
