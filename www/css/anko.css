@@ -45,15 +45,17 @@ ul.anko-horizon{
  }
 }
 
+a.anko-close {
+  cursor:pointer;
+  float:right;
+  font-size: 1.2em;
+}
 div.anko-danger {
   background-color: rgb(246, 216, 220);
   border: solid 1px pink;
   color:crimson;
   .anko-close {
-    cursor:pointer;
-    float:right;
     color:brown;
-    font-size: 1.2em;
   }
   .anko-close:hover {
     color:maroon;
@@ -62,10 +64,28 @@ div.anko-danger {
 
 dialog.primary {
   background-color: rgb(223, 232, 245);
+  .anko-close {
+    color:brown;
+  }
+  .anko-close:hover {
+    color:maroon;
+  }
 }
 dialog.success {
   background-color: rgb(217, 241, 217);
+  .anko-close {
+    color:brown;
+  }
+  .anko-close:hover {
+    color:maroon;
+  }
 }
 dialog.warning {
   background-color: rgb(242, 222, 206);
+  .anko-close {
+    color:brown;
+  }
+  .anko-close:hover {
+    color:maroon;
+  }
 }
