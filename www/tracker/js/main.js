@@ -156,23 +156,23 @@ function dispIssueRegister() {
 
 // メモ編集表示
 function dispIssueUpdate() {
-	contentTemplate('issueUpdateTemplate');
-	post('/issue/list', null, data => {
-		initList(data.list);
-		const tbody = document.createElement("tbody");
-		for (let key in data.list) {
-			const record = data.list[key];
-			const row = createRow('issueUpdateTemplate');
-			row.querySelector("td").append(record.id);
-			const inputs = row.querySelectorAll("input,textarea");
-			inputs[0].value = record.id;
-			inputs[1].value = record.subject;
-			inputs[2].value = record.detail;
-			tbody.append(row);
-		}
-		const form = querySelector("#content form");
-		form.querySelector("tbody").replaceWith(tbody);
-		attachValidattion(form, labelConsumer);
+	contentTemplate('issueUpdateTemplate', form => {
+		post('/issue/list', null, data => {
+			initList(data.list);
+			const tbody = document.createElement("tbody");
+			for (let key in data.list) {
+				const record = data.list[key];
+				const row = createRow('issueUpdateTemplate');
+				row.querySelector("td").append(record.id);
+				const inputs = row.querySelectorAll("input,textarea");
+				inputs[0].value = record.id;
+				inputs[1].value = record.subject;
+				inputs[2].value = record.detail;
+				tbody.append(row);
+			}
+			form.querySelector("tbody").replaceWith(tbody);
+			attachValidattion(form, labelConsumer);
+		});
 	});
 }
 function dispIssueView(issueId) {

@@ -78,7 +78,7 @@
     <tr><th><label for="pass">パスワード</label></th><td><input class="anko-input" type="password" id="pass" name="pass" ></td></tr>
     <tr><th><label for="name">お名前</label></th><td><input class="anko-input" type="text" id="name" name="name" ></td></tr>
     </table>
-    <button class="anko-button primary" style="float:right" id="signupbutton" onclick="this.disabled=true;post('/account/register', 'form#accountRegister', null, (() => this.disabled = false).bind(this))">登録</button>
+    <button class="anko-button primary" style="float:right" id="signupbutton" onclick="this.disabled=true;post('/account/register', 'form#accountRegister', ()=>location.href='/tracker/user/', (() => this.disabled = false).bind(this))">登録</button>
     </form>
     </article></div>
 </template>
