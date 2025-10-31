@@ -44,14 +44,14 @@ function successNotification(message) {
 function warningNotification(message) {
 	notification(message, 'warning');
 }
-function clearErrorMessage() {
+function clearNotification() {
 	var elements = querySelectorAll("dialog");
 	for (var index = 0; index < elements.length; index++) {
 		elements[index].close();
+		elements[index].remove();
 	}
 }
 function errorMessage(message) {
-	clearErrorMessage();
   idElement("content").prepend(createAlertDiv(true, message));
 }
 function notification(message, className) {
@@ -62,17 +62,19 @@ function notification(message, className) {
 	const p = create("p");
 	p.style = "margin:10px";
 	p.append(message);
+	var messageA = create("a");
+	messageA.append("×");
+	messageA.classList.add("anko-close");
+	messageA.onclick = () => dialog.close();
+	p.append(messageA);
 	dialog.append(p);
-	const div = create("div");
-	div.align = "center";
-	const button = create("button");
-	button.classList.add('anko-button');
-	button.classList.add('primary');
-	button.onclick = () => dialog.close();
-	button.append("OK");
-	div.append(button);
-	dialog.append(div);
-	querySelector("body").append(dialog);
+	querySelector("body").prepend(dialog);
+	setInterval(() => {
+		if (dialog.open) {
+			dialog.close();
+			dialog.remove();
+		}
+	}, 5000);
 }
 function replaceClone(id) {
 	var element = idElement(id);
@@ -84,6 +86,12 @@ function removeAll(className) {
 	var elems = classNameElements(className);
 	for (var index = 0; index < elems.length; index++) {
 		elems[index].classList.remove(className);
+	}
+}
+function removeAllMessageDiv() {
+	var elems = classNameElements("anko-danger");
+	while (elems.length > 0) {
+		elems[0].parentNode.removeChild(elems[0]);
 	}
 }
 function removeQuerySelector(selector) {
@@ -111,7 +119,6 @@ function createAlertDiv(closeDiv, message) {
 
 }
 function errorMessages(formId, violations) {
-	clearErrorMessage();
 	if (formId) {
 		var selector = "#" + formId;
 		var selects = document.querySelectorAll(`${selector} input, ${selector} textarea, ${selector} select`);
@@ -130,7 +137,6 @@ function errorMessages(formId, violations) {
 				if (elem.parentNode) {
 					elem.parentNode.append(createAlertDiv(false, violation.message));
 				}
-				elem.classList.add("anko-danger");
 			}
 		}
 	} else {
@@ -139,7 +145,6 @@ function errorMessages(formId, violations) {
 			var elems =  document.querySelectorAll(`${selector} input[name="${violation.propertyPath}"], ${selector} textarea[name="${violation.propertyPath}"], ${selector} select[name="${violation.propertyPath}"]`);
 			var elem = elems[violation.index];
 			elem.parentNode.append(createAlertDiv(false, violation.message));
-			elem.classList.add("anko-danger");
 		}
 	}
 }
@@ -309,6 +314,7 @@ function postJsonDataUrl(url, data, func, errorFunc, confirmMessage) {
 					return false;
 				}
       }
+			removeAllMessageDiv();
       removeAll("anko-danger");
 			loading(true, key);
 			return true;
@@ -334,7 +340,6 @@ function postJsonDataUrl(url, data, func, errorFunc, confirmMessage) {
           errorFunc(data);
         }
       } else {
-        clearErrorMessage();
         if (func) {
           func(data);
         }

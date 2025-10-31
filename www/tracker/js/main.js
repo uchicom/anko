@@ -25,7 +25,6 @@ const display = pathname => {
 	const keyId = getKeyId(pathname);
 	const route = router[keyId.key];
 	if (route) {
-		clearErrorMessage();
 		route(keyId.id);
 		history.pushState(null, null, pathname);
 		return true;

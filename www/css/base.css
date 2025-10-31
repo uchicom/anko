@@ -232,3 +232,6 @@ a {
 a:hover{
 	color:salmon;
 }
+dialog{
+	z-index: 1000;
+}
