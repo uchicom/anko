@@ -12,7 +12,7 @@ public abstract class AbstractTable {
   public Long id;
 
   /** 登録者. */
-  @IQColumn(length = 5, nullable = false)
+  @IQColumn(length = 256, nullable = false)
   public String inserted;
 
   /** 登録日時. */
@@ -20,16 +20,16 @@ public abstract class AbstractTable {
   @IQColumn(nullable = false)
   public LocalDateTime insert_datetime;
 
+  /** 更新回数. */
+  @IQColumn(nullable = false)
+  public Integer update_seq;
+
   /** 更新者. */
-  @IQColumn(length = 5)
+  @IQColumn(length = 256)
   public String updated;
 
   /** 更新日時. */
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   @IQColumn
   public LocalDateTime update_datetime;
-
-  /** 更新回数. */
-  @IQColumn(nullable = false)
-  public Integer update_seq;
 }

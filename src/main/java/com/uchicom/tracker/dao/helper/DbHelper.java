@@ -158,6 +158,7 @@ public class DbHelper<T extends AbstractTable> {
   private void setInsertSystemColumn(T entity) {
     entity.insert_datetime = LocalDateTime.now(Constants.ZONE_ID);
     entity.inserted = getExecutor();
+    entity.update_seq = 0;
   }
 
   /**
@@ -184,6 +185,23 @@ public class DbHelper<T extends AbstractTable> {
     // システムカラムを設定します
     setUpdateSystemColumn(entity);
     return getDb().update(entity);
+  }
+
+  /**
+   * エンティティを更新するクエリを取得します.
+   *
+   * @param entity エンティティ
+   * @return 更新クエリ
+   */
+  public Query<T> updateFrom(T entity) {
+    return getDb()
+        .from(entity)
+        .set(entity.update_datetime)
+        .to(LocalDateTime.now(Constants.ZONE_ID))
+        .set(entity.updated)
+        .to(getExecutor())
+        .increment(entity.update_seq)
+        .by(1);
   }
 
   /**
