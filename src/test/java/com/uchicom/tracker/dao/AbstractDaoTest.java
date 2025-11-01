@@ -2,7 +2,10 @@
 package com.uchicom.tracker.dao;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
 
 import com.iciql.Db;
 import com.iciql.Query;
@@ -19,6 +22,8 @@ import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,25 +39,22 @@ public abstract class AbstractDaoTest<U extends AbstractTable, V> extends Abstra
   @Mock PreparedStatement preState;
   @Mock Statement statement;
   @Mock ResultSet resultSet;
-
   @Mock DatabaseMetaData databaseMetaData;
 
   V dao;
-  Query<U> query;
+  List<Query<U>> queryList = new ArrayList<>();
   DbHelper<U> helper;
 
-  @Mock QueryWhere<U> queryWhere;
-
   @Captor ArgumentCaptor<Query<U>> queryCaptor;
-
   @Captor ArgumentCaptor<QueryWhere<U>> queryWhereCaptor;
-
   @Captor ArgumentCaptor<String> sqlCaptor;
-
   @Captor ArgumentCaptor<U> entityCaptor;
+  @Captor ArgumentCaptor<Class<?>> classCaptor;
+  @Captor ArgumentCaptor<Object[]> paramsCaptor;
+  @Captor ArgumentCaptor<U> fromCaptor;
 
   AbstractDaoTest(Supplier<U> u, Function<DbHelper<U>, V> function) {
-    helper = Mockito.spy(new DbHelper<U>(u.get()));
+    helper = spy(new DbHelper<U>(u.get()));
     dao = function.apply(helper);
   }
 
@@ -61,43 +63,69 @@ public abstract class AbstractDaoTest<U extends AbstractTable, V> extends Abstra
   public void setUp() throws Exception {
     Utils.AS_COUNTER.set(0);
 
-    Mockito.doReturn(databaseMetaData).when(conn).getMetaData();
-    Mockito.doReturn("H2").when(databaseMetaData).getDatabaseProductName();
+    doReturn(databaseMetaData).when(conn).getMetaData();
+    doReturn("H2").when(databaseMetaData).getDatabaseProductName();
     doReturn(true).when(helper).insert(entityCaptor.capture());
     doReturn(true).when(helper).update(entityCaptor.capture());
   }
 
   protected String getSQL() {
-    String sql = query.toSQL();
-    if (sql != null) {
-      return sql.replace(" (false) OR", "")
-          .replaceAll("\\(", " ( ")
-          .replaceAll("\\)", " )")
+    return getSQL(queryList.size() - 1);
+  }
+
+  protected String getSQL(int i) {
+    if (!queryList.isEmpty()) {
+      var query = queryList.get(i);
+      String sql = query.toSQL();
+      if (sql != null) {
+        return sql.replaceAll(" +", " ")
+            .replaceAll("\\( +", "(")
+            .replaceAll(" +\\)", ")")
+            .replaceAll(" ,", ",")
+            .replace(" (false) OR", "")
+            .trim();
+      }
+    }
+    if (!sqlCaptor.getAllValues().isEmpty()) {
+      return sqlCaptor
+          .getValue()
           .replaceAll(" +", " ")
-          .replaceAll(" +,", ",");
+          .replaceAll("\\( +", "(")
+          .replaceAll(" +\\)", ")")
+          .replaceAll(" ,", ",")
+          .replace(" (false) OR", "")
+          .trim();
     }
     return null;
   }
 
   public U test(ThrowingFunction<Db, U, Throwable> function) {
-    try (Db db = Mockito.spy(Db.open(conn))) {
-      Mockito.doReturn(true).when(db).getSkipCreate();
-      Mockito.doReturn(null)
+    try (Db db = spy(Db.open(conn))) {
+      doReturn(true).when(db).getSkipCreate();
+      doReturn(null)
           .when(db)
-          .executeQuery(Mockito.<Class<U>>any(), sqlCaptor.capture(), Mockito.<Object>any());
-      Mockito.doReturn(statement).when(conn).createStatement();
-      Mockito.doReturn(resultSet).when(statement).executeQuery(sqlCaptor.capture());
-      Mockito.doReturn(preState).when(conn).prepareStatement(sqlCaptor.capture(), Mockito.anyInt());
-      Mockito.doReturn(preState).when(conn).prepareStatement(sqlCaptor.capture());
-      Mockito.doReturn(resultSet).when(preState).executeQuery();
-      Context.db.set(db);
-      Mockito.doAnswer(
+          .executeQuery(Mockito.<Class<U>>any(), sqlCaptor.capture(), paramsCaptor.capture());
+      doReturn(statement).when(conn).createStatement();
+      doReturn(resultSet).when(statement).executeQuery(sqlCaptor.capture());
+      doReturn(preState).when(conn).prepareStatement(sqlCaptor.capture(), anyInt());
+      doReturn(preState).when(conn).prepareStatement(sqlCaptor.capture());
+      doReturn(resultSet).when(preState).executeQuery();
+      doAnswer(
               invocation -> {
-                query = db.from((U) invocation.getArguments()[0]);
+                var query = db.from((U) invocation.getArguments()[0]);
+                queryList.add(query);
                 return query;
               })
           .when(helper)
           .from(any());
+      doAnswer(
+              invocation -> {
+                var query = db.from((U) invocation.getArguments()[0]);
+                queryList.add(query);
+                return query;
+              })
+          .when(helper)
+          .updateFrom(any());
       return function.apply(db);
     } catch (Throwable e) {
       throw new RuntimeException(e);
@@ -107,24 +135,33 @@ public abstract class AbstractDaoTest<U extends AbstractTable, V> extends Abstra
   }
 
   public void test(ThrowingRunnable<Throwable> runnable) {
-    try (Db db = Mockito.spy(Db.open(conn))) {
-      Mockito.doReturn(true).when(db).getSkipCreate();
-      Mockito.doReturn(null)
+    try (Db db = spy(Db.open(conn))) {
+      doReturn(true).when(db).getSkipCreate();
+      doReturn(null)
           .when(db)
-          .executeQuery(Mockito.<Class<U>>any(), sqlCaptor.capture(), Mockito.<Object>any());
-      Mockito.doReturn(statement).when(conn).createStatement();
-      Mockito.doReturn(resultSet).when(statement).executeQuery(sqlCaptor.capture());
-      Mockito.doReturn(preState).when(conn).prepareStatement(sqlCaptor.capture(), Mockito.anyInt());
-      Mockito.doReturn(preState).when(conn).prepareStatement(sqlCaptor.capture());
-      Mockito.doReturn(resultSet).when(preState).executeQuery();
+          .executeQuery(Mockito.<Class<U>>any(), sqlCaptor.capture(), paramsCaptor.capture());
+      doReturn(statement).when(conn).createStatement();
+      doReturn(resultSet).when(statement).executeQuery(sqlCaptor.capture());
+      doReturn(preState).when(conn).prepareStatement(sqlCaptor.capture(), anyInt());
+      doReturn(preState).when(conn).prepareStatement(sqlCaptor.capture());
+      doReturn(resultSet).when(preState).executeQuery();
       Context.db.set(db);
-      Mockito.doAnswer(
+      doAnswer(
               invocation -> {
-                query = db.from((U) invocation.getArguments()[0]);
+                var query = db.from((U) invocation.getArguments()[0]);
+                queryList.add(query);
                 return query;
               })
           .when(helper)
           .from(any());
+      doAnswer(
+              invocation -> {
+                var query = db.from((U) invocation.getArguments()[0]);
+                queryList.add(query);
+                return query;
+              })
+          .when(helper)
+          .updateFrom(any());
       runnable.run();
     } catch (Throwable e) {
       throw new RuntimeException(e);
