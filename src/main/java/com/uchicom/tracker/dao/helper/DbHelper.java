@@ -219,11 +219,7 @@ public class DbHelper<T extends AbstractTable> {
   void setUpdateSystemColumn(T entity) {
     entity.update_datetime = LocalDateTime.now(Constants.ZONE_ID);
     entity.updated = getExecutor();
-    if (entity.update_seq == null) {
-      entity.update_seq = 1;
-    } else {
-      entity.update_seq++;
-    }
+    entity.update_seq++;
   }
 
   /**
