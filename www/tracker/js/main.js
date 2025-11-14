@@ -170,6 +170,7 @@ function dispIssueUpdate() {
 				tbody.append(row);
 			}
 			form.querySelector("tbody").replaceWith(tbody);
+			querySelector("button").disabled = data.list.length == 0;
 			attachValidattion(form, labelConsumer);
 		});
 	});

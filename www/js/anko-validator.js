@@ -12,6 +12,15 @@ const attachValidattion = (form, labelConsumer) => {
 	if (!map) {
 		return;
 	}
+	for (const [key, value] of Object.entries(map)) {
+		if (!value.required) {
+			continue;
+		}
+		var label = form.querySelector(`label[for="${key}"]`);
+		if (label && labelConsumer) {
+			labelConsumer(label);
+		}
+	}
 	var elements = form.querySelectorAll("input,select,textarea");
 	for (var ei = 0; ei < elements.length; ei++) {
 		var element = elements[ei];
@@ -22,10 +31,6 @@ const attachValidattion = (form, labelConsumer) => {
 		if (validation['required']) {
 			element.required = true;
 			element.title = validation['required'].message;
-			var label = form.querySelector("label[for=\"" + element.getAttribute("id") + "\"],label[for=\"" + element.getAttribute("name") + "\"]");
-			if (label && labelConsumer) {
-        labelConsumer(label);
-			}
 		}
 		if (validation['pattern']) {
 			element.pattern = validation['pattern'].regexp;
