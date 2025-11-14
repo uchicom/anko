@@ -149,7 +149,7 @@
           </template>
         </table>
       </div>
-      <button class="anko-button primary" style="float:right" id="signupbutton" onclick="this.disabled=true;post('/issue/update', 'form#issueUpdate', () => dispIssueUpdate(), (() => this.disabled = false).bind(this), '保存しますか？', true)">保存</button>
+      <button class="anko-button primary" style="float:right" id="signupbutton" onclick="this.disabled=true;post('/issue/update', 'form#issueUpdate', () => dispIssueUpdate(), (() => this.disabled = false).bind(this), '保存しますか？', true)" disabled>保存</button>
     </form>
   </div>
 </template>
