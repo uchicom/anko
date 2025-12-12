@@ -8,7 +8,7 @@ button.anko-button {
 }
 input.anko-input {
   padding: 0.3em 0.75em 0.2em 0.75em;
-  border:gray solid 2px;
+  border:gray solid 1px;
 }
 input.anko-input:focus {
   outline:darkgray solid 1px;

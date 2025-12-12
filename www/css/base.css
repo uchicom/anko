@@ -4,6 +4,7 @@ body {
   position: relative;/*←相対位置*/
   padding-bottom: 80px;/*←footerの高さ*/
   box-sizing: border-box;/*←全て含めてmin-height:100vhに*/
+	color:#444444;
 }
 
 footer{
@@ -32,31 +33,30 @@ footer{
 	}
 	h1 {
 		font-size: 24px;
-		width: 90%;
 		display: block;
-		margin: 0 auto;
+		margin: 10px 0 10px 0;
 		padding: 0;
 		position: relative;
 		font-style: bold;
-		color: #333333;
+		color: #444444;
 		line-height: 1.5em;
-		border-bottom: 3px solid #333333;
+		border-bottom: 3px solid #444444;
 	}
   h2 {
 		font-size: 18px;
-		border-left: 10px solid #333333;
+		border-left: 10px solid #444444;
 		text-indent: 10px;
 		margin: 10px 0 10px 0;
 	}
 	h3 {
 		font-size: 14px;
-		border-left:10px solid #333333;
+		border-left:10px solid #444444;
 		text-indent: 10px;
 		margin: 10px 0 10px 10px;
 	}
 	h4 {
 		font-size: 12px;
-		border-left:5px solid #333333;
+		border-left:5px solid #444444;
 		text-indent: 10px;
 		margin: 10px 0 10px 10px;
 	}
@@ -79,25 +79,25 @@ footer{
 		padding: 0;
 		position: relative;
 		font-style: bold;
-		color: #333333;
+		color: #444444;
 		line-height: 1.5em;
-		border-bottom: 3px solid #333333;
+		border-bottom: 3px solid #444444;
 	}
   h2 {
 		font-size: 18px;
-		border-left: 10px solid #333333;
+		border-left: 10px solid #444444;
 		text-indent: 10px;
 		margin: 10px 0 10px 0;
 	}
 	h3 {
 		font-size: 14px;
-		border-left: 10px solid #333333;
+		border-left: 10px solid #444444;
 		text-indent: 10px;
 		margin: 10px 0 10px 0;
 	}
 	h4 {
 		font-size: 12px;
-		border-left: 5px solid #333333;
+		border-left: 5px solid #444444;
 		text-indent: 10px;
 		margin: 10px 0 10px 0;
 	}
@@ -153,10 +153,11 @@ div.waitScreen {
 }
  
 input:invalid,select:invalid,textarea:invalid {
-	border: pink solid;
+	border: 1px pink solid;
 	background-color: mistyrose;
 }
 button.primary {
+	color: white;
   background-color: #76a4f4;
 }
 button.primary:hover {
@@ -176,7 +177,7 @@ button.primary:hover {
 		top:0;
 		position: sticky;
 		background-color: #C9DAF8;
-		color: #333333;
+		color: #444444;
 		font-weight: normal;
 		text-align:left;
 		border-bottom:1px solid black;
@@ -208,7 +209,7 @@ button.primary:hover {
 		top:0;
 		position: sticky;
 		background-color: #C9DAF8;
-		color: #333333;
+		color: #444444;
 		font-weight: normal;
 		text-align:left;
 		border-bottom:1px solid black;
