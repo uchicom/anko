@@ -16,7 +16,7 @@ const attachValidattion = (form, labelConsumer) => {
 		if (!value.required) {
 			continue;
 		}
-		var label = form.querySelector(`label[for="${key}"]`);
+		var label = form.querySelector(`.anko-label[data-anko-for="${key}"]`);
 		if (label && labelConsumer) {
 			labelConsumer(label);
 		}

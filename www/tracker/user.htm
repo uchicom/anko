@@ -48,8 +48,8 @@
       <h2>ログイン</h2>
       <form onsubmit="event.preventDefault()" id="login">
         <table style="margin: auto">
-          <tr><th><label for="id">ログインID</label></th><td><input class="anko-input" type="text" id="id" name="id"></td></tr>
-          <tr><th><label for="pass">パスワード</label></th><td><input class="anko-input" type="password" id="pass" name="pass"></td></tr>
+          <tr><th><label for="id" class="anko-label" data-anko-for="id">ログインID</label></th><td><input class="anko-input" type="text" id="id" name="id"></td></tr>
+          <tr><th><label for="pass" class="anko-label" data-anko-for="pass">パスワード</label></th><td><input class="anko-input" type="password" id="pass" name="pass"></td></tr>
           <tr><td colspan="2" style="text-align: right"><button class="anko-button primary" onclick="login()">ログイン</button></td></tr>
         </table>
       </form>
@@ -74,9 +74,9 @@
     <h2>アカウント登録</h2>
     <form onsubmit="event.preventDefault()" id="accountRegister">
     <table class="guide-list" style="margin-right:auto;margin-left:auto">
-    <tr><th><label for="id">ログインID</label></th><td><input class="anko-input" type="text" id="id" name="id" ></td></tr>
-    <tr><th><label for="pass">パスワード</label></th><td><input class="anko-input" type="password" id="pass" name="pass" ></td></tr>
-    <tr><th><label for="name">お名前</label></th><td><input class="anko-input" type="text" id="name" name="name" ></td></tr>
+    <tr><th><label for="id" class="anko-label" data-anko-for="id">ログインID</label></th><td><input class="anko-input" type="text" id="id" name="id" ></td></tr>
+    <tr><th><label for="pass" class="anko-label" data-anko-for="pass">パスワード</label></th><td><input class="anko-input" type="password" id="pass" name="pass" ></td></tr>
+    <tr><th><label for="name" class="anko-label" data-anko-for="name">お名前</label></th><td><input class="anko-input" type="text" id="name" name="name" ></td></tr>
     </table>
     <button class="anko-button primary" style="float:right" id="signupbutton" onclick="this.disabled=true;post('/account/register', 'form#accountRegister', ()=>location.href='/tracker/user/', (() => this.disabled = false).bind(this))">登録</button>
     </form>
@@ -117,8 +117,8 @@
   <div style="float:left" id="content"><h3>問題登録</h3>
     <form onsubmit="event.preventDefault()" id="issueRegister">
     <table class="guide-list">
-      <tr><th><label for="subject">件名</label></th><td><input class="anko-input" type="text" id="subject" name="subject"></td></tr>
-      <tr><th><label for="detail">詳細</label></th><td><textarea class="anko-textarea" id="detail" name="detail"></textarea></td></tr>
+      <tr><th><label for="subject" class="anko-label" data-anko-for="subject">件名</label></th><td><input class="anko-input" type="text" id="subject" name="subject"></td></tr>
+      <tr><th><label for="detail" class="anko-label" data-anko-for="detail">詳細</label></th><td><textarea class="anko-textarea" id="detail" name="detail"></textarea></td></tr>
     </table>
     <button class="anko-button primary" style="float: right" id="signupbutton" onclick="post('/issue/register', 'form#issueRegister', () => display('/tracker/user/issue/list'))">登録</button>
     </form>
@@ -134,8 +134,8 @@
           <thead>
             <tr>
               <th>問題ID</th>
-              <th><label for="subject">件名</label></th>
-              <th><label for="detail">詳細</label></th>
+              <th class="anko-label" data-anko-for="subject">件名</th>
+              <th class="anko-label" data-anko-for="detail">詳細</th>
             </tr>
           </thead>
           <tbody>
