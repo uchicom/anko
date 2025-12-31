@@ -78,8 +78,8 @@ When requested, it dynamically generates a frontend JavaScript file
 │ | (fetch) | │               │
 │ └─┬───────┘ │               │
 └───┼─────────┼───────────────┘
-    │ POST    │  GET /validator.js
-    │         │
+	│ POST    │  GET /validator.js
+	│         │
 ┌───┼─────────┼────────────────────────────────────────────┐
 │   │         v                                            │
 │   │   ┌─────────────────────────┐                        │
@@ -109,11 +109,11 @@ When requested, it dynamically generates a frontend JavaScript file
 
 ```
 Browser
-  └─ JSON Request
-        └─ ApiServlet
-              └─ API Layer
-                    └─ Service Layer
-                          └─ DAO / ORM
+└─ JSON Request
+		└─ ApiServlet
+			└─ API Layer
+					└─ Service Layer
+						└─ DAO / ORM
 ```
 
 - ApiServlet is responsible only for request routing and JSON handling
@@ -126,8 +126,8 @@ Browser
 
 ```
 validator.js
-  └─ JsServlet
-        └─ DTO + Validator
+└─ JsServlet
+		└─ DTO + Validator
 ```
 - Validation metadata generation never accesses the database
 
