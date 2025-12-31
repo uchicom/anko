@@ -1,0 +1,34 @@
+{
+  "name": "Java 25 Maven zouni + H2",
+  "image": "maven:3-eclipse-temurin-25",
+
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+
+  "postCreateCommand": "java -version && mvn -version",
+  "postStartCommand": "mvn clean package -DskipTests",
+
+  "forwardPorts": [8080],
+  "portsAttributes": {
+    "8080": {
+      "label": "zouni",
+      "onAutoForward": "openBrowser"
+    }
+  },
+
+  "containerEnv": {
+    "H2_DB_PATH": "/workspaces/${localWorkspaceFolderBasename}/data/h2"
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "redhat.java",
+        "vscjava.vscode-java-pack",
+        "vscjava.vscode-maven"
+      ],
+      "settings": {
+        "java.configuration.updateBuildConfiguration": "automatic"
+      }
+    }
+  }
+}
