@@ -5,7 +5,7 @@ import com.iciql.Iciql.IQColumn;
 import com.iciql.Iciql.IQSchema;
 import com.iciql.Iciql.IQTable;
 
-/** 問題. */
+/** 課題. */
 @IQSchema("tracker")
 @IQTable(name = "issue", inheritColumns = true)
 public class Issue extends AbstractTable {
