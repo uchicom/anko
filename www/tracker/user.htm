@@ -8,8 +8,8 @@
 <meta http-equiv="content-script-type" content="text/javascript">
 <meta http-equiv="content-style-type" content="text/css">
 <meta name="author" content="uchicom">
-<meta name="keywords" content="問題">
-<meta name="description" content="問題サービスです">
+<meta name="keywords" content="課題管理">
+<meta name="description" content="課題管理システムです">
 <script src="/js/anko.js"></script>
 <script src="/js/anko-validator.js"></script>
 <script src="/tracker/js/common.js"></script>
@@ -19,7 +19,7 @@
   window.addEventListener("load", dispLogin);
 </script>
 <style>img {width:40px;height:25px;margin-right:10px}</style>
-<title>会員システム - トラッカーサービス</title>
+<title>業務システム - 課題管理</title>
 </head>
 <body>
 <header>
@@ -28,7 +28,7 @@
   </div>
 <ul class="anko-horizon">
   <li><a href="/">ホーム</a></li>
-  <li><a href="/service.htm"> トラッカーサービス</a></li>
+  <li><a href="/service.htm"> 課題管理</a></li>
 </ul>
 </header>
 <article style="clear:left;" id="article"></article>
@@ -59,9 +59,9 @@
 <template id="topTemplate">
   <article style="clear:left;" id="article">
     <ul id="menu" class="anko-horizon">
-      <li><a onclick="display('/tracker/user/issue/list')">問題一覧</a>
-      <li><a onclick="display('/tracker/user/issue/register')">問題登録</a>
-      <li><a onclick="display('/tracker/user/issue/update')">問題編集</a>
+      <li><a onclick="display('/tracker/user/issue/list')">課題一覧</a>
+      <li><a onclick="display('/tracker/user/issue/register')">課題登録</a>
+      <li><a onclick="display('/tracker/user/issue/update')">課題編集</a>
       <li><a onclick="logout()">ログアウト</a>
     </ul>
     <div style="float:left" id="content">
@@ -89,13 +89,13 @@
 </template>
 <template id="issueTemplate">
   <div id="content">
-    <h3>問題一覧</h3>
+    <h3>課題一覧</h3>
     <span id="number"></span>
     <div style="height: calc(100vh - 230px); width:100%; overflow-x: auto;">
       <table class="guide-table">
         <thead>
           <tr>
-            <th>問題ID</th>
+            <th>課題ID</th>
             <th>件名</th>
             <th>詳細</th>
           </tr>
@@ -114,7 +114,7 @@
   </div>
 </template>
 <template id="issueRegisterTemplate">
-  <div style="float:left" id="content"><h3>問題登録</h3>
+  <div style="float:left" id="content"><h3>課題登録</h3>
     <form onsubmit="event.preventDefault()" id="issueRegister">
     <table class="guide-list">
       <tr><th><label for="subject" class="anko-label" data-anko-for="subject">件名</label></th><td><input class="anko-input" type="text" id="subject" name="subject"></td></tr>
@@ -126,14 +126,14 @@
 </template>
 <template id="issueUpdateTemplate">
   <div id="content">
-    <h3>問題更新</h3>
+    <h3>課題更新</h3>
     <span id="number"></span>
     <form onsubmit="event.preventDefault()" id="issueUpdate">
       <div style="height: calc(100vh - 300px); width:100%; overflow-x: auto;">
         <table class="guide-table">
           <thead>
             <tr>
-              <th>問題ID</th>
+              <th>課題ID</th>
               <th class="anko-label" data-anko-for="subject">件名</th>
               <th class="anko-label" data-anko-for="detail">詳細</th>
             </tr>
@@ -154,9 +154,9 @@
   </div>
 </template>
 <template id="issueViewTemplate">
-  <div style="float:left" id="content"><h3>問題表示</h3>
+  <div style="float:left" id="content"><h3>課題表示</h3>
     <table class="guide-list">
-      <tr><th>問題ID</th><td></td></tr>
+      <tr><th>課題ID</th><td></td></tr>
       <tr><th>件名</th><td></td></tr>
       <tr><th>詳細</th><td></td></tr>
     </table>
