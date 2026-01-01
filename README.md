@@ -61,31 +61,31 @@ When requested, it dynamically generates a frontend JavaScript file
 (`validation.js`) by extracting validation metadata from DTOs.
 
 ```
-┌─────────────────────────────┐
-│          Browser            │
-│                             │
-│  HTML / CSS / Vanilla JS    │
-│  ────────────────────────   │
-│  Template Rendering         │
-│  Lightweight Content-based Routing    │
-│                             │
-│  ┌───────────────────────┐  │
-│  │ validator.js          │<─┼────>localStorage (cached by hash)
-│  │ (loaded via HTTP)     │  │
-│  └───────────────────────┘  │
-│ ┌─────────┐ ^               │
-│ │  JSON   │ │               │
-│ | (fetch) | │               │
-│ └─┬───────┘ │               │
-└───┼─────────┼───────────────┘
-	│ POST    │  GET /validator.js
+┌────────────────────────────────────┐
+│          Browser                   │
+│                                    │
+│  HTML / CSS / Vanilla JS           │
+│  ────────────────────────          │
+│  Template Rendering                │
+│  Lightweight Content-based Routing │
+│                                    │
+│  ┌───────────────────────┐         │
+│  │ validation.js         │<────────┼────>localStorage (cached by hash)
+│  │ (loaded via HTTP)     │         │
+│  └───────────────────────┘         │
+│ ┌─────────┐ ^                      │
+│ │  JSON   │ │                      │
+│ | (fetch) | │                      │
+│ └─┬───────┘ │                      │
+└───┼─────────┼──────────────────────┘
+	│ POST    │  GET /validation.js
 	│         │
 ┌───┼─────────┼────────────────────────────────────────────┐
 │   │         v                                            │
-│   │   ┌─────────────────────────┐                        │
-│   │   │     JsServlet           │                        │
-│   │   │ (validator.js endpoint) │                        │
-│   │   └─────────────────────────┘                        │
+│   │   ┌──────────────────────────┐                       │
+│   │   │     JsServlet            │                       │
+│   │   │ (validation.js endpoint) │                       │
+│   │   └──────────────────────────┘                       │
 │   │               ^                                      │
 │   │  ┌────────────┴──────────────┐                       │
 │   │<─┤ DTO + Validator           │                       │
