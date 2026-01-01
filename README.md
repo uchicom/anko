@@ -223,20 +223,6 @@ This framework intentionally limits its scope to keep the architecture simple, e
 
 	- Real-time or event-driven UIs
 
-Design Philosophy Behind These Limitations
-
-These limitations are intentional design choices, not missing features.
-
-By restricting the feature set:
-
-DTOs remain the single source of truth
-
-Frontend logic stays minimal and predictable
-
-Validation logic is never duplicated
-
-The system remains easy to reason about and debug
-
 ---
 
 # Design Philosophy Behind These Limitations
