@@ -144,6 +144,114 @@ JsServlet only depends on DTO definitions and Validators
 DAO / ORM is used exclusively by API request handling
 
 Validation metadata is extracted without accessing the database
+
+---
+
+# Limitations
+
+This framework intentionally limits its scope to keep the architecture simple, explicit, and maintainable.
+
+## Validation
+
+- No cross-field (correlation) validation
+
+- Validation rules are applied per field.
+
+- Rules that depend on multiple fields are intentionally out of scope.
+
+- No conditional required fields
+
+- Conditions such as “required only if another field has a specific value” are not supported.
+
+- Validation rules are DTO-driven
+
+- Only validations defined on DTOs are propagated to the frontend.
+
+- Frontend-only validation rules are not supported.
+
+## Frontend Architecture
+
+- No frontend build process
+
+- Frameworks such as React, Vue, or Angular are intentionally not used.
+
+- ES modules, bundlers, and transpilers are not part of the design.
+
+- Limited SPA features
+
+- This is a lightweight SPA.
+
+- Only the content area is dynamically replaced.
+
+- Global state management is intentionally not provided.
+
+- No client-side state persistence
+
+- Screens are treated as stateless.
+
+- All authoritative state resides on the server.
+
+## Backend Architecture
+
+- DTO changes require server restart
+
+- Validation metadata (validator.js) is generated at server startup.
+
+- Updating DTO definitions requires rebuilding and restarting the server.
+
+- No runtime DTO introspection via API
+
+- Validation metadata is served only through validator.js.
+
+- API endpoints do not expose validation schemas.
+
+## Use Case Focus
+
+- Optimized for business form-based applications
+
+- CRUD-oriented screens
+
+- Administrative tools
+
+- Internal systems
+
+- Not intended for
+
+- Complex UI interactions
+
+- Highly dynamic visual applications
+
+- Real-time or event-driven UIs
+
+Design Philosophy Behind These Limitations
+
+These limitations are intentional design choices, not missing features.
+
+By restricting the feature set:
+
+DTOs remain the single source of truth
+
+Frontend logic stays minimal and predictable
+
+Validation logic is never duplicated
+
+The system remains easy to reason about and debug
+
+---
+
+# Design Philosophy Behind These Limitations
+These limitations are intentional design choices, not missing features.
+
+By restricting the feature set:
+
+- DTOs remain the single source of truth
+
+- Frontend logic stays minimal and predictable
+
+- Validation logic is never duplicated
+
+- The system remains easy to reason about and debug
+
 ## mvn
 ### server start
 ```
