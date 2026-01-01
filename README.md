@@ -1,12 +1,12 @@
 # anko
 
-**Buildless SPA framework with backend-driven validation for business web applications**
+**Buildless web application framework with backend-driven validation for business web applications**
 
 ---
 
 ## Overview
 
-**anko** is a buildless Single Page Application (SPA) framework
+**anko** is a buildless web application framework
 designed to eliminate duplicate input validation in business-oriented
 web applications.
 
@@ -67,7 +67,7 @@ When requested, it dynamically generates a frontend JavaScript file
 │  HTML / CSS / Vanilla JS    │
 │  ────────────────────────   │
 │  Template Rendering         │
-│  Lightweight SPA Routing    │
+│  Lightweight Content-based Routing    │
 │                             │
 │  ┌───────────────────────┐  │
 │  │ validator.js          │<─┼────>localStorage (cached by hash)
@@ -177,9 +177,9 @@ This framework intentionally limits its scope to keep the architecture simple, e
 
 	- ES modules, bundlers, and transpilers are not part of the design.
 
-- Limited SPA features
+- Limited client-side features
 
-	- This is a lightweight SPA.
+	- UI updates are performed by content replacement.
 
 	- Only the content area is dynamically replaced.
 
@@ -414,7 +414,7 @@ No additional installation is required.
 
 - Ideal for quick evaluation and experimentation
 
-- Matches the “Buildless SPA” philosophy
+- Matches the “Buildless” philosophy
 
 ## mvn
 ### server start
