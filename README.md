@@ -238,6 +238,184 @@ By restricting the feature set:
 
 - The system remains easy to reason about and debug
 
+---
+
+# DTO-driven Validation Example
+## Java DTO Definition
+
+```
+package com.uchicom.tracker.dto.request.account;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.uchicom.tracker.annotation.Form;
+import jakarta.validation.constraints.NotBlank;
+
+@Form("login")
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class LoginDto {
+
+	@NotBlank(message = "必須です。")
+	public String id;
+
+	@NotBlank(message = "必須です。")
+	public String pass;
+}
+```
+
+---
+
+## Generated validator.js
+```
+const validationHash = 'FFFFFFFFA2C9E569';
+
+if (validationHash != localStorage.getItem('validationHash')) {
+	localStorage.setItem('validationHash', validationHash);
+	localStorage.setItem('validation', JSON.stringify({
+		"login": {
+			"id": {
+				"required": { "message": "必須です。" },
+				"pattern": {
+					"regexp": ".*\\S+.*",
+					"message": "必須です。"
+				}
+			},
+			"pass": {
+				"required": { "message": "必須です。" },
+				"pattern": {
+					"regexp": ".*\\S+.*",
+					"message": "必須です。"
+				}
+			}
+		}
+	}));
+}
+
+```
+
+---
+
+## Mapping Rules
+
+Java Annotation	| Generated Rule |	Description
+---|---|---
+@Form("login") |	"login"	| Form identifier
+@NotBlank	| required | Required field
+@NotBlank	| pattern: .*\\S+.*	| Must contain non-whitespace
+message | message | Error message propagation
+
+---
+
+## How This Works
+
+1. DTO is annotated
+
+	- Validation rules are defined once, on the server side
+
+2. JsServlet extracts metadata
+
+	- Reads DTO annotations at server startup
+
+	- Generates validator.js
+
+3. Frontend loads validator.js
+
+	- Cached using validationHash
+
+	- Stored in localStorage
+
+4. Form rendering applies rules
+
+	- Required labels
+
+	- Visual emphasis
+
+	- Client-side validation
+
+5. API validation is shared
+
+	-	JSON → DTO → Validator
+
+	-	Violations are returned and bound to the same form
+
+---
+
+## Why This Matters
+
+- No duplicated validation logic
+
+- No frontend validation definitions
+
+- Single source of truth: DTO
+
+- Consistent behavior between frontend and backend
+
+---
+
+# Quick Start (GitHub Codespaces)
+
+This project is configured to run out-of-the-box using **GitHub Codespaces**.
+
+You can start the server and verify the behavior in **about 3 minutes** without any local setup.
+
+## Steps
+
+1. Open the repository on GitHub
+
+2. Click **Code** → **Create codespace on main**
+
+3. Wait for the Codespace to start
+
+4. Run the server:
+```
+mvn exec:java "-Dexec.mainClass=com.uchicom.tracker.Main"
+```
+
+5. Access the application in your browser:
+```
+http://localhost:8080
+```
+---
+
+## What is preconfigured
+
+- Java runtime
+
+- Maven
+
+- H2 database
+
+- All dependencies
+
+No additional installation is required.
+
+---
+
+## What you can verify immediately
+
+- Server startup
+
+- API routing via **ApiServlet**
+
+- DTO-based validation
+
+- Generated **validator.js** via **JsServlet**
+
+- Frontend validation without build tools
+
+- Validation error propagation from backend to frontend
+
+---
+
+## Why Codespaces is recommended
+
+- No environment differences
+
+- No dependency conflicts
+
+- Ideal for quick evaluation and experimentation
+
+- Matches the “Buildless SPA” philosophy
+
 ## mvn
 ### server start
 ```
