@@ -78,8 +78,8 @@ When requested, it dynamically generates a frontend JavaScript file
 │ | (fetch) | │               │
 │ └─┬───────┘ │               │
 └───┼─────────┼───────────────┘
-	│ POST    │  GET /validator.js
-	│         │
+		│ POST    │  GET /validator.js
+		│         │
 ┌───┼─────────┼────────────────────────────────────────────┐
 │   │         v                                            │
 │   │   ┌─────────────────────────┐                        │
