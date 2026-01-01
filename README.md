@@ -155,73 +155,73 @@ This framework intentionally limits its scope to keep the architecture simple, e
 
 - No cross-field (correlation) validation
 
-- Validation rules are applied per field.
+	- Validation rules are applied per field.
 
-- Rules that depend on multiple fields are intentionally out of scope.
+	- Rules that depend on multiple fields are intentionally out of scope.
 
 - No conditional required fields
 
-- Conditions such as “required only if another field has a specific value” are not supported.
+	- Conditions such as “required only if another field has a specific value” are not supported.
 
 - Validation rules are DTO-driven
 
-- Only validations defined on DTOs are propagated to the frontend.
+	- Only validations defined on DTOs are propagated to the frontend.
 
-- Frontend-only validation rules are not supported.
+	- Frontend-only validation rules are not supported.
 
 ## Frontend Architecture
 
 - No frontend build process
 
-- Frameworks such as React, Vue, or Angular are intentionally not used.
+	- Frameworks such as React, Vue, or Angular are intentionally not used.
 
-- ES modules, bundlers, and transpilers are not part of the design.
+	- ES modules, bundlers, and transpilers are not part of the design.
 
 - Limited SPA features
 
-- This is a lightweight SPA.
+	- This is a lightweight SPA.
 
-- Only the content area is dynamically replaced.
+	- Only the content area is dynamically replaced.
 
-- Global state management is intentionally not provided.
+	- Global state management is intentionally not provided.
 
 - No client-side state persistence
 
-- Screens are treated as stateless.
+	- Screens are treated as stateless.
 
-- All authoritative state resides on the server.
+	- All authoritative state resides on the server.
 
 ## Backend Architecture
 
 - DTO changes require server restart
 
-- Validation metadata (validator.js) is generated at server startup.
+	- Validation metadata (validator.js) is generated at server startup.
 
-- Updating DTO definitions requires rebuilding and restarting the server.
+	- Updating DTO definitions requires rebuilding and restarting the server.
 
 - No runtime DTO introspection via API
 
-- Validation metadata is served only through validator.js.
+	- Validation metadata is served only through validator.js.
 
-- API endpoints do not expose validation schemas.
+	- API endpoints do not expose validation schemas.
 
 ## Use Case Focus
 
 - Optimized for business form-based applications
 
-- CRUD-oriented screens
+	- CRUD-oriented screens
 
-- Administrative tools
+	- Administrative tools
 
-- Internal systems
+	- Internal systems
 
 - Not intended for
 
-- Complex UI interactions
+	- Complex UI interactions
 
-- Highly dynamic visual applications
+	- Highly dynamic visual applications
 
-- Real-time or event-driven UIs
+	- Real-time or event-driven UIs
 
 Design Philosophy Behind These Limitations
 
@@ -275,5 +275,5 @@ mvn spotless:apply clean compile verify
 
 ## SQLスクリプト
 ```
-java -cp ~/.m2/repository/com/h2database/h2/2.4.240/2.4.240.jar org.h2.tools.RunScript -url "jdbc:h2:./database/tracker;AUTO_COMPACT_FILL_RATE=0;CIPHER=AES" -user tracker -password "tracker tracker" -script ./database/sql/create.sql  -showResults
+java -cp ~/.m2/repository/com/h2database/h2/2.4.240/2.4.240.jar org.h2.tools.RunScript -url "jdbc:h2:./database/tracker;AUTO_COMPACT_FILL_RATE=0;CIPHER=AES" -user tracker -password "tracker tracker" -script ./database/sql/create.sql	-showResults
 ```
