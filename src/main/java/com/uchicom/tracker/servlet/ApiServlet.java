@@ -8,6 +8,7 @@ import com.uchicom.tracker.annotation.Path;
 import com.uchicom.tracker.api.AbstractApi;
 import com.uchicom.tracker.api.AccountApi;
 import com.uchicom.tracker.api.IssueApi;
+import com.uchicom.tracker.dto.response.ErrorDto;
 import com.uchicom.tracker.dto.response.account.AuthDto;
 import com.uchicom.tracker.exception.ViolationException;
 import com.uchicom.tracker.service.AuthService;
@@ -20,6 +21,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
@@ -88,9 +90,29 @@ public class ApiServlet extends HttpServlet {
       if (result != null) {
         res.getOutputStream().write(result.getBytes(StandardCharsets.UTF_8));
       }
-    } catch (Exception exception) {
-      logger.log(Level.SEVERE, exception.getMessage(), exception);
+    } catch (ViolationException e) {
+      inputError(res, e);
+    } catch (InvocationTargetException e) {
+      systemError(res, e.getCause());
+    } catch (Exception e) {
+      systemError(res, e);
     }
+  }
+
+  void inputError(HttpServletResponse res, ViolationException e) throws IOException {
+    res.setContentType("application/json; charset=UTF-8");
+    writeError(res, e.getErrorDto());
+  }
+
+  void systemError(HttpServletResponse res, Throwable e) throws IOException {
+    logger.log(Level.SEVERE, "システムエラー:" + e.getMessage(), e);
+    writeError(res, new ErrorDto("システムエラー.管理者にお問い合わせください."));
+  }
+
+  void writeError(HttpServletResponse res, ErrorDto errorDto) throws IOException {
+    res.setContentType("application/json; charset=UTF-8");
+    var result = objectMapper.writeValueAsString(errorDto);
+    res.getOutputStream().write(result.toString().getBytes(StandardCharsets.UTF_8));
   }
 
   String execute(AbstractApi api, Method method, HttpServletRequest req, HttpServletResponse res)
@@ -99,52 +121,45 @@ public class ApiServlet extends HttpServlet {
     logger.info(
         req.getHeader("User-Agent") + "@" + req.getRemoteAddr() + ":" + req.getRequestURI());
 
-    try {
-      String url = null;
-      Auth auth = method.getAnnotation(Auth.class);
-      res.setHeader("Cache-Control", "no-store");
-      if (auth != null && !authService.auth(req)) {
-        res.setContentType("application/json; charset=UTF-8");
-        return objectMapper.writeValueAsString(new AuthDto("認証情報の有効期限が切れました。ログインしなおしてください。"));
-      }
-
-      var types = method.getGenericParameterTypes();
-      var parameterTypes = method.getParameterTypes();
-
-      if (String.class == method.getReturnType()) { // Stringの場合はurl
-        return switch (parameterTypes.length) {
-          case 1 -> (String) method.invoke(api, readValue(req, parameterTypes[0], types[0]));
-          case 2 -> (String) method.invoke(api, req, res);
-          case 3 ->
-              (String) method.invoke(api, readValue(req, parameterTypes[0], types[0]), req, res);
-          default -> null;
-        };
-      } else if (Object.class == method.getReturnType()) { // Objectの場合はJSON
-        res.setContentType("application/json; charset=UTF-8");
-        return switch (parameterTypes.length) {
-          case 1 ->
-              objectMapper.writeValueAsString(
-                  method.invoke(api, readValue(req, parameterTypes[0], types[0])));
-          case 2 -> objectMapper.writeValueAsString(method.invoke(api, req, res));
-          case 3 ->
-              objectMapper.writeValueAsString(
-                  method.invoke(api, readValue(req, parameterTypes[0], types[0]), req, res));
-          default -> null;
-        };
-      } else { // 戻りがない場合は内部処理で書き込み
-        switch (parameterTypes.length) {
-          case 1 -> method.invoke(api, readValue(req, parameterTypes[0], types[0]));
-          case 2 -> method.invoke(api, req, res);
-          case 3 -> method.invoke(api, readValue(req, parameterTypes[0], types[0]), req, res);
-        }
-      }
-      return url;
-    } catch (ViolationException e) {
-      return objectMapper.writeValueAsString(e.getErrorDto());
-    } catch (Exception e) {
-      logger.log(Level.SEVERE, "メモエラー通知:" + e.getMessage(), e);
-      throw new ServletException(e);
+    String url = null;
+    Auth auth = method.getAnnotation(Auth.class);
+    res.setHeader("Cache-Control", "no-store");
+    if (auth != null && !authService.auth(req)) {
+      res.setContentType("application/json; charset=UTF-8");
+      return objectMapper.writeValueAsString(new AuthDto("認証情報の有効期限が切れました。ログインしなおしてください。"));
     }
+
+    var types = method.getGenericParameterTypes();
+    var parameterTypes = method.getParameterTypes();
+
+    if (String.class == method.getReturnType()) { // Stringの場合はurl
+      return switch (parameterTypes.length) {
+        case 1 -> (String) method.invoke(api, readValue(req, parameterTypes[0], types[0]));
+        case 2 -> (String) method.invoke(api, req, res);
+        case 3 ->
+            (String) method.invoke(api, readValue(req, parameterTypes[0], types[0]), req, res);
+        default -> null;
+      };
+    } else if (Object.class == method.getReturnType()) { // Objectの場合はJSON
+      res.setContentType("application/json; charset=UTF-8");
+      return switch (parameterTypes.length) {
+        case 1 ->
+            objectMapper.writeValueAsString(
+                method.invoke(api, readValue(req, parameterTypes[0], types[0])));
+        case 2 -> objectMapper.writeValueAsString(method.invoke(api, req, res));
+        case 3 ->
+            objectMapper.writeValueAsString(
+                method.invoke(api, readValue(req, parameterTypes[0], types[0]), req, res));
+        default -> null;
+      };
+    } else { // 戻りがない場合は内部処理で書き込み
+      switch (parameterTypes.length) {
+        case 1 -> method.invoke(api, readValue(req, parameterTypes[0], types[0]));
+        case 2 -> method.invoke(api, req, res);
+        case 3 -> method.invoke(api, readValue(req, parameterTypes[0], types[0]), req, res);
+      }
+    }
+    return url;
   }
 
   <T> T readValue(HttpServletRequest req, Class<T> clazz, Type type) throws Exception {
