@@ -4,5 +4,6 @@ package com.uchicom.tracker.enumeration;
 public enum Config {
   SECRET,
   ZONE_ID,
-  ZONE_OFFSET
+  ZONE_OFFSET,
+  SALT_SUFFIX
 }

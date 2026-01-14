@@ -1,6 +1,7 @@
 // (C) 2023 uchicom
 package com.uchicom.tracker.service;
 
+import com.uchicom.tracker.Constants;
 import com.uchicom.tracker.dao.AccountDao;
 import com.uchicom.tracker.dto.request.account.AccountRegisterDto;
 import com.uchicom.tracker.dto.request.account.LoginDto;
@@ -55,7 +56,7 @@ public class AccountService {
 
   String createSalt(String loginId) {
     // 再現可能な複雑な文字列を使用するとよい
-    return loginId + "/abcdefghijklmnop";
+    return loginId + "/" + Constants.SALT_SUFFIX;
   }
 
   byte[] createPasswordHash(String loginId, String password) throws NoSuchAlgorithmException {

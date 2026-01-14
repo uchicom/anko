@@ -17,6 +17,9 @@ public class Constants {
   public static final ZoneOffset ZONE_OFFSET =
       ZoneOffset.ofHours(Context.getInteger(Config.ZONE_OFFSET));
 
+  /** パスフレーズハッシュのSALT付加情報. */
+  public static final String SALT_SUFFIX = Context.get(Config.SALT_SUFFIX);
+
   /** ログ出力ディレクトリ. */
   public static final String LOG_DIR = "./logs";
 
