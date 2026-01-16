@@ -459,18 +459,18 @@ by making Java DTOs the single source of truth for:
 ## Core Philosophy
 
 1. **DTOs are the single source of truth**
-   - Validation
-   - API request structure
-   - UI validation behavior
+	- Validation
+	- API request structure
+	- UI validation behavior
 
 2. **Validation is defined exactly once**
-   - Only in Java DTO annotations
-   - Never duplicated in frontend or service logic
+	- Only in Java DTO annotations
+	- Never duplicated in frontend or service logic
 
 3. **Frontend is intentionally lightweight**
-   - No framework abstractions
-   - No client-side state ownership
-   - No build step
+	- No framework abstractions
+	- No client-side state ownership
+	- No build step
 
 
 ## Constraints (Hard Rules)
@@ -511,10 +511,10 @@ Allowed:
 
 ```text
 DTO annotations
- → JsServlet (at server startup)
- → validator.js / enumeration.js (generated)
- → Browser (cached by hash)
- → Form rendering & client-side validation
+	→ JsServlet (at server startup)
+		→ validator.js / enumeration.js (generated)
+			→ Browser (cached by hash)
+				→ Form rendering & client-side validation
 ```
 
 
@@ -522,10 +522,10 @@ DTO annotations
 
 ```text
 Browser (JSON)
- → ApiServlet
-   → API Layer
-     → Service Layer
-       → DAO / ORM
+	→ ApiServlet
+		→ API Layer
+			→ Service Layer
+				→ DAO / ORM
 ```
 
 
@@ -534,8 +534,8 @@ Browser (JSON)
 ```text
 - Extract validation metadata from DTO annotations
 - Generate frontend JavaScript dynamically:
-  - validator.js (validation rules)
-  - enumeration.js (enum propagation)
+	- validator.js (validation rules)
+	- enumeration.js (enum propagation)
 - Serve generated JavaScript via HTTP
 - Apply hash-based cache control
 ```
@@ -570,8 +570,8 @@ Example:
 @Form("formId")   // unique identifier
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ExampleDto {
-    @NotBlank(message = "必須です。")
-    public String field;
+	@NotBlank(message = "必須です。")
+	public String field;
 }
 ```
 
