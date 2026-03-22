@@ -37,6 +37,4 @@ public class Customer extends AbstractTable {
   /** 建物. */
   @IQColumn(length = 64)
   public String building;
-
-  public Customer() {}
 }

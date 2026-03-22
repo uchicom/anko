@@ -17,6 +17,4 @@ public class TaskToAccount extends AbstractTable {
   /** アカウントID. */
   @IQColumn(nullable = false)
   public Long account_id;
-
-  public TaskToAccount() {}
 }

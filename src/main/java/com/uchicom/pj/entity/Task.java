@@ -41,6 +41,4 @@ public class Task extends AbstractTable {
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   @IQColumn
   public LocalDateTime complete_datetime;
-
-  public Task() {}
 }

@@ -21,6 +21,4 @@ public class Account extends AbstractTable {
   /** 名前. */
   @IQColumn(length = 128, nullable = false)
   public String name;
-
-  public Account() {}
 }

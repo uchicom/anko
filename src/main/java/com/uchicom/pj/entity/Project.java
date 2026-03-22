@@ -46,6 +46,4 @@ public class Project extends AbstractTable {
 
   /** 説明. */
   @IQColumn public String description;
-
-  public Project() {}
 }
