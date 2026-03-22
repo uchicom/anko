@@ -244,10 +244,10 @@ By restricting the feature set:
 ## Java DTO Definition
 
 ```
-package com.uchicom.tracker.dto.request.account;
+package com.uchicom.pj.dto.request.account;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.uchicom.tracker.annotation.Form;
+import com.uchicom.pj.annotation.Form;
 import jakarta.validation.constraints.NotBlank;
 
 @Form("login")
@@ -367,7 +367,7 @@ You can start the server and verify the behavior in **about 3 minutes** without 
 
 4. Run the server:
 ```
-mvn exec:java "-Dexec.mainClass=com.uchicom.tracker.Main"
+mvn exec:java "-Dexec.mainClass=com.uchicom.pj.Main"
 ```
 
 5. Access the application in your browser:
@@ -419,7 +419,7 @@ No additional installation is required.
 ## mvn
 ### server start
 ```
-mvn exec:java "-Dexec.mainClass=com.uchicom.tracker.Main"
+mvn exec:java "-Dexec.mainClass=com.uchicom.pj.Main"
 ```
 
 ### format
@@ -439,7 +439,7 @@ mvn spotless:apply clean compile verify
 
 ## SQLスクリプト
 ```
-java -cp ~/.m2/repository/com/h2database/h2/2.4.240/2.4.240.jar org.h2.tools.RunScript -url "jdbc:h2:./database/tracker;AUTO_COMPACT_FILL_RATE=0;CIPHER=AES" -user tracker -password "tracker tracker" -script ./database/sql/create.sql	-showResults
+java -cp ~/.m2/repository/com/h2database/h2/2.4.240/2.4.240.jar org.h2.tools.RunScript -url "jdbc:h2:./database/pj;AUTO_COMPACT_FILL_RATE=0;CIPHER=AES" -user pj -password "pj pj" -script ./database/sql/create.sql -showResults
 ```
 # AI Context (For AI Assistants Only)
 

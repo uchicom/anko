@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<link rel="stylesheet" href="/css/anko.css" type="text/css">
+<link rel="stylesheet" href="/css/base.css" type="text/css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta http-equiv="content-script-type" content="text/javascript">
+<meta http-equiv="content-style-type" content="text/css">
+<meta name="author" content="uchicom">
+<meta name="keywords" content="案件管理">
+<meta name="description" content="案件管理システムです">
+<script src="/js/anko.js"></script>
+<script src="/js/anko-validator.js"></script>
+<script src="/pj/js/common.js"></script>
+<script src="/pj/js/main.js"></script>
+<script src="/pj/js/validation.js"></script>
+<script>
+  window.addEventListener("load", dispLogin);
+</script>
+<style>img {width:40px;height:25px;margin-right:10px}</style>
+<title>業務システム - 案件管理</title>
+</head>
+<body>
+<header>
+  <div id="companyNameHeader">
+  <span class="logoChar">ankoサンプル</span>
+  </div>
+<ul class="anko-horizon">
+  <li><a href="/">ホーム</a></li>
+  <li><a href="/service.htm"> 案件管理</a></li>
+</ul>
+</header>
+<article style="clear:left;" id="article"></article>
+<div id="footer">
+  <footer>
+    <div>
+      <a href="https://github.com/uchicom" style="text-decoration: none;">uchicom &copy; 2023</a>
+    </div>
+  </footer>
+</div>
+</body>
+</html>
+
+<template id="loginTemplate">
+  <div id="article" style="clear:both;">
+    <article id="content">
+      <h2>ログイン</h2>
+      <form onsubmit="event.preventDefault()" id="login">
+        <table style="margin: auto">
+          <tr><th><label for="id" class="anko-label" data-anko-for="id">ログインID</label></th><td><input class="anko-input" type="text" id="id" name="id"></td></tr>
+          <tr><th><label for="pass" class="anko-label" data-anko-for="pass">パスワード</label></th><td><input class="anko-input" type="password" id="pass" name="pass"></td></tr>
+          <tr><td colspan="2" style="text-align: right"><button class="anko-button primary" onclick="login()">ログイン</button></td></tr>
+        </table>
+      </form>
+    </article>
+  </div>
+</template>
+<template id="topTemplate">
+  <article style="clear:left;" id="article">
+    <ul id="menu" class="anko-horizon">
+      <li><a onclick="display('/pj/user/project/list')">案件一覧</a>
+      <li><a onclick="display('/pj/user/project/register')">案件登録</a>
+      <li><a onclick="display('/pj/user/project/update')">案件編集</a>
+      <li><a onclick="display('/pj/user/customer/list')">顧客一覧</a>
+      <li><a onclick="display('/pj/user/customer/register')">顧客登録</a>
+      <li><a onclick="display('/pj/user/customer/update')">顧客編集</a>
+      <li><a onclick="display('/pj/user/task/list')">タスク一覧</a>
+      <li><a onclick="display('/pj/user/task/register')">タスク登録</a>
+      <li><a onclick="display('/pj/user/task/update')">タスク編集</a>
+      <li><a onclick="logout()">ログアウト</a>
+    </ul>
+    <div style="float:left" id="content">
+    </div>
+  </article>
+</template>
+<template id="accountRegisterTemplate">
+  <div id="article" style="clear:left;" >
+    <article id="content">
+    <h2>アカウント登録</h2>
+    <form onsubmit="event.preventDefault()" id="accountRegister">
+    <table class="guide-list" style="margin-right:auto;margin-left:auto">
+    <tr><th><label for="id" class="anko-label" data-anko-for="id">ログインID</label></th><td><input class="anko-input" type="text" id="id" name="id" ></td></tr>
+    <tr><th><label for="pass" class="anko-label" data-anko-for="pass">パスワード</label></th><td><input class="anko-input" type="password" id="pass" name="pass" ></td></tr>
+    <tr><th><label for="name" class="anko-label" data-anko-for="name">お名前</label></th><td><input class="anko-input" type="text" id="name" name="name" ></td></tr>
+    </table>
+    <button class="anko-button primary" style="float:right" id="signupbutton" onclick="this.disabled=true;post('/account/register', 'form#accountRegister', ()=>location.href='/pj/user/', (() => this.disabled = false).bind(this))">登録</button>
+    </form>
+    </article></div>
+</template>
+<template id="mypageTemplate">
+  <div style="float:left" id="content"><h3>マイページ</h3>
+    <p>ログインに成功しました。</p>
+  </div>
+</template>
+<template id="projectTemplate">
+  <div id="content">
+    <h3>案件一覧</h3>
+    <span id="number"></span>
+    <div style="height: calc(100vh - 230px); width:100%; overflow-x: auto;">
+      <table class="guide-table">
+        <thead>
+          <tr>
+            <th>案件ID</th>
+            <th>件名</th>
+            <th>詳細</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        <template id="projectTemplate.row">
+          <tr>
+            <td><a></a></td>
+            <td><a></a></td>
+            <td><pre></pre></td>
+          </tr>
+        </template>
+      </table>
+    </div>
+  </div>
+</template>
+<template id="projectRegisterTemplate">
+  <div style="float:left" id="content"><h3>案件登録</h3>
+    <form onsubmit="event.preventDefault()" id="projectRegister">
+    <table class="guide-list">
+      <tr><th><label for="customerId" class="anko-label" data-anko-for="customerId">顧客</label></th><td><select class="anko-select" id="customerId" name="customerId"></select></td></tr>
+      <tr><th><label for="subject" class="anko-label" data-anko-for="subject">件名</label></th><td><input class="anko-input" type="text" id="subject" name="subject"></td></tr>
+      <tr><th><label for="startScheduleDate" class="anko-label" data-anko-for="startScheduleDate">開始予定日</label></th><td><input class="anko-input" type="date" id="startScheduleDate" name="startScheduleDate"></td></tr>
+      <tr><th><label for="endScheduleDate" class="anko-label" data-anko-for="endScheduleDate">終了予定日</label></th><td><input class="anko-input" type="date" id="endScheduleDate" name="endScheduleDate"></td></tr>
+      <tr><th><label for="description" class="anko-label" data-anko-for="description">詳細</label></th><td><textarea class="anko-textarea" id="description" name="description"></textarea></td></tr>
+    </table>
+    <button class="anko-button primary" style="float: right" id="signupbutton" onclick="post('/project/register', 'form#projectRegister', () => display('/pj/user/project/list'))">登録</button>
+    </form>
+  </div>
+</template>
+<template id="projectUpdateTemplate">
+  <div id="content">
+    <h3>案件更新</h3>
+    <span id="number"></span>
+    <form onsubmit="event.preventDefault()" id="projectUpdate">
+      <div style="height: calc(100vh - 300px); width:100%; overflow-x: auto;">
+        <table class="guide-table">
+          <thead>
+            <tr>
+              <th>案件ID</th>
+              <th class="anko-label" data-anko-for="subject">件名</th>
+              <th class="anko-label" data-anko-for="startScheduleDate">開始予定日</th>
+              <th class="anko-label" data-anko-for="endScheduleDate">終了予定日</th>
+              <th class="anko-label" data-anko-for="description">詳細</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+          <template id="projectUpdateTemplate.row">
+            <tr>
+              <td><input type="hidden" name="projectId"><span></span></td>
+              <td><input class="anko-input" type="text" name="subject"></td>
+              <td><input class="anko-input" type="date" name="startScheduleDate"></td>
+              <td><input class="anko-input" type="date" name="endScheduleDate"></td>
+              <td><textarea class="anko-textarea" name="description"></textarea></td>
+            </tr>
+          </template>
+        </table>
+      </div>
+      <button class="anko-button primary" style="float:right" id="signupbutton" onclick="this.disabled=true;post('/project/update', 'form#projectUpdate', () => dispprojectUpdate(), (() => this.disabled = false).bind(this), '保存しますか？', true)" disabled>保存</button>
+    </form>
+  </div>
+</template>
+<template id="projectViewTemplate">
+  <div style="float:left" id="content"><h3>案件表示</h3>
+    <table class="guide-list">
+      <tr><th>案件ID</th><td></td></tr>
+      <tr><th>件名</th><td></td></tr>
+      <tr><th>詳細</th><td></td></tr>
+    </table>
+  </div>
+</template>
+<template id="customerTemplate">
+  <div id="content">
+    <h3>顧客一覧</h3>
+    <span id="number"></span>
+    <div style="height: calc(100vh - 230px); width:100%; overflow-x: auto;">
+      <table class="guide-table">
+        <thead>
+          <tr>
+            <th>顧客ID</th>
+            <th>会社名</th>
+            <th>担当者名</th>
+            <th>メールアドレス</th>
+            <th>電話番号</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        <template id="customerTemplate.row">
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </template>
+      </table>
+    </div>
+  </div>
+</template>
+<template id="customerRegisterTemplate">
+  <div style="float:left" id="content"><h3>顧客登録</h3>
+    <form onsubmit="event.preventDefault()" id="customerRegister">
+    <table class="guide-list">
+      <tr><th><label for="companyName" class="anko-label" data-anko-for="companyName">会社名</label></th><td><input class="anko-input" type="text" id="companyName" name="companyName"></td></tr>
+      <tr><th><label for="picName" class="anko-label" data-anko-for="picName">担当者名</label></th><td><input class="anko-input" type="text" id="picName" name="picName"></td></tr>
+      <tr><th><label for="emailAddress" class="anko-label" data-anko-for="emailAddress">メールアドレス</label></th><td><input class="anko-input" type="email" id="emailAddress" name="emailAddress"></td></tr>
+      <tr><th><label for="telephonNumber" class="anko-label" data-anko-for="telephonNumber">電話番号</label></th><td><input class="anko-input" type="text" id="telephonNumber" name="telephonNumber"></td></tr>
+      <tr><th><label for="faxNumber" class="anko-label" data-anko-for="faxNumber">FAX番号</label></th><td><input class="anko-input" type="text" id="faxNumber" name="faxNumber"></td></tr>
+      <tr><th><label for="address" class="anko-label" data-anko-for="address">住所</label></th><td><input class="anko-input" type="text" id="address" name="address"></td></tr>
+      <tr><th><label for="building" class="anko-label" data-anko-for="building">建物名</label></th><td><input class="anko-input" type="text" id="building" name="building"></td></tr>
+    </table>
+    <button class="anko-button primary" style="float: right" id="signupbutton" onclick="post('/customer/register', 'form#customerRegister', () => display('/pj/user/customer/list'))">登録</button>
+    </form>
+  </div>
+</template>
+<template id="customerUpdateTemplate">
+  <div id="content">
+    <h3>顧客編集</h3>
+    <span id="number"></span>
+    <form onsubmit="event.preventDefault()" id="customerUpdate">
+      <div style="height: calc(100vh - 300px); width:100%; overflow-x: auto;">
+        <table class="guide-table">
+          <thead>
+            <tr>
+              <th>顧客ID</th>
+              <th class="anko-label" data-anko-for="companyName">会社名</th>
+              <th class="anko-label" data-anko-for="picName">担当者名</th>
+              <th class="anko-label" data-anko-for="emailAddress">メールアドレス</th>
+              <th class="anko-label" data-anko-for="telephonNumber">電話番号</th>
+              <th class="anko-label" data-anko-for="faxNumber">FAX番号</th>
+              <th class="anko-label" data-anko-for="address">住所</th>
+              <th class="anko-label" data-anko-for="building">建物名</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+          <template id="customerUpdateTemplate.row">
+            <tr>
+              <td><input type="hidden" name="customerId"><span></span></td>
+              <td><input class="anko-input" type="text" name="companyName"></td>
+              <td><input class="anko-input" type="text" name="picName"></td>
+              <td><input class="anko-input" type="email" name="emailAddress"></td>
+              <td><input class="anko-input" type="text" name="telephonNumber"></td>
+              <td><input class="anko-input" type="text" name="faxNumber"></td>
+              <td><input class="anko-input" type="text" name="address"></td>
+              <td><input class="anko-input" type="text" name="building"></td>
+            </tr>
+          </template>
+        </table>
+      </div>
+      <button class="anko-button primary" style="float:right" id="signupbutton" onclick="this.disabled=true;post('/customer/update', 'form#customerUpdate', () => dispCustomerUpdate(), (() => this.disabled = false).bind(this), '保存しますか？', true)" disabled>保存</button>
+    </form>
+  </div>
+</template>
+<template id="taskTemplate">
+  <div id="content">
+    <h3>タスク一覧</h3>
+    <div style="margin-bottom:8px">
+      <label>案件：<select class="anko-select" id="taskProjectId" onchange="loadTaskList(this.value)"></select></label>
+    </div>
+    <span id="number"></span>
+    <div style="height: calc(100vh - 270px); width:100%; overflow-x: auto;">
+      <table class="guide-table">
+        <thead>
+          <tr>
+            <th>タスクID</th>
+            <th>件名</th>
+            <th>優先度</th>
+            <th>進捗(%)</th>
+            <th>開始日時</th>
+            <th>完了日時</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        <template id="taskTemplate.row">
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </template>
+      </table>
+    </div>
+  </div>
+</template>
+<template id="taskRegisterTemplate">
+  <div style="float:left" id="content"><h3>タスク登録</h3>
+    <form onsubmit="event.preventDefault()" id="taskRegister">
+    <table class="guide-list">
+      <tr><th><label for="projectId" class="anko-label" data-anko-for="projectId">案件</label></th><td><select class="anko-select" id="projectId" name="projectId"></select></td></tr>
+      <tr><th><label for="subject" class="anko-label" data-anko-for="subject">件名</label></th><td><input class="anko-input" type="text" id="subject" name="subject"></td></tr>
+      <tr><th><label for="priority" class="anko-label" data-anko-for="priority">優先度</label></th><td><input class="anko-input" type="number" id="priority" name="priority"></td></tr>
+      <tr><th><label for="cost" class="anko-label" data-anko-for="cost">コスト</label></th><td><input class="anko-input" type="number" step="0.01" id="cost" name="cost"></td></tr>
+      <tr><th><label for="progress" class="anko-label" data-anko-for="progress">進捗(%)</label></th><td><input class="anko-input" type="number" min="0" max="100" id="progress" name="progress"></td></tr>
+      <tr><th><label for="startDatetime" class="anko-label" data-anko-for="startDatetime">開始日時</label></th><td><input class="anko-input" type="datetime-local" id="startDatetime" name="startDatetime"></td></tr>
+      <tr><th><label for="completeDatetime" class="anko-label" data-anko-for="completeDatetime">完了日時</label></th><td><input class="anko-input" type="datetime-local" id="completeDatetime" name="completeDatetime"></td></tr>
+      <tr><th><label for="description" class="anko-label" data-anko-for="description">説明</label></th><td><textarea class="anko-textarea" id="description" name="description"></textarea></td></tr>
+    </table>
+    <button class="anko-button primary" style="float: right" id="signupbutton" onclick="post('/task/register', 'form#taskRegister', () => display('/pj/user/task/list'))">登録</button>
+    </form>
+  </div>
+</template>
+<template id="taskUpdateTemplate">
+  <div id="content">
+    <h3>タスク編集</h3>
+    <div style="margin-bottom:8px">
+      <label>案件：<select class="anko-select" id="taskUpdateProjectId" onchange="loadTaskUpdateList(this.value)"></select></label>
+    </div>
+    <span id="number"></span>
+    <form onsubmit="event.preventDefault()" id="taskUpdate">
+      <div style="height: calc(100vh - 340px); width:100%; overflow-x: auto;">
+        <table class="guide-table">
+          <thead>
+            <tr>
+              <th>タスクID</th>
+              <th class="anko-label" data-anko-for="subject">件名</th>
+              <th class="anko-label" data-anko-for="priority">優先度</th>
+              <th class="anko-label" data-anko-for="cost">コスト</th>
+              <th class="anko-label" data-anko-for="progress">進捗(%)</th>
+              <th class="anko-label" data-anko-for="startDatetime">開始日時</th>
+              <th class="anko-label" data-anko-for="completeDatetime">完了日時</th>
+              <th class="anko-label" data-anko-for="description">説明</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+          <template id="taskUpdateTemplate.row">
+            <tr>
+              <td><input type="hidden" name="taskId"><input type="hidden" name="projectId"><span></span></td>
+              <td><input class="anko-input" type="text" name="subject"></td>
+              <td><input class="anko-input" type="number" name="priority"></td>
+              <td><input class="anko-input" type="number" step="0.01" name="cost"></td>
+              <td><input class="anko-input" type="number" min="0" max="100" name="progress"></td>
+              <td><input class="anko-input" type="datetime-local" name="startDatetime"></td>
+              <td><input class="anko-input" type="datetime-local" name="completeDatetime"></td>
+              <td><textarea class="anko-textarea" name="description"></textarea></td>
+            </tr>
+          </template>
+        </table>
+      </div>
+      <button class="anko-button primary" style="float:right" id="signupbutton" onclick="this.disabled=true;post('/task/update', 'form#taskUpdate', () => loadTaskUpdateList(querySelector('#taskUpdateProjectId').value), (() => this.disabled = false).bind(this), '保存しますか？', true)" disabled>保存</button>
+    </form>
+  </div>
+</template>
