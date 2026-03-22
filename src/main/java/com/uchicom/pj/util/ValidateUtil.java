@@ -23,7 +23,9 @@ public class ValidateUtil {
   public static String createJsonForAllRequest() {
     var classSet = ClassUtil.listClasses("com.uchicom.pj.dto.request");
     classSet.addAll(ClassUtil.listClasses("com.uchicom.pj.dto.request.account"));
-    classSet.addAll(ClassUtil.listClasses("com.uchicom.pj.dto.request.issue"));
+    classSet.addAll(ClassUtil.listClasses("com.uchicom.pj.dto.request.customer"));
+    classSet.addAll(ClassUtil.listClasses("com.uchicom.pj.dto.request.project"));
+    classSet.addAll(ClassUtil.listClasses("com.uchicom.pj.dto.request.task"));
     return classSet.stream()
         .map(ValidateUtil::createJson)
         .filter(Objects::nonNull)

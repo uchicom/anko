@@ -2,9 +2,11 @@
 package com.uchicom.pj.dto.request.customer;
 
 import com.uchicom.pj.annotation.Form;
+import jakarta.validation.constraints.NotBlank;
 
 @Form("customerRegister")
 public class CustomerRegisterDto {
+  @NotBlank(message = "必須です。")
   public String companyName;
 
   public String picName;

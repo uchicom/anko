@@ -439,7 +439,7 @@ mvn spotless:apply clean compile verify
 
 ## SQLスクリプト
 ```
-java -cp ~/.m2/repository/com/h2database/h2/2.4.240/2.4.240.jar org.h2.tools.RunScript -url "jdbc:h2:./database/pj;AUTO_COMPACT_FILL_RATE=0;CIPHER=AES" -user pj -password "pj pj" -script ./database/sql/create.sql -showResults
+java -cp ~/.m2/repository/com/h2database/h2/2.4.240/h2-2.4.240.jar org.h2.tools.RunScript -url "jdbc:h2:./database/pj;AUTO_COMPACT_FILL_RATE=0;CIPHER=AES" -user pj -password "pj pj" -script ./database/sql/create.sql -showResults
 ```
 # AI Context (For AI Assistants Only)
 
