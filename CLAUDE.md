@@ -26,38 +26,38 @@
 
 ```
 Browser (HTML / CSS / Vanilla JS)
-    └─ JSON fetch
-        └─ ApiServlet         # リクエストルーティング・JSONハンドリング
-            └─ API Layer      # リクエスト固有のロジック
-                └─ Service Layer  # ビジネスロジック
-                    └─ DAO / ORM (iciql)  # 永続化
+	└─ JSON fetch
+		└─ ApiServlet         # リクエストルーティング・JSONハンドリング
+			└─ API Layer      # リクエスト固有のロジック
+				└─ Service Layer  # ビジネスロジック
+					└─ DAO / ORM (iciql)  # 永続化
 ```
 
 バリデーション伝播:
 
 ```
 JsServlet
-    └─ DTO + Validator（アノテーション）
-        └─ validator.js（サーバー起動時に自動生成）
-            └─ ブラウザのlocalStorageにキャッシュ
+	└─ DTO + Validator（アノテーション）
+		└─ validator.js（サーバー起動時に自動生成）
+			└─ ブラウザのlocalStorageにキャッシュ
 ```
 
 ## ディレクトリ構成
 
 ```
 anko/
-    src/
-        main/
-            java/          # Javaソースコード
-            resources/     # 設定ファイル
-        test/              # バックエンドテスト
-            java/
-            resources/
-    www/                   # フロントエンド（HTML / CSS / JS）
-        test/              # フロントエンドテスト
-    database/              # ローカルデータベース
-        sql/               # SQLスクリプト
-    pom.xml
+	src/
+		main/
+			java/          # Javaソースコード
+			resources/     # 設定ファイル
+		test/              # バックエンドテスト
+			java/
+			resources/
+	www/                   # フロントエンド（HTML / CSS / JS）
+		test/              # フロントエンドテスト
+	database/              # ローカルデータベース
+		sql/               # SQLスクリプト
+	pom.xml
 ```
 
 ## Mavenコマンド
@@ -90,8 +90,8 @@ mvn spotless:apply clean compile verify
 @Form("login")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class LoginDto {
-    @NotBlank(message = "必須です。")
-    public String id;
+	@NotBlank(message = "必須です。")
+	public String id;
 }
 ```
 
@@ -126,9 +126,9 @@ public class LoginDto {
 
 ```bash
 java -cp ~/.m2/repository/com/h2database/h2/2.4.240/2.4.240.jar org.h2.tools.RunScript \
-    -url "jdbc:h2:./database/pj;AUTO_COMPACT_FILL_RATE=0;CIPHER=AES" \
-    -user pj \
-    -password "pj pj" \
-    -script ./database/sql/create.sql \
-    -showResults
+	-url "jdbc:h2:./database/pj;AUTO_COMPACT_FILL_RATE=0;CIPHER=AES" \
+	-user pj \
+	-password "pj pj" \
+	-script ./database/sql/create.sql \
+	-showResults
 ```
