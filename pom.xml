@@ -7,8 +7,8 @@
   <scm>
     <connection>scm:git:${project.scm.url}</connection>
     <developerConnection>scm:git:${project.scm.url}</developerConnection>
-    <url>https://github.com/uchicom/anko.git</url>
     <tag>HEAD</tag>
+    <url>https://github.com/uchicom/anko.git</url>
   </scm>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -268,8 +268,8 @@
                 <include>*.md</include>
                 <include>.gitignore</include>
               </includes>
-              <trimTrailingWhitespace />
-              <endWithNewline />
+              <trimTrailingWhitespace/>
+              <endWithNewline/>
               <indent>
                 <tabs>true</tabs>
                 <spacesPerTab>4</spacesPerTab>
@@ -281,8 +281,8 @@
               <include>src/main/java/**/*.java</include>
               <include>src/test/java/**/*.java</include>
             </includes>
-            <importOrder />
-            <removeUnusedImports />
+            <importOrder/>
+            <removeUnusedImports/>
             <googleJavaFormat>
               <version>1.28.0</version>
               <style>GOOGLE</style>
@@ -292,6 +292,12 @@
               <!-- or <file>${basedir}/license-header</file> -->
             </licenseHeader>
           </java>
+          <pom>
+            <includes>
+              <include>pom.xml</include>
+            </includes>
+            <sortPom/>
+          </pom>
         </configuration>
         <executions>
           <execution>
@@ -311,8 +317,8 @@
               <goal>java</goal>
             </goals>
             <configuration>
-              <arguments />
-              <systemProperties />
+              <arguments/>
+              <systemProperties/>
             </configuration>
           </execution>
         </executions>
