@@ -66,23 +66,71 @@ const tests = [{
     },
     path: {
       '/pj/api/account/login': {
-        mock: {token: "abc"},
+        mock: {result: "OK"},
         assert: [
           payload=>payload.id == "test@test",
           payload=>payload.pass == "test"
         ]
       },
       '/pj/api/account/check/login': {
-        mock: {"result": "OK"},
+        mock: {"result": "NG"},
         assert: [
         ]
       }
     },
   },
-  {
-    name: "ログアウト",
-    action: ifWindow=>ifWindow.logout(),
-  }
+	{
+		name: "案件一覧",
+    action: ifWindow => {
+			ifWindow.dispProject();
+    },
+    path: {
+      '/pj/api/project/list': {
+        mock: {list: [{id: 1, subject:'システム開発', description:'せつめい'}]},
+        assert: [
+          (payload, window)=>window.querySelectorAll("td")[0].textContent == '1',
+          (payload, window)=>window.querySelectorAll("td")[1].textContent == 'システム開発',
+          (payload, window)=>window.querySelectorAll("td")[2].textContent == 'せつめい',
+        ]
+      }
+    }
+	},
+	{
+		name: "案件登録",
+    action: ifWindow => {
+			ifWindow.dispProjectRegister();
+      ifWindow.set("#projectRegister", {
+				customerId: 1,
+        subject: "テスト案件",
+        startScheduleDate: "2026-03-28",
+				description: "案件の詳細"
+      });
+			ifWindow.registerProject();
+    },
+    path: {
+      '/pj/api/customer/list': {
+        mock: {list: [{id: 1, company_name:'顧客1株式会社'},{id: 2, company_name:'顧客2株式会社'},{id: 3, company_name:'顧客3株式会社'}]},
+        assert: [
+          (payload, window)=>window.querySelector("#customerId").options[0].value == '1',
+          (payload, window)=>window.querySelector("#customerId").options[0].label == '顧客1株式会社',
+          (payload, window)=>window.querySelector("#customerId").options[1].value == '2',
+          (payload, window)=>window.querySelector("#customerId").options[1].label == '顧客2株式会社',
+          (payload, window)=>window.querySelector("#customerId").options[2].value == '3',
+          (payload, window)=>window.querySelector("#customerId").options[2].label == '顧客3株式会社',
+        ]
+      },
+      '/pj/api/project/register': {
+        mock: {message: '登録しました.'},
+        assert: [
+          (payload, window)=>payload.customerId == '1',
+          (payload, window)=>payload.subject == 'テスト案件',
+          (payload, window)=>payload.startScheduleDate == '2026-03-28',
+          (payload, window)=>payload.endScheduleDate == null,
+          (payload, window)=>payload.description == '案件の詳細',
+        ]
+      }
+    },
+	}
 ]
 </script>
 </head>

@@ -33,7 +33,11 @@ function mockJson(url, assignHeader, payload, preProcess, process, errorProcess,
     if (test.assert) {
         let results = [];
         for (let i = 0; i < test.assert.length; i++) {
-          results.push(test.assert[i](payload, window));
+          const result = test.assert[i](payload, window);
+          if (!result) {
+            console.warn({NG:{payload: payload, assert: test.assert[i]}});
+          }
+          results.push(result);
         }
         test[assertResultKey] = results;
       }

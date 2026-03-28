@@ -129,7 +129,7 @@
       <tr><th><label for="endScheduleDate" class="anko-label" data-anko-for="endScheduleDate">終了予定日</label></th><td><input class="anko-input" type="date" id="endScheduleDate" name="endScheduleDate"></td></tr>
       <tr><th><label for="description" class="anko-label" data-anko-for="description">詳細</label></th><td><textarea class="anko-textarea" id="description" name="description"></textarea></td></tr>
     </table>
-    <button class="anko-button primary" style="float: right" id="signupbutton" onclick="post('/project/register', 'form#projectRegister', () => display('/pj/user/project/list'))">登録</button>
+    <button class="anko-button primary" style="float: right" id="signupbutton" onclick="registerProject()">登録</button>
     </form>
   </div>
 </template>

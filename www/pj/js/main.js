@@ -13,10 +13,10 @@ window.addEventListener('popstate', function() {
 function init() {
 	router = {
 		"/pj/user/mypage": dispMyPage,
-		"/pj/user/project/list": dispproject,
-		"/pj/user/project/register": dispprojectRegister,
-		"/pj/user/project/update": dispprojectUpdate,
-		"/pj/user/project/{id}": dispprojectView,
+		"/pj/user/project/list": dispProject,
+		"/pj/user/project/register": dispProjectRegister,
+		"/pj/user/project/update": dispProjectUpdate,
+		"/pj/user/project/{id}": dispProjectView,
 		"/pj/user/customer/list": dispCustomer,
 		"/pj/user/customer/register": dispCustomerRegister,
 		"/pj/user/customer/update": dispCustomerUpdate,
@@ -132,8 +132,8 @@ function dispMyPage() {
 	contentTemplate('mypageTemplate');
 }
 
-// メモ一覧表示
-function dispproject() {
+// 案件一覧表示
+function dispProject() {
 	contentTemplate('projectTemplate');
 	post('/project/list', null, data => {
 		initList(data.list);
@@ -153,16 +153,20 @@ function dispproject() {
 	});
 }
 
-// メモ登録画面
-function dispprojectRegister() {
+// 案件登録画面
+function dispProjectRegister() {
 	contentTemplate('projectRegisterTemplate');
 	post('/customer/list', null, data => {
 		appendOption("customerId", data.list, record => option(record.id, record.company_name))
 	});
 }
 
-// メモ編集表示
-function dispprojectUpdate() {
+function registerProject() {
+	post('/project/register', 'form#projectRegister', () => display('/pj/user/project/list'));
+}
+
+// 案件編集表示
+function dispProjectUpdate() {
 	contentTemplate('projectUpdateTemplate', form => {
 		post('/project/list', null, data => {
 			initList(data.list);
@@ -324,7 +328,7 @@ function loadTaskUpdateList(projectId) {
 	});
 }
 
-function dispprojectView(projectId) {
+function dispProjectView(projectId) {
 	contentTemplate('projectViewTemplate');
 	
 	post('/project/get', {projectId:projectId}, data => {
