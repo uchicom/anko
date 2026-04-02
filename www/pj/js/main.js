@@ -62,8 +62,9 @@ function post(path, selector, func, errorFunc, confirmMessage, isArray) {
 // ログイン
 dispLogin = () => {
 	// 認証済み
-	post( '/account/check/login',  null, data => {
+	post( '/account/refresh',  null, data => {
 		if (data.result == "OK") {
+			startRefresh(data.refreshIntervalMinutes);
 			dispTop();
 			return;
 		}
@@ -97,6 +98,7 @@ function dispLoginView() {
 function login() {
 	post( '/account/login',  'form#login', data => {
 		if (data.result == 'OK') {
+			startRefresh(data.refreshIntervalMinutes);
 			dispTop();
 		}
 	});
@@ -117,6 +119,7 @@ function logout() {
 }
 function logoutProcess() {
 	post( '/account/logout',  null, data => {
+		stopRefresh();
 		if (data.result == "OK") {
 			dispLoginView();
 		}

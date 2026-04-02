@@ -561,3 +561,18 @@ function getToday() {
     var ymd = yyyy + "-" + mm + "-" + dd;
     return ymd;
 }
+let refresh;
+const refreshFunction = () => {
+	post( '/session/refresh',  null, data => {
+		if (data.result != "OK") {
+			stopRefresh();
+			dispLoginView();
+		}
+	});
+};
+function startRefresh(refreshIntervalMinutes) {
+	refresh = setInterval(refreshFunction, refreshIntervalMinutes * 60 * 1000);
+}
+function stopRefresh() {
+	clearInterval(refresh);
+}

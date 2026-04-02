@@ -7,6 +7,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
 import com.uchicom.pj.AbstractTest;
+import com.uchicom.pj.Constants;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -33,6 +34,7 @@ public class CookieServiceTest extends AbstractTest {
   @Captor ArgumentCaptor<String> keyCaptor;
   @Captor ArgumentCaptor<String> valueCaptor;
   @Captor ArgumentCaptor<String> loginIdCaptor;
+  @Captor ArgumentCaptor<String> pathCaptor;
   @Captor ArgumentCaptor<Cookie[]> cookiesCaptor;
   @Captor ArgumentCaptor<LocalDateTime> dateTimeCaptor;
   @Captor ArgumentCaptor<HttpServletResponse> resCaptor;
@@ -94,6 +96,76 @@ public class CookieServiceTest extends AbstractTest {
   }
 
   @Test
+  public void addRefreshToken() throws Exception {
+    // mock
+    var res = mock(HttpServletResponse.class);
+    doNothing().when(res).addCookie(cookieCaptor.capture());
+    var cookie = mock(Cookie.class);
+    doReturn(cookie).when(service).createRefreshTokenCookie(jwtCaptor.capture());
+
+    var refreshToken = "token";
+    // test
+    service.addRefreshToken(res, refreshToken);
+
+    // assert
+    assertThat(cookieCaptor.getValue()).isEqualTo(cookie);
+    assertThat(jwtCaptor.getValue()).isEqualTo(refreshToken);
+  }
+
+  @Test
+  public void removeRefreshToken() throws Exception {
+    // mock
+    var req = mock(HttpServletRequest.class);
+    var cookies = new Cookie[0];
+    doReturn(cookies).when(req).getCookies();
+    var cookie = mock(Cookie.class);
+    doReturn(cookie).when(service).createRefreshTokenCookie(jwtCaptor.capture());
+    var res = mock(HttpServletResponse.class);
+    doNothing().when(res).addCookie(cookieCaptor.capture());
+
+    // test
+    service.removeRefreshToken(req, res);
+
+    // assert
+    assertThat(jwtCaptor.getValue()).isNull();
+    assertThat(cookieCaptor.getValue().getMaxAge()).isEqualTo(0);
+  }
+
+  @Test
+  public void getRefreshToken() throws Exception {
+    // mock
+    var req = mock(HttpServletRequest.class);
+    var cookies = new Cookie[0];
+    doReturn(cookies).when(req).getCookies();
+    var decoded = "decoded";
+    doReturn(decoded).when(service).getValue(cookiesCaptor.capture(), keyCaptor.capture());
+
+    // test
+    var result = service.getRefreshToken(req);
+
+    // assert
+    assertThat(result).isEqualTo(decoded);
+    assertThat(cookiesCaptor.getValue()).isEqualTo(cookies);
+    assertThat(keyCaptor.getValue()).isEqualTo(Constants.REFRESH_TOKEN_KEY);
+  }
+
+  @Test
+  public void getRefreshTokenCookie() throws Exception {
+    // mock
+    var cookie = new Cookie(Constants.REFRESH_TOKEN_KEY, "token");
+    doReturn(cookie).when(service).getCookie(cookiesCaptor.capture(), keyCaptor.capture());
+    var cookies = new Cookie[0];
+
+    // test
+    var result = service.getRefreshTokenCookie(cookies);
+
+    // assert
+    assertThat(result).isEqualTo(cookie);
+    assertThat(cookiesCaptor.getValue()).isEqualTo(cookies);
+    assertThat(keyCaptor.getValue()).isEqualTo(Constants.REFRESH_TOKEN_KEY);
+  }
+
+  @Test
   public void createJwtCookie() throws Exception {
     // mock
     var cookie = mock(Cookie.class);
@@ -104,8 +176,28 @@ public class CookieServiceTest extends AbstractTest {
 
     // assert
     assertThat(result).isEqualTo(cookie);
-    assertThat(keyCaptor.getValue()).isEqualTo("jwt");
+    assertThat(keyCaptor.getValue()).isEqualTo(Constants.ACCESS_TOKEN_KEY);
     assertThat(jwtCaptor.getValue()).isEqualTo(jwt);
+  }
+
+  @Test
+  public void createRefreshTokenCookie() throws Exception {
+    // mock
+    var cookie = mock(Cookie.class);
+    doReturn(cookie)
+        .when(service)
+        .createCookie(
+            keyCaptor.capture(), jwtCaptor.capture(), pathCaptor.capture(), maxAgeCaptor.capture());
+    var refreshToken = "token";
+    // test
+    var result = service.createRefreshTokenCookie(refreshToken);
+
+    // assert
+    assertThat(result).isEqualTo(cookie);
+    assertThat(keyCaptor.getValue()).isEqualTo(Constants.REFRESH_TOKEN_KEY);
+    assertThat(jwtCaptor.getValue()).isEqualTo(refreshToken);
+    assertThat(pathCaptor.getValue()).isEqualTo("/pj/api/account/refresh");
+    assertThat(maxAgeCaptor.getValue()).isEqualTo(Constants.REFRESH_TOKEN_MAX_AGE_DAYS * 24 * 3600);
   }
 
   @Test
@@ -134,21 +226,38 @@ public class CookieServiceTest extends AbstractTest {
     var key = "key";
     var jwt = "token";
     // test
-    var cookie = service.createCookie(key, jwt);
+    var cookie = service.createCookie(key, jwt, "/", null);
 
     // assert
     assertThat(valueCaptor.getValue()).isEqualTo(jwt);
     assertThat(cookie.getName()).isEqualTo(key);
     assertThat(cookie.getValue()).isEqualTo(encoded);
     assertThat(cookie.getPath()).isEqualTo("/");
-    assertThat(cookie.getSecure()).isTrue();
+    assertThat(cookie.getSecure()).isFalse();
+    assertThat(cookie.isHttpOnly()).isTrue();
+  }
+
+  @Test
+  public void createCookie_withMaxAge() throws Exception {
+    // mock
+    var encoded = "encoded";
+    doReturn(encoded).when(service).encode(valueCaptor.capture());
+    var key = "key";
+    var value = "token";
+    // test
+    var cookie = service.createCookie(key, value, "/custom", 3600);
+
+    // assert
+    assertThat(cookie.getPath()).isEqualTo("/custom");
+    assertThat(cookie.getMaxAge()).isEqualTo(3600);
+    assertThat(cookie.getSecure()).isFalse();
     assertThat(cookie.isHttpOnly()).isTrue();
   }
 
   @Test
   public void getJwtCookie() throws Exception {
     // mock
-    var cookie = new Cookie("jwt", "token");
+    var cookie = new Cookie(Constants.ACCESS_TOKEN_KEY, "token");
     doReturn(cookie).when(service).getCookie(cookiesCaptor.capture(), keyCaptor.capture());
     var cookies = new Cookie[0];
 
@@ -158,7 +267,7 @@ public class CookieServiceTest extends AbstractTest {
     // assert
     assertThat(result).isEqualTo(cookie);
     assertThat(cookiesCaptor.getValue()).isEqualTo(cookies);
-    assertThat(keyCaptor.getValue()).isEqualTo("jwt");
+    assertThat(keyCaptor.getValue()).isEqualTo(Constants.ACCESS_TOKEN_KEY);
   }
 
   @Test

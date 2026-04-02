@@ -58,7 +58,7 @@ public class AuthService {
    * @return 認証OKの場合はtrue,それ以外はfalseを返します
    */
   public boolean auth(HttpServletRequest req) {
-    var token = cookieService.getValue(req.getCookies(), "jwt");
+    var token = cookieService.getValue(req.getCookies(), Constants.ACCESS_TOKEN_KEY);
     if (token == null) {
       return false;
     }

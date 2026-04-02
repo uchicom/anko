@@ -15,6 +15,22 @@ name varchar(128) not null,
 primary key(id)
 );
 
+-- refresh_token
+create table pj.refresh_token(
+id bigint auto_increment,
+inserted varchar(256) not null,
+insert_datetime timestamp not null,
+updated varchar(256),
+update_datetime timestamp,
+update_seq integer not null default 0,
+account_id bigint not null,
+token_hash varbinary(128) not null,
+expire_datetime timestamp not null,
+inactive_datetime timestamp,
+primary key(id),
+unique(account_id)
+);
+
 -- project
 create table pj.project(
 id bigint auto_increment,

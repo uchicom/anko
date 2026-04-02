@@ -96,7 +96,7 @@ public class AuthServiceTest extends AbstractTest {
     // assert
     assertThat(result).isFalse();
     assertThat(cookiesCaptor.getValue()).isEqualTo(cookies);
-    assertThat(keyCaptor.getValue()).isEqualTo("jwt");
+    assertThat(keyCaptor.getValue()).isEqualTo(Constants.ACCESS_TOKEN_KEY);
     assertThat(tokenCaptor.getAllValues()).isEmpty();
   }
 
@@ -114,7 +114,7 @@ public class AuthServiceTest extends AbstractTest {
     // assert
     assertThat(result).isFalse();
     assertThat(cookiesCaptor.getValue()).isEqualTo(cookies);
-    assertThat(keyCaptor.getValue()).isEqualTo("jwt");
+    assertThat(keyCaptor.getValue()).isEqualTo(Constants.ACCESS_TOKEN_KEY);
     assertThat(tokenCaptor.getValue()).isEqualTo(token);
     assertThat(nameCaptor.getAllValues()).isEmpty();
     assertThat(objectCaptor.getAllValues()).isEmpty();
@@ -134,9 +134,27 @@ public class AuthServiceTest extends AbstractTest {
     // assert
     assertThat(result).isTrue();
     assertThat(cookiesCaptor.getValue()).isEqualTo(cookies);
-    assertThat(keyCaptor.getValue()).isEqualTo("jwt");
+    assertThat(keyCaptor.getValue()).isEqualTo(Constants.ACCESS_TOKEN_KEY);
     assertThat(tokenCaptor.getValue()).isEqualTo(token);
     assertThat(nameCaptor.getValue()).isEqualTo("accountId");
     assertThat(objectCaptor.getValue()).isEqualTo(2L);
+  }
+
+  @Test
+  public void auth_exception() {
+    // mock
+    var cookies = new Cookie[0];
+    doReturn(cookies).when(req).getCookies();
+    var token = "invalid_token";
+    doReturn(token).when(cookieService).getValue(cookiesCaptor.capture(), keyCaptor.capture());
+    doReturn(null).when(service).subject(tokenCaptor.capture());
+    // test method
+    var result = service.auth(req);
+    // assert
+    assertThat(result).isFalse();
+    assertThat(cookiesCaptor.getValue()).isEqualTo(cookies);
+    assertThat(keyCaptor.getValue()).isEqualTo(Constants.ACCESS_TOKEN_KEY);
+    assertThat(tokenCaptor.getValue()).isEqualTo(token);
+    assertThat(nameCaptor.getAllValues()).isEmpty();
   }
 }

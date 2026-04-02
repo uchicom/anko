@@ -7,6 +7,7 @@ import com.uchicom.pj.dto.request.account.AccountRegisterDto;
 import com.uchicom.pj.dto.request.account.LoginDto;
 import com.uchicom.pj.entity.Account;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -15,10 +16,18 @@ import java.util.Arrays;
 public class AccountService {
 
   private final AuthService authService;
+  private final CookieService cookieService;
+  private final RefreshTokenService refreshTokenService;
   private final AccountDao accountDao;
 
-  public AccountService(AuthService authService, AccountDao accountDao) {
+  public AccountService(
+      AuthService authService,
+      CookieService cookieService,
+      RefreshTokenService refreshTokenService,
+      AccountDao accountDao) {
     this.authService = authService;
+    this.cookieService = cookieService;
+    this.refreshTokenService = refreshTokenService;
     this.accountDao = accountDao;
   }
 
@@ -39,19 +48,30 @@ public class AccountService {
    *
    * @return トークン
    */
-  public String login(LoginDto dto) throws NoSuchAlgorithmException {
+  public boolean login(LoginDto dto, HttpServletResponse res) throws NoSuchAlgorithmException {
     var account = accountDao.findByLoginId(dto.id);
 
     // アカウントが存在しない場合
     if (account == null) {
-      return null;
+      return false;
     }
     // ログインチェック
     if (!verifyPassword(account, dto.pass)) {
       // ログイン失敗
-      return null;
+      return false;
     }
-    return authService.publish(account.id);
+    var refreshToken = refreshTokenService.register(account.id);
+    setToken(res, account, refreshToken);
+    return true;
+  }
+
+  void setToken(HttpServletResponse res, Account account, String refreshToken)
+      throws NoSuchAlgorithmException {
+
+    cookieService.addRefreshToken(res, refreshToken);
+
+    var token = authService.publish(account.id);
+    cookieService.addJwt(res, token);
   }
 
   String createSalt(String loginId) {
@@ -75,5 +95,31 @@ public class AccountService {
 
   public boolean isLogin(HttpServletRequest req) {
     return authService.auth(req);
+  }
+
+  public boolean refresh(HttpServletRequest req, HttpServletResponse res)
+      throws NoSuchAlgorithmException {
+    var refreshToken = cookieService.getRefreshToken(req);
+    if (refreshToken == null) {
+      return false;
+    }
+    var token = refreshTokenService.get(refreshToken);
+    if (token == null) {
+      return false;
+    }
+    var account = accountDao.findById(token.account_id);
+    if (account == null) {
+      return false;
+    }
+    setToken(res, account, refreshToken);
+    return true;
+  }
+
+  public void logout(HttpServletRequest req, HttpServletResponse res) {
+    cookieService.removeJwt(req, res);
+    cookieService.removeRefreshToken(req, res);
+    if (authService.auth(req)) {
+      refreshTokenService.delete((Long) req.getAttribute("accountId"));
+    }
   }
 }
