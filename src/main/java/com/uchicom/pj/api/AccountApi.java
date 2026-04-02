@@ -9,7 +9,6 @@ import com.uchicom.pj.dto.response.MessageDto;
 import com.uchicom.pj.dto.response.account.ResultDto;
 import com.uchicom.pj.enumeration.ApiResult;
 import com.uchicom.pj.service.AccountService;
-import com.uchicom.pj.service.CookieService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -17,11 +16,9 @@ import jakarta.servlet.http.HttpServletResponse;
 public class AccountApi extends AbstractApi {
 
   private final AccountService accountService;
-  private final CookieService cookieService;
 
-  public AccountApi(AccountService accountService, CookieService cookieService) {
+  public AccountApi(AccountService accountService) {
     this.accountService = accountService;
-    this.cookieService = cookieService;
   }
 
   @Path("/register")
@@ -42,20 +39,19 @@ public class AccountApi extends AbstractApi {
     return trans(
         req,
         () -> {
-          var token = accountService.login(dto);
-          if (token == null) {
+          if (!accountService.login(dto, res)) {
             return new ErrorDto("認証エラー");
           }
-          cookieService.addJwt(res, token);
           return new ResultDto(ApiResult.OK);
         });
   }
 
-  @Path("/check/login")
-  public Object checkLogin(HttpServletRequest req, HttpServletResponse res) {
-    return refer(
+  @Path("/refresh")
+  public Object refresh(HttpServletRequest req, HttpServletResponse res) {
+    return trans(
+        req,
         () -> {
-          if (accountService.isLogin(req)) {
+          if (accountService.refresh(req, res)) {
             return new ResultDto(ApiResult.OK);
           }
           return new ResultDto(ApiResult.NG);
@@ -64,9 +60,10 @@ public class AccountApi extends AbstractApi {
 
   @Path("/logout")
   public Object logout(HttpServletRequest req, HttpServletResponse res) {
-    return refer(
+    return trans(
+        req,
         () -> {
-          cookieService.removeJwt(req, res);
+          accountService.logout(req, res);
           return new ResultDto(ApiResult.OK);
         });
   }

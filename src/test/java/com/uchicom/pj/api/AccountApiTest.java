@@ -86,7 +86,7 @@ public class AccountApiTest extends AbstractTest {
   @Test
   public void login_fail() throws Exception {
     // mock
-    doReturn(null).when(accountService).login(loginDtoCaptor.capture());
+    doReturn(false).when(accountService).login(loginDtoCaptor.capture(), resCaptor.capture());
 
     var dto = new LoginDto();
 
@@ -105,7 +105,7 @@ public class AccountApiTest extends AbstractTest {
   @Test
   public void login() throws Exception {
     // mock
-    doReturn("test").when(accountService).login(loginDtoCaptor.capture());
+    doReturn(true).when(accountService).login(loginDtoCaptor.capture(), resCaptor.capture());
 
     var dto = new LoginDto();
 
@@ -122,12 +122,12 @@ public class AccountApiTest extends AbstractTest {
   }
 
   @Test
-  public void checkLogin_NG() throws Exception {
+  public void refresh_NG() throws Exception {
 
-    doReturn(false).when(accountService).isLogin(reqCaptor.capture());
+    doReturn(false).when(accountService).refresh(reqCaptor.capture(), resCaptor.capture());
 
     // test method
-    var result = api.checkLogin(req, res);
+    var result = api.refresh(req, res);
 
     // assert
     if (result instanceof ResultDto resultDto) {
@@ -136,15 +136,16 @@ public class AccountApiTest extends AbstractTest {
       fail();
     }
     assertThat(reqCaptor.getValue()).isEqualTo(req);
+    assertThat(resCaptor.getValue()).isEqualTo(res);
   }
 
   @Test
-  public void checkLogin() throws Exception {
+  public void refresh_OK() throws Exception {
 
-    doReturn(true).when(accountService).isLogin(reqCaptor.capture());
+    doReturn(true).when(accountService).refresh(reqCaptor.capture(), resCaptor.capture());
 
     // test method
-    var result = api.checkLogin(req, res);
+    var result = api.refresh(req, res);
 
     // assert
     if (result instanceof ResultDto resultDto) {
@@ -153,12 +154,13 @@ public class AccountApiTest extends AbstractTest {
       fail();
     }
     assertThat(reqCaptor.getValue()).isEqualTo(req);
+    assertThat(resCaptor.getValue()).isEqualTo(res);
   }
 
   @Test
   public void logout() throws Exception {
 
-    doNothing().when(cookieService).removeJwt(reqCaptor.capture(), resCaptor.capture());
+    doNothing().when(accountService).logout(reqCaptor.capture(), resCaptor.capture());
 
     // test method
     var result = api.logout(req, res);

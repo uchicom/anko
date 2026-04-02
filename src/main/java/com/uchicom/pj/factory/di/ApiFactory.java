@@ -9,7 +9,7 @@ import com.uchicom.pj.api.TaskApi;
 public class ApiFactory {
 
   static AccountApi accountApi() {
-    return new AccountApi(ServiceFactory.accountService(), ServiceFactory.cookieService());
+    return new AccountApi(ServiceFactory.accountService());
   }
 
   static CustomerApi customerApi() {

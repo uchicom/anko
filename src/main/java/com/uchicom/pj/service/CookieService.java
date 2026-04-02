@@ -1,6 +1,7 @@
 // (C) 2023 uchicom
 package com.uchicom.pj.service;
 
+import com.uchicom.pj.Constants;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -11,6 +12,10 @@ import java.nio.charset.StandardCharsets;
 public class CookieService {
 
   public CookieService() {}
+
+  public void addRefreshToken(HttpServletResponse res, String refreshToken) {
+    res.addCookie(createRefreshTokenCookie(refreshToken));
+  }
 
   public void addJwt(HttpServletResponse res, String jwt) {
     res.addCookie(createJwtCookie(jwt));
@@ -25,8 +30,22 @@ public class CookieService {
     res.addCookie(cookie);
   }
 
+  public void removeRefreshToken(HttpServletRequest req, HttpServletResponse res) {
+    var cookie = createRefreshTokenCookie(null);
+    cookie.setMaxAge(0);
+    res.addCookie(cookie);
+  }
+
   Cookie createJwtCookie(String jwt) {
-    return createCookie("jwt", jwt);
+    return createCookie(Constants.ACCESS_TOKEN_KEY, jwt);
+  }
+
+  Cookie createRefreshTokenCookie(String refreshToken) {
+    return createCookie(
+        Constants.REFRESH_TOKEN_KEY,
+        refreshToken,
+        "/pj/api/account/refresh",
+        Constants.REFRESH_TOKEN_MAX_AGE_DAYS * 24 * 3600);
   }
 
   Cookie createLoginIdCookie(String key, String loginId) {
@@ -36,15 +55,30 @@ public class CookieService {
   }
 
   Cookie createCookie(String key, String value) {
+    return createCookie(key, value, "/", null);
+  }
+
+  Cookie createCookie(String key, String value, String path, Integer maxAge) {
     var cookie = new Cookie(key, encode(value));
-    cookie.setHttpOnly(true);
-    cookie.setSecure(true);
-    cookie.setPath("/");
+    cookie.setHttpOnly(Constants.HTTP_ONLY);
+    cookie.setSecure(Constants.COOKIE_SECURE);
+    cookie.setPath(path);
+    if (maxAge != null) {
+      cookie.setMaxAge(maxAge);
+    }
     return cookie;
   }
 
+  String getRefreshToken(HttpServletRequest req) {
+    return getValue(req.getCookies(), Constants.REFRESH_TOKEN_KEY);
+  }
+
+  Cookie getRefreshTokenCookie(Cookie[] cookies) {
+    return getCookie(cookies, Constants.REFRESH_TOKEN_KEY);
+  }
+
   Cookie getJwtCookie(Cookie[] cookies) {
-    return getCookie(cookies, "jwt");
+    return getCookie(cookies, Constants.ACCESS_TOKEN_KEY);
   }
 
   Cookie getCookie(Cookie[] cookies, String key) {

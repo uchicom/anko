@@ -15,6 +15,7 @@ import com.uchicom.pj.service.CookieService;
 import com.uchicom.pj.service.CustomerService;
 import com.uchicom.pj.service.DateTimeService;
 import com.uchicom.pj.service.ProjectService;
+import com.uchicom.pj.service.RefreshTokenService;
 import com.uchicom.pj.service.TaskService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,7 +24,8 @@ import java.time.LocalTime;
 public class ServiceFactory {
 
   static AccountService accountService() {
-    return new AccountService(authService(), DaoFactory.accountDao());
+    return new AccountService(
+        authService(), cookieService(), refreshTokenService(), DaoFactory.accountDao());
   }
 
   static AuthService authService() {
@@ -44,6 +46,10 @@ public class ServiceFactory {
 
   static ProjectService projectService() {
     return new ProjectService(DaoFactory.projectDao());
+  }
+
+  static RefreshTokenService refreshTokenService() {
+    return new RefreshTokenService(dateTimeService(), DaoFactory.refreshTokenDao());
   }
 
   static TaskService taskService() {
