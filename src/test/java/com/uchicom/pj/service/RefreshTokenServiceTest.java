@@ -105,14 +105,14 @@ public class RefreshTokenServiceTest extends AbstractTest {
     Mockito.verify(refreshTokenDao, Mockito.never()).update(Mockito.any());
   }
 
-  /** {@link RefreshTokenService#register(Long)}でinactive_datetimeがnullの場合は更新のテスト. */
+  /** {@link RefreshTokenService#register(Long)}でレコードが存在する場合は更新のテスト. */
   @Test
   public void register_update() throws Exception {
     // mock
     var now = LocalDateTime.of(2026, 3, 30, 12, 0, 0);
     doReturn(now).when(dateTimeService).getLocalDateTime();
     var existing = new RefreshToken();
-    existing.inactive_datetime = null;
+    existing.inactive_datetime = LocalDateTime.of(2026, 1, 1, 0, 0, 0);
     doReturn(existing).when(refreshTokenDao).findByAccountId(accountIdCaptor.capture());
     var token = "generated_token";
     doReturn(token).when(service).generateToken();
@@ -128,24 +128,8 @@ public class RefreshTokenServiceTest extends AbstractTest {
         .isEqualTo(SecurityUtil.getHash(token, Constants.REFRESH_TOKEN_SALT));
     assertThat(captured.expire_datetime)
         .isEqualTo(now.plusDays(Constants.REFRESH_TOKEN_MAX_AGE_DAYS));
+    assertThat(captured.inactive_datetime).isNull();
     Mockito.verify(refreshTokenDao, Mockito.never()).insert(Mockito.any());
-  }
-
-  /** {@link RefreshTokenService#register(Long)}でinactive_datetimeがnot nullの場合はnull返却のテスト. */
-  @Test
-  public void register_inactive() throws Exception {
-    // mock
-    var existing = new RefreshToken();
-    existing.inactive_datetime = LocalDateTime.of(2026, 1, 1, 0, 0, 0);
-    doReturn(existing).when(refreshTokenDao).findByAccountId(accountIdCaptor.capture());
-
-    // test method
-    var result = service.register(1L);
-
-    // assert
-    assertThat(result).isNull();
-    Mockito.verify(refreshTokenDao, Mockito.never()).insert(Mockito.any());
-    Mockito.verify(refreshTokenDao, Mockito.never()).update(Mockito.any());
   }
 
   /** {@link RefreshTokenService#delete(Long)}でレコードが存在しない場合のテスト. */
