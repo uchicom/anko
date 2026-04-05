@@ -43,12 +43,11 @@ public class RefreshTokenService {
       refreshToken.token_hash = SecurityUtil.getHash(token, Constants.REFRESH_TOKEN_SALT);
       refreshToken.expire_datetime = now.plusDays(Constants.REFRESH_TOKEN_MAX_AGE_DAYS);
       refreshTokenDao.insert(refreshToken);
-    } else if (refreshToken.inactive_datetime == null) {
+    } else {
       refreshToken.token_hash = SecurityUtil.getHash(token, Constants.REFRESH_TOKEN_SALT);
       refreshToken.expire_datetime = now.plusDays(Constants.REFRESH_TOKEN_MAX_AGE_DAYS);
+      refreshToken.inactive_datetime = null;
       refreshTokenDao.update(refreshToken);
-    } else {
-      return null;
     }
     return token;
   }
