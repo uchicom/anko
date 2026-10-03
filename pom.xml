@@ -12,7 +12,7 @@
   </scm>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <spotless.version>3.8.0</spotless.version>
+    <spotless.version>3.10.2</spotless.version>
   </properties>
   <dependencies>
     <dependency>
@@ -284,7 +284,7 @@
             <importOrder/>
             <removeUnusedImports/>
             <googleJavaFormat>
-              <version>1.28.0</version>
+              <version>1.30.0</version>
               <style>GOOGLE</style>
             </googleJavaFormat>
             <licenseHeader>
