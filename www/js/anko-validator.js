@@ -4,10 +4,16 @@ function getValidationMap(formId) {
 }
 
 function replaceValidateTemplate(orgId, templateId) {
-  replaceTemplate(orgId, templateId, attachValidattion);
+  replaceTemplate(orgId, templateId, attachValidations);
 }
 
-const attachValidattion = (form, labelConsumer) => {
+const attachValidations = (forms, labelConsumer) => {
+	for (var i = 0; i < forms.length; i++) {
+		attachValidation(forms[i], labelConsumer);
+	}
+};
+
+const attachValidation = (form, labelConsumer) => {
 	var map = getValidationMap(form.getAttribute("id"));
 	if (!map) {
 		return;

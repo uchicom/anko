@@ -170,7 +170,7 @@ function registerProject() {
 
 // 案件編集表示
 function dispProjectUpdate() {
-	contentTemplate('projectUpdateTemplate', form => {
+	contentTemplate('projectUpdateTemplate', forms => {
 		post('/project/list', null, data => {
 			initList(data.list);
 			const tbody = document.createElement("tbody");
@@ -186,9 +186,9 @@ function dispProjectUpdate() {
 				inputs[4].value = blank(record.description);
 				tbody.append(row);
 			}
-			form.querySelector("tbody").replaceWith(tbody);
+			forms[0].querySelector("tbody").replaceWith(tbody);
 			querySelector("button").disabled = data.list.length == 0;
-			attachValidattion(form, labelConsumer);
+			attachValidation(forms[0], labelConsumer);
 		});
 	});
 }
@@ -220,7 +220,7 @@ function dispCustomerRegister() {
 
 // 顧客編集表示
 function dispCustomerUpdate() {
-	contentTemplate('customerUpdateTemplate', form => {
+	contentTemplate('customerUpdateTemplate', forms => {
 		post('/customer/list', null, data => {
 			initList(data.list);
 			const tbody = document.createElement("tbody");
@@ -239,9 +239,9 @@ function dispCustomerUpdate() {
 				inputs[7].value = blank(record.building);
 				tbody.append(row);
 			}
-			form.querySelector("tbody").replaceWith(tbody);
+			forms[0].querySelector("tbody").replaceWith(tbody);
 			querySelector("button").disabled = data.list.length == 0;
-			attachValidattion(form, labelConsumer);
+			attachValidation(forms[0], labelConsumer);
 		});
 	});
 }
@@ -294,10 +294,10 @@ function dispTaskRegister() {
 
 // タスク編集表示
 function dispTaskUpdate() {
-	contentTemplate('taskUpdateTemplate', form => {
+	contentTemplate('taskUpdateTemplate', forms => {
 		post('/project/list', null, data => {
 			appendOption("taskUpdateProjectId", data.list, record => option(record.id, record.subject));
-			attachValidattion(form, labelConsumer);
+			attachValidation(forms[0], labelConsumer);
 			if (data.list && data.list.length > 0) {
 				loadTaskUpdateList(data.list[0].id);
 			}
