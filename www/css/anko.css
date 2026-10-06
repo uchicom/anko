@@ -50,6 +50,17 @@ a.anko-close {
   float:right;
   font-size: 1.2em;
 }
+.anko-success {
+  background-color: rgb(217, 241, 217);
+  border: solid 1px lightgreen;
+  color:green;
+  .anko-close {
+    color:brown;
+  }
+  .anko-close:hover {
+    color:maroon;
+  }
+}
 div.anko-danger {
   background-color: rgb(246, 216, 220);
   border: solid 1px pink;

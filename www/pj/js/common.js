@@ -122,11 +122,12 @@ function errorMessages(formId, violations) {
 	if (formId) {
 		var selector = "#" + formId;
 		var selects = document.querySelectorAll(`${selector} input, ${selector} textarea, ${selector} select`);
-		for (var i = 0; i < selects.length; selects) {
-			var select = selects[i++];
+		for (var i = 0; i < selects.length; i++) {
+			var select = selects[i];
 			if (select.disabled) {
 				continue;
 			}
+			select.classList.add("anko-success");
 		}
 		
 		for (const key in violations) {
@@ -137,14 +138,12 @@ function errorMessages(formId, violations) {
 				if (elem.parentNode) {
 					elem.parentNode.append(createAlertDiv(false, violation.message));
 				}
+				elem.classList.remove("anko-success");
 			}
 		}
 	} else {
-		for (var key in violations) {
-			var violation = violations[key];
-			var elems =  document.querySelectorAll(`${selector} input[name="${violation.propertyPath}"], ${selector} textarea[name="${violation.propertyPath}"], ${selector} select[name="${violation.propertyPath}"]`);
-			var elem = elems[violation.index];
-			elem.parentNode.append(createAlertDiv(false, violation.message));
+		for (const key in violations) {
+			errorMessage(violations[key].message);
 		}
 	}
 }
@@ -414,10 +413,10 @@ function createRequirTag() {
 	return span;
 }
 function articleTemplate(templateId) {
-	replaceTemplate('article', templateId, attachValidattion, labelConsumer);
+	replaceTemplate('article', templateId, attachValidations, labelConsumer);
 }
 function contentTemplate(templateId, formFunction) {
-	replaceTemplate('content', templateId, formFunction ? formFunction : attachValidattion, labelConsumer);
+	replaceTemplate('content', templateId, formFunction ? formFunction : attachValidations, labelConsumer);
 }
 function getToken() {
 	return sessionStorage.getItem('token');

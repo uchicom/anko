@@ -34,10 +34,10 @@ function createRow(templateId, element) {
 function createInput(templateId, element) {
 	return createClone(templateId + ".input", element);
 }
-function replaceTemplate(orgId, templateId, formConsumer, labelConsumer) {
+function replaceTemplate(orgId, templateId, formsConsumer, labelConsumer) {
 	const clone = createClone(templateId);
-	const form = clone.querySelector("form");
-	if (form && formConsumer) formConsumer(form, labelConsumer);
+	const forms = clone.querySelectorAll("form");
+	if (forms.length > 0 && formsConsumer) formsConsumer(forms, labelConsumer);
 	idElement(orgId).replaceWith(clone);
 }
 function set(selector, response) {
