@@ -42,13 +42,13 @@ public class Main {
   private final Logger logger;
 
   public Main(ApiServlet apiServlet, JsFactory jsFactory, Logger logger) {
-
     this.apiServlet = apiServlet;
     this.jsFactory = jsFactory;
     this.logger = logger;
   }
 
   void execute(ZouniParameter zouniParameter) throws Exception {
+    var staticHandler = zouniParameter.createStaticHandler();
     var servlet = new RootServlet(logger, "./www/", "pj/user.htm");
     var map = new HashMap<String, Servlet>();
     map.put("pub./pj/user/", servlet);
@@ -62,7 +62,13 @@ public class Main {
         .createServer(
             (parameter, socket) -> {
               return new ZouniProcess(
-                  parameter, socket, map, startWithMap, logger, ipErrorMessageCountMap);
+                  parameter,
+                  socket,
+                  map,
+                  startWithMap,
+                  logger,
+                  ipErrorMessageCountMap,
+                  staticHandler);
             })
         .execute();
   }
