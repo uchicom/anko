@@ -2,7 +2,7 @@
 package com.uchicom.pj.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.iciql.Iciql.IQColumn;
+import com.uchicom.orz.Iciql.IQColumn;
 import java.time.LocalDateTime;
 
 public abstract class AbstractTable {

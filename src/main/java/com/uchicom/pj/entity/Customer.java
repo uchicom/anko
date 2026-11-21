@@ -1,9 +1,9 @@
 // (C) 2025 uchicom
 package com.uchicom.pj.entity;
 
-import com.iciql.Iciql.IQColumn;
-import com.iciql.Iciql.IQSchema;
-import com.iciql.Iciql.IQTable;
+import com.uchicom.orz.Iciql.IQColumn;
+import com.uchicom.orz.Iciql.IQSchema;
+import com.uchicom.orz.Iciql.IQTable;
 
 /** 顧客. */
 @IQSchema("pj")

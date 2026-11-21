@@ -1,11 +1,11 @@
 // (C) 2023 uchicom
 package com.uchicom.pj.dao.helper;
 
-import com.iciql.Db;
-import com.iciql.Iciql.IQSchema;
-import com.iciql.Iciql.IQTable;
-import com.iciql.Query;
-import com.iciql.util.Utils;
+import com.uchicom.orz.Db;
+import com.uchicom.orz.Iciql.IQSchema;
+import com.uchicom.orz.Iciql.IQTable;
+import com.uchicom.orz.Query;
+import com.uchicom.orz.util.Utils;
 import com.uchicom.pj.Constants;
 import com.uchicom.pj.Context;
 import com.uchicom.pj.entity.AbstractTable;

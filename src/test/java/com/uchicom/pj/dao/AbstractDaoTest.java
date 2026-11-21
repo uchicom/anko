@@ -7,10 +7,10 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 
-import com.iciql.Db;
-import com.iciql.Query;
-import com.iciql.QueryWhere;
-import com.iciql.util.Utils;
+import com.uchicom.orz.Db;
+import com.uchicom.orz.Query;
+import com.uchicom.orz.QueryWhere;
+import com.uchicom.orz.util.Utils;
 import com.uchicom.pj.AbstractTest;
 import com.uchicom.pj.Context;
 import com.uchicom.pj.dao.helper.DbHelper;

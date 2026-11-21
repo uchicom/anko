@@ -2,9 +2,9 @@
 package com.uchicom.pj.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.iciql.Iciql.IQColumn;
-import com.iciql.Iciql.IQSchema;
-import com.iciql.Iciql.IQTable;
+import com.uchicom.orz.Iciql.IQColumn;
+import com.uchicom.orz.Iciql.IQSchema;
+import com.uchicom.orz.Iciql.IQTable;
 import java.time.LocalDateTime;
 
 /** タスク. */

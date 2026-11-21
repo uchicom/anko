@@ -1,7 +1,7 @@
 // (C) 2022 uchicom
 package com.uchicom.pj.util;
 
-import com.iciql.Db;
+import com.uchicom.orz.Db;
 import com.uchicom.pj.Context;
 import com.uchicom.util.ThrowingConsumer;
 import com.uchicom.util.ThrowingFunction;

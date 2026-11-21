@@ -42,8 +42,8 @@
     </dependency>
     <dependency>
       <groupId>com.uchicom</groupId>
-      <artifactId>iciql</artifactId>
-      <version>2.2.1.8</version>
+      <artifactId>orz</artifactId>
+      <version>0.0.2</version>
     </dependency>
     <dependency>
       <groupId>com.auth0</groupId>
