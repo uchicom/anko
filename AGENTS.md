@@ -23,7 +23,7 @@
 | バックエンド言語 | Java |
 | フロントエンド | Vanilla JavaScript / HTML / CSS |
 | ビルドツール | Maven |
-| ORM | iciql |
+| ORM | orz |
 | 単体テスト | JUnit |
 | カバレッジ | JaCoCo |
 | 静的解析 | Error Prone |
@@ -41,7 +41,7 @@ Browser (HTML / CSS / Vanilla JS)
 		└─ ApiServlet         # リクエストルーティング・JSONハンドリング
 			└─ API Layer      # リクエスト固有のロジック
 				└─ Service Layer  # ビジネスロジック
-					└─ DAO / ORM (iciql)  # 永続化
+					└─ DAO / ORM (orz)  # 永続化
 ```
 
 ### バリデーション伝播
@@ -113,7 +113,7 @@ public class LoginDto {
 - グローバルな状態管理ライブラリは使用しない
 - 画面はステートレスとして扱い、状態はサーバー側で管理する
 
-### ORM（iciql）
+### ORM（orz）
 
 - DBアクセスはDAO層に閉じる
 - validator.js生成処理（JsServlet）からDBアクセスを行わない

@@ -1,7 +1,7 @@
 // (C) 2023 uchicom
 package com.uchicom.pj;
 
-import com.iciql.Db;
+import com.uchicom.orz.Db;
 import com.uchicom.pj.enumeration.Config;
 import com.uchicom.pj.factory.di.DIFactory;
 import com.uchicom.util.ResourceUtil;
